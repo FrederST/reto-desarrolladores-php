@@ -21,11 +21,6 @@ class PermissionsSeeder extends Seeder
         $role1->givePermissionTo('inactive customers');
         $role1->givePermissionTo('create customers');
 
-        // create a demo user
-        $user1 = User::factory()->create();
-        $user2 = User::factory()->create();
-
-        $user1->assignRole($role1);
-        $user2->assignRole($role1);
+        Role::create(['name' => 'customer']);
     }
 }

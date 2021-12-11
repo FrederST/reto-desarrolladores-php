@@ -12,25 +12,23 @@ class CreateNewUser implements CreatesNewUsers
 {
     use PasswordValidationRules;
 
-    /**
-     * Validate and create a newly registered user.
-     *
-     * @param  array  $input
-     * @return \App\Models\User
-     */
-    public function create(array $input)
+    public function create(array $input): User
     {
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'phone' => ['required', 'numeric', 'digits:10'],
             'password' => $this->passwordRules(),
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['required', 'accepted'] : '',
         ])->validate();
 
-        return User::create([
+        $user = User::create([
             'name' => $input['name'],
             'email' => $input['email'],
+            'phone' => $input['phone'],
             'password' => Hash::make($input['password']),
         ]);
+        $user->assignRole('customer');
+        return $user;
     }
 }

@@ -15,7 +15,7 @@ class CustomerController extends Controller
 
     public function index(): Response
     {
-        $customers = User::role('customer')->get();
+        $customers = User::role('customer')->paginate(6);
         return Inertia::render('Customer/Index', ['customers' => $customers]);
     }
 

@@ -8,119 +8,22 @@
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                    <table
-                        class="
-                            rounded-t-lg
-                            mt-5
-                            min-w-full
-                            mx-auto
-                            bg-gray-800
-                            text-gray-100
-                        "
-                    >
-                        <caption>
-                            Customers In DB
-                        </caption>
-                        <thead>
-                            <tr class="text-left border-b border-gray-300">
-                                <th
-                                    scope="col"
-                                    class="
-                                        px-6
-                                        py-3
-                                        text-left text-xs
-                                        font-medium
-                                        text-gray-100
-                                        uppercase
-                                        tracking-wider
-                                    "
-                                >
-                                    Id
-                                </th>
-                                <th
-                                    scope="col"
-                                    class="
-                                        px-6
-                                        py-3
-                                        text-left text-xs
-                                        font-medium
-                                        text-gray-100
-                                        uppercase
-                                        tracking-wider
-                                    "
-                                >
-                                    Name
-                                </th>
-                                <th
-                                    scope="col"
-                                    class="
-                                        px-6
-                                        py-3
-                                        text-center text-xs
-                                        font-medium
-                                        text-gray-100
-                                        uppercase
-                                        tracking-wider
-                                    "
-                                >
-                                    Acciones
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody
-                            class="
-                                bg-gray-700
-                                border-b border-gray-600
-                                text-gray-200
-                            "
-                        >
-                            <tr
-                                v-for="customer in customers"
-                                :key="customer.id"
-                            >
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div class="ml-4">
-                                            <div class="text-sm font-medium">
-                                                {{ customer.id }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm">
-                                        {{ customer.name }}
-                                    </div>
-                                </td>
-                                <td class="flex m-2">
-                                    <Link
-                                        type="button"
-                                        as="button"
-                                        :href="
-                                            route('customer.edit', customer.id)
-                                        "
-                                    >
-                                        Edit
-                                    </Link>
-                                    <Link
-                                        type="button"
-                                        as="button"
-                                        method="delete"
-                                        :href="
-                                            route(
-                                                'customer.destroy',
-                                                customer.id
-                                            )
-                                        "
-                                    >
-                                        Delete
-                                    </Link>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <a-table
+                    :columns="columns"
+                    :data-source="customers.data"
+                    :pagination="pagination"
+                    @change="handleTableChange"
+                >
+                    <template #bodyCell="{ column, record }">
+                        <template v-if="column.dataIndex === 'actions'">
+                            <span>
+                                <a>Edit</a>
+                                <a-divider type="vertical" />
+                                <a @click="showConfirm(record)">Delete</a>
+                            </span>
+                        </template>
+                    </template>
+                </a-table>
             </div>
         </div>
     </app-layout>
@@ -129,13 +32,69 @@
 <script>
 import AppLayout from "@/Layouts/AppLayout";
 import { Link } from "@inertiajs/inertia-vue3";
+
+import { ExclamationCircleOutlined } from "@ant-design/icons-vue";
+import { createVNode } from "vue";
+import { Modal } from "ant-design-vue";
+import { Inertia } from "@inertiajs/inertia";
+import Button from "@/Jetstream/Button.vue";
+
+import { computed } from "vue";
+
+const columns = [
+    {
+        title: "Name",
+        dataIndex: "name",
+    },
+    {
+        title: "Email",
+        dataIndex: "email",
+    },
+    {
+        title: "Actions",
+        dataIndex: "actions",
+    },
+];
+
 export default {
     props: {
-        customers: Array,
+        customers: Object,
     },
     components: {
         AppLayout,
         Link,
+        Button,
+    },
+    methods: {
+        showConfirm: (customer) => {
+            Modal.confirm({
+                title: "Do you Want to delete these Customer?",
+                icon: createVNode(ExclamationCircleOutlined),
+                content: createVNode(
+                    "div",
+                    { style: "color:red;" },
+                    "Some descriptions"
+                ),
+                onOk() {
+                    Inertia.delete(route("customer.destroy", customer.id));
+                },
+            });
+        },
+        handleTableChange: (pag, filters, sorter) => {
+            Inertia.get(route("customer.index", { page: pag.current }));
+        },
+    },
+    setup(props) {
+        const pagination = computed(() => ({
+            total: props.customers.total,
+            current: props.customers.current_page,
+            pageSize: props.customers.per_page,
+        }));
+
+        return {
+            columns,
+            pagination,
+        };
     },
 };
 </script>

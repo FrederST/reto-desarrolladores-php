@@ -27,9 +27,14 @@
             </div>
         </div>
 
-        <a-modal title="Edit" v-model:visible="visible" :destroyOnClose="true" :footer="null">
+        <a-modal
+            title="Edit"
+            v-model:visible="visible"
+            :destroyOnClose="true"
+            :footer="null"
+        >
             <CreateOrEditCustomerInformationForm
-            @close="modalClose"
+                @close="modalClose"
                 :user="userForEdit"
             ></CreateOrEditCustomerInformationForm>
         </a-modal>

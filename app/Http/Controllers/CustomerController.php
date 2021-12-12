@@ -20,21 +20,11 @@ class CustomerController extends Controller
         return Inertia::render('Customer/Index', ['customers' => $customers]);
     }
 
-    public function create(): Response
-    {
-        return Inertia::render('Customer/CreateOrEdit');
-    }
-
     public function store(Request $request): RedirectResponse
     {
         $user = User::create($request->all());
         $user->assignRole('customer');
         return Redirect::route(self::CUSTOMER_INDEX);
-    }
-
-    public function edit(User $user): Response
-    {
-        return Inertia::render('Customer/CreateOrEdit', ['customer' => $user]);
     }
 
     public function update(Request $request, string $id, User $user, UpdateAction $updateAction): RedirectResponse
@@ -43,9 +33,9 @@ class CustomerController extends Controller
         return Redirect::route(self::CUSTOMER_INDEX);
     }
 
-    public function destroy(User $user): RedirectResponse
+    public function destroy(User $user, string $id): RedirectResponse
     {
-        $user->delete();
+        User::find($id)->delete();
         return Redirect::route(self::CUSTOMER_INDEX);
     }
 }

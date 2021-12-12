@@ -2,12 +2,9 @@
     <jet-form-section @submitted="updateCustomerInformation">
         <template #title> Customer Information </template>
 
-        <template #description>
-            Update customer information.
-        </template>
+        <template #description> Update customer information. </template>
 
         <template #form>
-
             <div class="col-span-6 sm:col-span-4">
                 <jet-label for="name" value="Name" />
                 <jet-input

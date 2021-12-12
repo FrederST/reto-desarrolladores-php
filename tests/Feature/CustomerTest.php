@@ -1,0 +1,75 @@
+<?php
+
+namespace Tests\Feature;
+
+use App\Models\User;
+use App\Providers\RouteServiceProvider;
+use Database\Seeders\PermissionsSeeder;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Jetstream\Jetstream;
+use Tests\TestCase;
+
+class CustomerTest extends TestCase
+{
+    use RefreshDatabase;
+
+    const CUSTOMER_PATH = '/customer';
+
+    public function test_index_screen_can_be_rendered()
+    {
+        $this->seed(PermissionsSeeder::class);
+
+        $this->actingAs(User::factory()->create());
+
+        $response = $this->get(self::CUSTOMER_PATH);
+
+        $response->assertStatus(200);
+    }
+
+    public function test_new_customer_can_register()
+    {
+        $this->seed(PermissionsSeeder::class);
+
+        $this->actingAs(User::factory()->create());
+
+        $response = $this->post('/customer', [
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'phone' => '3122203321',
+            'password' => 'password',
+            'password_confirmation' => 'password',
+            'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature(),
+        ]);
+
+        $response->assertRedirect(self::CUSTOMER_PATH);
+        $this->assertDatabaseHas('users', [
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'phone' => '3122203321',
+        ]);
+    }
+
+    public function test_customer_information_can_be_updated()
+    {
+        $this->actingAs($user = User::factory()->create());
+
+        $this->put(self::CUSTOMER_PATH.'/'.$user->id, [
+            'name' => 'Test Name',
+            'email' => 'test@example.com',
+            'phone' => '3122203321',
+        ]);
+
+        $this->assertEquals('Test Name', $user->fresh()->name);
+        $this->assertEquals('test@example.com', $user->fresh()->email);
+        $this->assertEquals('3122203321', $user->fresh()->phone);
+    }
+
+    public function test_customer_can_be_delete()
+    {
+        $this->actingAs($user = User::factory()->create());
+
+        $this->delete(self::CUSTOMER_PATH.'/'.$user->id);
+
+        $this->assertDeleted($user);
+    }
+}

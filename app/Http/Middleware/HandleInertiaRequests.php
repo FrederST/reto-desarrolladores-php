@@ -42,9 +42,9 @@ class HandleInertiaRequests extends Middleware
                 $user = Auth::user();
                 return $user ? [
                         'roles' => $user->getRoleNames(),
-                        'permissions' => $user->getAllPermissions()->pluck('name')
+                        'permissions' => $user->getAllPermissions()->pluck('name'),
                 ] : null;
-            }
+            },
         ]);
     }
 }

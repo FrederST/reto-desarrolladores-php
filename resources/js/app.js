@@ -7,6 +7,9 @@ import { InertiaProgress } from '@inertiajs/progress';
 import VueGates from 'vue-gates';
 import Permissions from './Plugins/Permissions';
 
+import 'ant-design-vue/dist/antd.css';
+import Antd from 'ant-design-vue';
+
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 
 createInertiaApp({
@@ -15,6 +18,7 @@ createInertiaApp({
     setup({ el, app, props, plugin }) {
         return createApp({ render: () => h(app, props) })
             .use(plugin)
+            .use(Antd)
             .use(VueGates)
             .use(Permissions)
             .mixin({ methods: { route } })

@@ -24,6 +24,7 @@
         "tailwindcss": "^2.0.1",
         "vue": "^3.0.5",
         "vue-loader": "^16.1.2",
-        "vue-gates": "^2.1.2"
+        "vue-gates": "^2.1.2",
+        "ant-design-vue": "^3.0.0-alpha.14"
     }
 }

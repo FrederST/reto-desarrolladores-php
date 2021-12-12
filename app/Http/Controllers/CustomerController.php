@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Customer\UpdateAction;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -36,9 +37,9 @@ class CustomerController extends Controller
         return Inertia::render('Customer/CreateOrEdit', ['customer' => $user]);
     }
 
-    public function update(Request $request, User $user): RedirectResponse
+    public function update(Request $request, string $id, User $user, UpdateAction $updateAction): RedirectResponse
     {
-        $user->update($request->all());
+        $updateAction->update(User::find($id), $request->all());
         return Redirect::route(self::CUSTOMER_INDEX);
     }
 

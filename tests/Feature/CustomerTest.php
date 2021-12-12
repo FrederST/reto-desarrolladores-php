@@ -52,9 +52,9 @@ class CustomerTest extends TestCase
         $this->actingAs($user = User::factory()->create());
 
         $this->put(self::CUSTOMER_PATH.'/'.$user->id, [
-            'name' => 'Test Name',
+            'name' => 'Test Update',
             'email' => 'test@example.com',
-            'phone' => '3122203321',
+            'phone' => '3122203221',
         ]);
 
         $this->assertEquals('Test Name', $user->fresh()->name);

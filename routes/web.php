@@ -30,4 +30,4 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 })->name('dashboard');
 
 Route::resource('customer', CustomerController::class)->except(['create', 'edit', 'show'])
-->middleware(['auth:sanctum', 'verified']);
+->middleware(['auth:sanctum', 'verified', 'role:admin']);

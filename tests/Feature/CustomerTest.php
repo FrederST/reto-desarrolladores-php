@@ -17,9 +17,7 @@ class CustomerTest extends TestCase
 
     public function test_index_screen_can_be_rendered()
     {
-        $this->seed(PermissionsSeeder::class);
-
-        $this->actingAs(User::factory()->create());
+        $this->createUser();
 
         $response = $this->get(self::CUSTOMER_PATH);
 
@@ -28,9 +26,7 @@ class CustomerTest extends TestCase
 
     public function test_new_customer_can_register()
     {
-        $this->seed(PermissionsSeeder::class);
-
-        $this->actingAs(User::factory()->create());
+        $this->createUser();
 
         $response = $this->post('/customer', [
             'name' => 'Test User',
@@ -49,7 +45,7 @@ class CustomerTest extends TestCase
 
     public function test_customer_information_can_be_updated()
     {
-        $this->actingAs($user = User::factory()->create());
+        $user = $this->createUser();
 
         $this->put(self::CUSTOMER_PATH.'/'.$user->id, [
             'name' => 'Test Update',
@@ -57,17 +53,27 @@ class CustomerTest extends TestCase
             'phone' => '3122203221',
         ]);
 
-        $this->assertEquals('Test Name', $user->fresh()->name);
+        $this->assertEquals('Test Update', $user->fresh()->name);
         $this->assertEquals('test@example.com', $user->fresh()->email);
-        $this->assertEquals('3122203321', $user->fresh()->phone);
+        $this->assertEquals('3122203221', $user->fresh()->phone);
     }
 
     public function test_customer_can_be_delete()
     {
-        $this->actingAs($user = User::factory()->create());
+        $user = $this->createUser();
 
         $this->delete(self::CUSTOMER_PATH.'/'.$user->id);
 
         $this->assertDeleted($user);
     }
+
+
+    private function createUser()
+    {
+        $this->seed(PermissionsSeeder::class);
+        $this->actingAs($user =User::factory()->create());
+        $user->assignRole('admin');
+        return $user;
+    }
+
 }

@@ -7,14 +7,13 @@ use App\Actions\Customer\UpdateAction;
 use App\Http\Requests\CustomerRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class CustomerController extends Controller
 {
-    const CUSTOMER_INDEX = 'customer.index';
+    public const CUSTOMER_INDEX = 'customer.index';
 
     public function index(): Response
     {

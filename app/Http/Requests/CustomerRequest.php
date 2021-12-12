@@ -8,7 +8,6 @@ use Laravel\Jetstream\Jetstream;
 
 class CustomerRequest extends FormRequest
 {
-
     use PasswordValidationRules;
 
     public function authorize()

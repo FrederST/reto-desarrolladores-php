@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\Models\User;
-use App\Providers\RouteServiceProvider;
 use Database\Seeders\PermissionsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Jetstream\Jetstream;
@@ -13,7 +12,7 @@ class CustomerTest extends TestCase
 {
     use RefreshDatabase;
 
-    const CUSTOMER_PATH = '/customer';
+    public const CUSTOMER_PATH = '/customer';
 
     public function test_index_screen_can_be_rendered()
     {
@@ -47,7 +46,7 @@ class CustomerTest extends TestCase
     {
         $user = $this->createUser();
 
-        $this->put(self::CUSTOMER_PATH.'/'.$user->id, [
+        $this->put(self::CUSTOMER_PATH . '/' . $user->id, [
             'name' => 'Test Update',
             'email' => 'test@example.com',
             'phone' => '3122203221',
@@ -62,18 +61,16 @@ class CustomerTest extends TestCase
     {
         $user = $this->createUser();
 
-        $this->delete(self::CUSTOMER_PATH.'/'.$user->id);
+        $this->delete(self::CUSTOMER_PATH . '/' . $user->id);
 
         $this->assertDeleted($user);
     }
 
-
     private function createUser()
     {
         $this->seed(PermissionsSeeder::class);
-        $this->actingAs($user =User::factory()->create());
+        $this->actingAs($user = User::factory()->create());
         $user->assignRole('admin');
         return $user;
     }
-
 }

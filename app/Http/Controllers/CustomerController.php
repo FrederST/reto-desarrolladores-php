@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Customer\CreateAction;
 use App\Actions\Customer\UpdateAction;
+use App\Http\Requests\CustomerRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -20,14 +22,13 @@ class CustomerController extends Controller
         return Inertia::render('Customer/Index', ['customers' => $customers]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(CustomerRequest $request, CreateAction $createAction): RedirectResponse
     {
-        $user = User::create($request->all());
-        $user->assignRole('customer');
+        $createAction->create($request->all());
         return Redirect::route(self::CUSTOMER_INDEX);
     }
 
-    public function update(Request $request, string $id, User $user, UpdateAction $updateAction): RedirectResponse
+    public function update(CustomerRequest $request, string $id, User $user, UpdateAction $updateAction): RedirectResponse
     {
         $updateAction->update(User::find($id), $request->all());
         return Redirect::route(self::CUSTOMER_INDEX);

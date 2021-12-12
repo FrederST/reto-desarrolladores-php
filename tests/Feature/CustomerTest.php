@@ -36,8 +36,6 @@ class CustomerTest extends TestCase
             'name' => 'Test User',
             'email' => 'test@example.com',
             'phone' => '3122203321',
-            'password' => 'password',
-            'password_confirmation' => 'password',
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature(),
         ]);
 

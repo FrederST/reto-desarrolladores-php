@@ -8,6 +8,7 @@
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <Button @click="createCustomer()"> New Customer </Button>
                 <a-table
                     :columns="columns"
                     :data-source="customers.data"
@@ -28,7 +29,7 @@
         </div>
 
         <a-modal
-            title="Edit"
+            :title="modalEdit ? 'Edit' : 'Create'"
             v-model:visible="visible"
             :destroyOnClose="true"
             :footer="null"
@@ -36,6 +37,7 @@
             <CreateOrEditCustomerInformationForm
                 @close="modalClose"
                 :user="userForEdit"
+                :edit="editCustomer"
             ></CreateOrEditCustomerInformationForm>
         </a-modal>
     </app-layout>
@@ -47,7 +49,7 @@ import { Link } from "@inertiajs/inertia-vue3";
 import CreateOrEditCustomerInformationForm from "@/Pages/Customer/CreateOrEdit";
 
 import { ExclamationCircleOutlined } from "@ant-design/icons-vue";
-import { createVNode, computed, ref } from "vue";
+import { createVNode, computed } from "vue";
 import { Modal } from "ant-design-vue";
 import { Inertia } from "@inertiajs/inertia";
 import Button from "@/Jetstream/Button.vue";
@@ -75,6 +77,7 @@ export default {
         return {
             userForEdit: Object,
             visible: false,
+            modalEdit: true,
         };
     },
     components: {
@@ -103,11 +106,18 @@ export default {
         },
         editCustomer(customer) {
             this.userForEdit = customer;
+            this.modalEdit = true;
             this.visible = true;
         },
         modalClose() {
             this.userForEdit = new Object();
+            this.modalEdit = true;
             this.visible = false;
+        },
+        createCustomer() {
+            this.userForEdit = new Object();
+            this.modalEdit = false;
+            this.visible = true;
         },
     },
     setup(props) {

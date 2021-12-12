@@ -1,5 +1,5 @@
 <template>
-    <jet-form-section @submitted="updateCustomerInformation">
+    <jet-form-section @submitted="saveInfo">
         <template #title> Customer Information </template>
 
         <template #description> Update customer information. </template>
@@ -78,7 +78,10 @@ export default defineComponent({
         JetSecondaryButton,
     },
 
-    props: ["user"],
+    props: {
+        user: Object,
+        edit: false
+    },
 
     data() {
         return {
@@ -93,10 +96,26 @@ export default defineComponent({
         };
     },
     methods: {
-        updateCustomerInformation() {
+
+        saveInfo() {
             if (this.$refs.photo) {
                 this.form.photo = this.$refs.photo.files[0];
             }
+            if (this.edit) {
+                this.createCustomerInformation();
+            }else{
+                this.updateCustomerInformation();
+            }
+        },
+
+        createCustomerInformation() {
+            this.form.post(route("customer.store"), {
+                preserveScroll: true,
+                onSuccess: () => this.clearPhotoFileInput(),
+            });
+        },
+
+        updateCustomerInformation() {
 
             this.form.put(route("customer.update", this.user.id), {
                 errorBag: "updateCustomerInformation",

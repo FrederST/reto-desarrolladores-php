@@ -17,13 +17,11 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('name', 120);
             $table->string('email', 300)->unique();
-            $table->string('phone', 120);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password', 200);
             $table->rememberToken();
             $table->foreignId('current_team_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
-            $table->timestamp('banned_at')->nullable();
             $table->timestamps();
         });
     }

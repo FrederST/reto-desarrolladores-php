@@ -16,11 +16,17 @@
                     @change="handleTableChange"
                 >
                     <template #bodyCell="{ column, record }">
+                        <template v-if="column.dataIndex === 'active'">
+                            <span>
+                                <check-outlined v-if="!record.banned_at" />
+                                <close-outlined v-else />
+                            </span>
+                        </template>
                         <template v-if="column.dataIndex === 'actions'">
                             <span>
                                 <a @click="editCustomer(record)">Edit</a>
                                 <a-divider type="vertical" />
-                                <a @click="deleteCustomer(record)">Delete</a>
+                                <a @click="deleteCustomer(record)">Disable</a>
                             </span>
                         </template>
                     </template>
@@ -54,6 +60,8 @@ import { Modal } from "ant-design-vue";
 import { Inertia } from "@inertiajs/inertia";
 import Button from "@/Jetstream/Button.vue";
 
+import { CheckOutlined, CloseOutlined } from "@ant-design/icons-vue";
+
 const columns = [
     {
         title: "Name",
@@ -62,6 +70,10 @@ const columns = [
     {
         title: "Email",
         dataIndex: "email",
+    },
+    {
+        title: "Active",
+        dataIndex: "active",
     },
     {
         title: "Actions",
@@ -85,11 +97,13 @@ export default {
         Link,
         Button,
         CreateOrEditCustomerInformationForm,
+        CheckOutlined,
+        CloseOutlined,
     },
     methods: {
         deleteCustomer(customer) {
             Modal.confirm({
-                title: "Do you Want to delete these Customer?",
+                title: "Do you Want to deactivate these Customer?",
                 icon: createVNode(ExclamationCircleOutlined),
                 content: createVNode(
                     "div",

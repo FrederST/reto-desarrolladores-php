@@ -35,7 +35,7 @@ class CustomerController extends Controller
 
     public function destroy(User $user, string $id): RedirectResponse
     {
-        User::find($id)->delete();
+        User::find($id)->update(['banned_at' => now()]);
         return Redirect::route(self::CUSTOMER_INDEX);
     }
 }

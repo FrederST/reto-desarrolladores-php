@@ -57,13 +57,13 @@ class CustomerTest extends TestCase
         $this->assertEquals('3122203221', $user->fresh()->phone);
     }
 
-    public function test_customer_can_be_delete()
+    public function test_customer_can_be_deactivate()
     {
         $user = $this->createUser();
 
         $this->delete(self::CUSTOMER_PATH . '/' . $user->id);
 
-        $this->assertDeleted($user);
+        $this->assertEquals(now(), $user->fresh()->banned_at);
     }
 
     private function createUser()

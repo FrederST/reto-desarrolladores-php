@@ -17,8 +17,7 @@ class CustomerController extends Controller
 
     public function index(): Response
     {
-        $customers = User::role('customer')->paginate(6);
-        return Inertia::render('Customer/Index', ['customers' => $customers]);
+        return Inertia::render('Customer/Index', ['customers' =>  User::role('customer')->paginate(6)]);
     }
 
     public function store(CustomerRequest $request, CreateAction $createAction): RedirectResponse
@@ -35,7 +34,7 @@ class CustomerController extends Controller
 
     public function destroy(User $user, string $id): RedirectResponse
     {
-        User::find($id)->delete();
+        User::find($id)->update(['banned_at' => now()]);
         return Redirect::route(self::CUSTOMER_INDEX);
     }
 }

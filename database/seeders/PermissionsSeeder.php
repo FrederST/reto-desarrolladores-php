@@ -8,7 +8,7 @@ use Spatie\Permission\Models\Role;
 
 class PermissionsSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
         Permission::create(['name' => 'edit customers']);
         Permission::create(['name' => 'inactive customers']);

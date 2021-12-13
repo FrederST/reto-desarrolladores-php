@@ -54,7 +54,6 @@ import AppLayout from "@/Layouts/AppLayout";
 import { Link } from "@inertiajs/inertia-vue3";
 import CreateOrEditCustomerInformationForm from "@/Pages/Customer/CreateOrEdit";
 
-import { ExclamationCircleOutlined } from "@ant-design/icons-vue";
 import { createVNode, computed } from "vue";
 import { Modal } from "ant-design-vue";
 import { Inertia } from "@inertiajs/inertia";

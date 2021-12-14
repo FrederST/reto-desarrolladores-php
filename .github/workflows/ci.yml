@@ -16,15 +16,12 @@ jobs:
 
     services:
       mysql:
-        image: mysql:latest
+        image: mysql:5.7
         env:
-          MYSQL_DATABASE: reto_desarrolladores_php
-          MYSQL_USER: root
-          MYSQL_PASSWORD: root
-          MYSQL_ROOT_PASSWORD: root
+          MYSQL_ROOT_PASSWORD: password
         ports:
-          - 3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        - 3306
+        options: --health-cmd "mysqladmin ping" --health-interval 10s --health-timeout 5s --health-retries 10
 
 
     steps:
@@ -47,9 +44,6 @@ jobs:
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         run: composer run-script testdox
         env:
-          MYSQL_DATABASE: reto_desarrolladores_php
-          DB_USERNAME: root
-          DB_PASSWORD: root
           DB_PORT: ${{ job.services.mysql.ports[3306] }}
       - name: Fix results files
         run: sed -i -e "s%$GITHUB_WORKSPACE/%%g" *.xml

@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - develop
+      - feature/*
   pull_request:
     branches:
       - develop
@@ -32,6 +33,9 @@ jobs:
         run: chmod -R 777 storage bootstrap/cache
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         run: composer run-script testdox
+      - name: Fix results files
+        run: sed -i -e "s%$GITHUB_WORKSPACE/%%g" *.xml
+        working-directory: results
       - name: Store results
         uses: actions/upload-artifact@v2
         with:

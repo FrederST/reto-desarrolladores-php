@@ -59,7 +59,7 @@ import { Modal } from "ant-design-vue";
 import { Inertia } from "@inertiajs/inertia";
 import Button from "@/Jetstream/Button.vue";
 
-import { CheckOutlined, CloseOutlined } from "@ant-design/icons-vue";
+import { CheckOutlined, CloseOutlined, ExclamationCircleOutlined } from "@ant-design/icons-vue";
 
 const columns = [
     {

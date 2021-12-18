@@ -102,9 +102,9 @@ export default defineComponent({
                 this.form.photo = this.$refs.photo.files[0];
             }
             if (this.edit) {
-                this.createCustomerInformation();
-            }else{
                 this.updateCustomerInformation();
+            }else{
+                this.createCustomerInformation();
             }
         },
 
@@ -116,7 +116,7 @@ export default defineComponent({
         },
 
         updateCustomerInformation() {
-
+console.log('EDITTTTTTTTT');
             this.form.put(route("customers.update", this.user.id), {
                 errorBag: "updateCustomerInformation",
                 preserveScroll: true,

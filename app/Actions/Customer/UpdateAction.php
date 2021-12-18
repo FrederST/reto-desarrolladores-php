@@ -13,27 +13,19 @@ class UpdateAction
             $user->updateProfilePhoto($input['photo']);
         }
 
-        if ($input['email'] !== $user->email &&
-            $user instanceof MustVerifyEmail) {
-            $this->updateVerifiedUser($user, $input);
-        } else {
-            $user->update([
-                'name' => $input['name'],
-                'email' => $input['email'],
-                'phone' => $input['phone'],
-            ]);
-        }
-    }
-
-    protected function updateVerifiedUser(User $user, array $input)
-    {
         $user->update([
             'name' => $input['name'],
             'email' => $input['email'],
             'phone' => $input['phone'],
-            'email_verified_at' => null,
         ]);
 
-        $user->sendEmailVerificationNotification();
+        if ($input['email'] !== $user->email &&
+            $user instanceof MustVerifyEmail) {
+            $user->update([
+                'email_verified_at' => null,
+            ]);
+
+            $user->sendEmailVerificationNotification();
+        }
     }
 }

@@ -13,7 +13,7 @@ use Inertia\Response;
 
 class CustomerController extends Controller
 {
-    public const CUSTOMER_INDEX = 'customer.index';
+    public const CUSTOMER_INDEX = 'customers.index';
 
     public function index(): Response
     {

@@ -110,12 +110,12 @@ export default {
                     "Some descriptions"
                 ),
                 onOk() {
-                    Inertia.delete(route("customer.destroy", customer.id));
+                    Inertia.delete(route("customers.destroy", customer.id));
                 },
             });
         },
         handleTableChange(pag) {
-            Inertia.get(route("customer.index", { page: pag.current }));
+            Inertia.get(route("customers.index", { page: pag.current }));
         },
         editCustomer(customer) {
             this.userForEdit = customer;

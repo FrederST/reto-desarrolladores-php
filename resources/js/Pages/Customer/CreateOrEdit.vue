@@ -109,7 +109,7 @@ export default defineComponent({
         },
 
         createCustomerInformation() {
-            this.form.post(route("customer.store"), {
+            this.form.post(route("customers.store"), {
                 preserveScroll: true,
                 onSuccess: () => this.clearPhotoFileInput(),
             });
@@ -117,7 +117,7 @@ export default defineComponent({
 
         updateCustomerInformation() {
 
-            this.form.put(route("customer.update", this.user.id), {
+            this.form.put(route("customers.update", this.user.id), {
                 errorBag: "updateCustomerInformation",
                 preserveScroll: true,
                 onSuccess: () => this.clearPhotoFileInput(),

@@ -29,5 +29,5 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->name('dashboard');
 
-Route::resource('customer', CustomerController::class)->except(['create', 'edit', 'show'])
+Route::resource('customers', CustomerController::class)->except(['create', 'edit', 'show'])
 ->middleware(['auth:sanctum', 'verified', 'role:admin']);

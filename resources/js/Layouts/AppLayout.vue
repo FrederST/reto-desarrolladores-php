@@ -26,7 +26,7 @@
 
                             <!-- Navigation Links -->
                             <div v-role="'admin'" class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <jet-nav-link :href="route('customer.index')" :active="route().current('customer.index')">
+                                <jet-nav-link :href="route('customers.index')" :active="route().current('customers.index')">
                                     Customer
                                 </jet-nav-link>
                             </div>

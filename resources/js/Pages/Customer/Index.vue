@@ -35,7 +35,7 @@
         </div>
 
         <a-modal
-            :title="modalEdit ? 'Edit' : 'Create'"
+            :title="modalTitle"
             v-model:visible="visible"
             :destroyOnClose="true"
             :footer="null"
@@ -132,6 +132,9 @@ export default {
             this.modalEdit = false;
             this.visible = true;
         },
+        modalTitle() {
+            return this.modalEdit ? 'Edit' : 'Create';
+        }
     },
     setup(props) {
         const pagination = computed(() => ({

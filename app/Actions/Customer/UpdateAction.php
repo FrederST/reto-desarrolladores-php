@@ -3,7 +3,6 @@
 namespace App\Actions\Customer;
 
 use App\Actions\Action;
-use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;

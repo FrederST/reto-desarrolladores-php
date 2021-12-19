@@ -4,6 +4,7 @@ namespace App\Actions\Customer;
 
 use App\Models\User;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Support\Facades\Log;
 
 class UpdateAction
 {
@@ -24,8 +25,9 @@ class UpdateAction
             $user->update([
                 'email_verified_at' => null,
             ]);
-
             $user->sendEmailVerificationNotification();
         }
+
+        Log::channel('customer')->info('Customer/User Updated', $user->toArray());
     }
 }

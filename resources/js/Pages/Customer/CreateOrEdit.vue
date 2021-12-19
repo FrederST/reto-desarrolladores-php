@@ -116,7 +116,6 @@ export default defineComponent({
         },
 
         updateCustomerInformation() {
-console.log('EDITTTTTTTTT');
             this.form.put(route("customers.update", this.user.id), {
                 errorBag: "updateCustomerInformation",
                 preserveScroll: true,

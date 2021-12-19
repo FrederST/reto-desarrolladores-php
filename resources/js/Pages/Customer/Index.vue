@@ -43,7 +43,7 @@
             <CreateOrEditCustomerInformationForm
                 @close="modalClose"
                 :user="userForEdit"
-                :edit="editCustomer"
+                :edit="modalEdit"
             ></CreateOrEditCustomerInformationForm>
         </a-modal>
     </app-layout>

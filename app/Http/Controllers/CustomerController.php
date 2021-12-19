@@ -23,13 +23,13 @@ class CustomerController extends Controller
 
     public function store(StoreRequest $request, CreateAction $createAction): RedirectResponse
     {
-        $createAction->create($request->validated());
+        $createAction->execute($request->validated(), new User);
         return Redirect::route(self::CUSTOMER_INDEX);
     }
 
     public function update(UpdateRequest $request, User $customer, UpdateAction $updateAction): RedirectResponse
     {
-        $updateAction->update($customer, $request->validated());
+        $updateAction->execute($request->validated(), $customer);
         return Redirect::route(self::CUSTOMER_INDEX);
     }
 

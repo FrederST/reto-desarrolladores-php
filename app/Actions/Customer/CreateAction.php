@@ -2,22 +2,24 @@
 
 namespace App\Actions\Customer;
 
+use App\Actions\Action;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
-class CreateAction
+class CreateAction extends Action
 {
-    public function create(array $input): User
+    public function execute(array $data, Model $user): Model
     {
-        $user = User::create([
-            'name' => $input['name'],
-            'email' => $input['email'],
-            'phone' => $input['phone'],
-            'password' => Hash::make('password'),
-        ]);
+        $user->name = $data['name'];
+        $user->email = $data['email'];
+        $user->phone = $data['phone'];
+        $user->password = Hash::make('password');
+        $user->save();
         $user->assignRole('customer');
         Log::channel('customer')->info('Customer/User Created', $user->toArray());
         return $user;
     }
+
 }

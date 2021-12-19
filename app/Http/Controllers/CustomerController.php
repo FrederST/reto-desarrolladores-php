@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Actions\Customer\CreateAction;
 use App\Actions\Customer\UpdateAction;
-use App\Http\Requests\CustomerRequest;
+use App\Http\Requests\Customer\StoreRequest;
+use App\Http\Requests\Customer\UpdateRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
@@ -13,28 +14,28 @@ use Inertia\Response;
 
 class CustomerController extends Controller
 {
-    public const CUSTOMER_INDEX = 'customer.index';
+    public const CUSTOMER_INDEX = 'customers.index';
 
     public function index(): Response
     {
         return Inertia::render('Customer/Index', ['customers' =>  User::role('customer')->paginate(6)]);
     }
 
-    public function store(CustomerRequest $request, CreateAction $createAction): RedirectResponse
+    public function store(StoreRequest $request, CreateAction $createAction): RedirectResponse
     {
-        $createAction->create($request->all());
+        $createAction->create($request->validated());
         return Redirect::route(self::CUSTOMER_INDEX);
     }
 
-    public function update(CustomerRequest $request, string $id, User $user, UpdateAction $updateAction): RedirectResponse
+    public function update(UpdateRequest $request, User $customer, UpdateAction $updateAction): RedirectResponse
     {
-        $updateAction->update(User::find($id), $request->all());
+        $updateAction->update($customer, $request->validated());
         return Redirect::route(self::CUSTOMER_INDEX);
     }
 
-    public function destroy(User $user, string $id): RedirectResponse
+    public function destroy(User $customer): RedirectResponse
     {
-        User::find($id)->update(['banned_at' => now()]);
+        $customer->update(['banned_at' => now()]);
         return Redirect::route(self::CUSTOMER_INDEX);
     }
 }

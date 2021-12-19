@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - develop
+      - feature/*
   pull_request:
     branches:
       - develop
@@ -12,6 +13,17 @@ on:
 jobs:
   laravel-tests:
     runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_DATABASE: reto_desarrolladores_php
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+        - 3306
+        options: --health-cmd "mysqladmin ping" --health-interval 10s --health-timeout 5s --health-retries 10
+
 
     steps:
       - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
@@ -32,6 +44,12 @@ jobs:
         run: chmod -R 777 storage bootstrap/cache
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         run: composer run-script testdox
+        env:
+          DB_PASSWORD: root
+          DB_PORT: ${{ job.services.mysql.ports[3306] }}
+      - name: Fix results files
+        run: sed -i -e "s%$GITHUB_WORKSPACE/%%g" *.xml
+        working-directory: results
       - name: Store results
         uses: actions/upload-artifact@v2
         with:

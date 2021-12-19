@@ -102,22 +102,21 @@ export default defineComponent({
                 this.form.photo = this.$refs.photo.files[0];
             }
             if (this.edit) {
-                this.createCustomerInformation();
-            }else{
                 this.updateCustomerInformation();
+            }else{
+                this.createCustomerInformation();
             }
         },
 
         createCustomerInformation() {
-            this.form.post(route("customer.store"), {
+            this.form.post(route("customers.store"), {
                 preserveScroll: true,
                 onSuccess: () => this.clearPhotoFileInput(),
             });
         },
 
         updateCustomerInformation() {
-
-            this.form.put(route("customer.update", this.user.id), {
+            this.form.put(route("customers.update", this.user.id), {
                 errorBag: "updateCustomerInformation",
                 preserveScroll: true,
                 onSuccess: () => this.clearPhotoFileInput(),

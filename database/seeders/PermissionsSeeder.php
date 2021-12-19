@@ -5,20 +5,24 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use File;
 
 class PermissionsSeeder extends Seeder
 {
     public function run(): void
     {
-        Permission::create(['name' => 'edit customers']);
-        Permission::create(['name' => 'inactive customers']);
-        Permission::create(['name' => 'create customers']);
+        $permissions = json_decode(File::get("database/data/permissions.json"));
 
-        $role1 = Role::create(['name' => 'admin']);
-        $role1->givePermissionTo('edit customers');
-        $role1->givePermissionTo('inactive customers');
-        $role1->givePermissionTo('create customers');
+        foreach ($permissions->permissions as $value) {
+            Permission::create([
+                'name' => $value
+            ]);
+        }
 
-        Role::create(['name' => 'customer']);
+        foreach ($permissions->roles as $key => $value) {
+            $role = Role::create(['name' => $key]);
+
+            $role->syncPermissions($value);
+        }
     }
 }

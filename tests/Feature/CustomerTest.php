@@ -12,7 +12,7 @@ class CustomerTest extends TestCase
 {
     use RefreshDatabase;
 
-    public const CUSTOMER_PATH = '/customer';
+    public const CUSTOMER_PATH = '/customers';
 
     public function test_index_screen_can_be_rendered()
     {
@@ -27,7 +27,7 @@ class CustomerTest extends TestCase
     {
         $this->createUser();
 
-        $response = $this->post('/customer', [
+        $response = $this->post(self::CUSTOMER_PATH, [
             'name' => 'Test User',
             'email' => 'test@example.com',
             'phone' => '3122203321',

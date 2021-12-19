@@ -4,6 +4,7 @@ namespace App\Actions\Customer;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class CreateAction
 {
@@ -16,6 +17,7 @@ class CreateAction
             'password' => Hash::make('password'),
         ]);
         $user->assignRole('customer');
+        Log::channel('customer')->info('Customer/User Created', $user->toArray());
         return $user;
     }
 }

@@ -1,0 +1,15 @@
+{
+    "permissions": [
+        "edit customers",
+        "inactive customers",
+        "create customers"
+    ],
+    "roles": {
+        "admin": [
+            "edit customers",
+            "inactive customers",
+            "create customers"
+        ],
+        "customer": []
+    }
+}

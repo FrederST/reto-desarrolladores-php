@@ -35,7 +35,7 @@
         </div>
 
         <a-modal
-            :title="modalEdit ? 'Edit' : 'Create'"
+            :title="modalTitle"
             v-model:visible="visible"
             :destroyOnClose="true"
             :footer="null"
@@ -43,7 +43,7 @@
             <CreateOrEditCustomerInformationForm
                 @close="modalClose"
                 :user="userForEdit"
-                :edit="editCustomer"
+                :edit="modalEdit"
             ></CreateOrEditCustomerInformationForm>
         </a-modal>
     </app-layout>
@@ -59,7 +59,7 @@ import { Modal } from "ant-design-vue";
 import { Inertia } from "@inertiajs/inertia";
 import Button from "@/Jetstream/Button.vue";
 
-import { CheckOutlined, CloseOutlined } from "@ant-design/icons-vue";
+import { CheckOutlined, CloseOutlined, ExclamationCircleOutlined } from "@ant-design/icons-vue";
 
 const columns = [
     {
@@ -110,12 +110,12 @@ export default {
                     "Some descriptions"
                 ),
                 onOk() {
-                    Inertia.delete(route("customer.destroy", customer.id));
+                    Inertia.delete(route("customers.destroy", customer.id));
                 },
             });
         },
         handleTableChange(pag) {
-            Inertia.get(route("customer.index", { page: pag.current }));
+            Inertia.get(route("customers.index", { page: pag.current }));
         },
         editCustomer(customer) {
             this.userForEdit = customer;
@@ -132,6 +132,9 @@ export default {
             this.modalEdit = false;
             this.visible = true;
         },
+        modalTitle() {
+            return this.modalEdit ? 'Edit' : 'Create';
+        }
     },
     setup(props) {
         const pagination = computed(() => ({

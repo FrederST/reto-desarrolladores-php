@@ -3,6 +3,7 @@
 namespace App\Actions\Fortify;
 
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\ResetsUserPasswords;
 
@@ -26,5 +27,6 @@ class ResetUserPassword implements ResetsUserPasswords
         $user->forceFill([
             'password' => Hash::make($input['password']),
         ])->save();
+        Log::channel('fortify')->info('User Password Reset', $user->toArray());
     }
 }

@@ -126,6 +126,12 @@ return [
             'level' => env('LOG_LEVEL', 'debug'),
         ],
 
+        'product' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/product.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+        ],
+
     ],
 
 ];

@@ -41,7 +41,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
                 'phone' => $input['phone'],
             ])->save();
         }
-        Log::channel('fortify')->info('User Profile Info Updated ', $user->toArray());
+        Log::channel('auth')->info('User Profile Info Updated ', $user->toArray());
     }
 
     /**

@@ -32,6 +32,6 @@ class UpdateUserPassword implements UpdatesUserPasswords
         $user->forceFill([
             'password' => Hash::make($input['password']),
         ])->save();
-        Log::channel('fortify')->info('User Password Updated', $user->toArray());
+        Log::channel('auth')->info('User Password Updated', $user->toArray());
     }
 }

@@ -114,9 +114,9 @@ return [
             'path' => storage_path('logs/laravel.log'),
         ],
 
-        'fortify' => [
+        'auth' => [
             'driver' => 'single',
-            'path' => storage_path('logs/fortify.log'),
+            'path' => storage_path('logs/auth.log'),
             'level' => env('LOG_LEVEL', 'debug'),
         ],
 

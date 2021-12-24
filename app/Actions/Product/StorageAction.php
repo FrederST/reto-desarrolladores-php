@@ -18,7 +18,20 @@ class StorageAction extends Action
         $product->sale_price = $data['sale_price'];
         $product->save();
 
+        $this->saveImages($data['images'], $product);
+
         Log::channel('product')->info('Product Created', $product->toArray());
         return $product;
+    }
+
+    private function saveImages(array $images, Model $product)
+    {
+        $storagePath = 'products/' . $product->id . '/images';
+        foreach ($images as $image) {
+            $imageName = 'product-' . time() . '.' . $image->getClientOriginalExtension();
+            $product->images()->create([
+                'path' => $image->storeAs($storagePath, $imageName),
+            ]);
+        }
     }
 }

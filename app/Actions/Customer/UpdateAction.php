@@ -2,25 +2,26 @@
 
 namespace App\Actions\Customer;
 
-use App\Models\User;
+use App\Actions\Action;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 
-class UpdateAction
+class UpdateAction extends Action
 {
-    public function update(User $user, array $input)
+    public function execute(array $data, Model $user): Model
     {
-        if (isset($input['photo'])) {
-            $user->updateProfilePhoto($input['photo']);
+        if (isset($data['photo'])) {
+            $user->updateProfilePhoto($data['photo']);
         }
 
         $user->update([
-            'name' => $input['name'],
-            'email' => $input['email'],
-            'phone' => $input['phone'],
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'phone' => $data['phone'],
         ]);
 
-        if ($input['email'] !== $user->email &&
+        if ($data['email'] !== $user->email &&
             $user instanceof MustVerifyEmail) {
             $user->update([
                 'email_verified_at' => null,
@@ -29,5 +30,8 @@ class UpdateAction
         }
 
         Log::channel('customer')->info('Customer/User Updated', $user->toArray());
+        return $user;
     }
+
+
 }

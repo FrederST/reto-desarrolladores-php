@@ -66,7 +66,7 @@ class CustomerTest extends TestCase
         $this->assertEquals(now(), $user->fresh()->banned_at);
     }
 
-    private function createUser()
+    private function createUser(): User
     {
         $this->seed(PermissionsSeeder::class);
         $this->actingAs($user = User::factory()->create());

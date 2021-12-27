@@ -43,6 +43,7 @@ class HandleInertiaRequests extends Middleware
                 return $user ? [
                         'roles' => $user->getRoleNames(),
                         'permissions' => $user->getAllPermissions()->pluck('name'),
+                        'csrf_token' => csrf_token(),
                 ] : null;
             },
         ]);

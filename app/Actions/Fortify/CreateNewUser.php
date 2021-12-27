@@ -30,7 +30,7 @@ class CreateNewUser implements CreatesNewUsers
             'password' => Hash::make($input['password']),
         ]);
         $user->assignRole('customer');
-        Log::channel('fortify')->info('User Created', $user->toArray());
+        Log::channel('auth')->info('User Created', $user->toArray());
         return $user;
     }
 }

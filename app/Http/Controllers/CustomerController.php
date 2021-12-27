@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\Customer\CreateAction;
+use App\Actions\Customer\StorageAction;
 use App\Actions\Customer\UpdateAction;
 use App\Http\Requests\Customer\StoreRequest;
 use App\Http\Requests\Customer\UpdateRequest;
@@ -21,15 +21,15 @@ class CustomerController extends Controller
         return Inertia::render('Customer/Index', ['customers' =>  User::role('customer')->paginate(6)]);
     }
 
-    public function store(StoreRequest $request, CreateAction $createAction): RedirectResponse
+    public function store(StoreRequest $request, StorageAction $createAction): RedirectResponse
     {
-        $createAction->create($request->validated());
+        $createAction->execute($request->validated(), new User);
         return Redirect::route(self::CUSTOMER_INDEX);
     }
 
     public function update(UpdateRequest $request, User $customer, UpdateAction $updateAction): RedirectResponse
     {
-        $updateAction->update($customer, $request->validated());
+        $updateAction->execute($request->validated(), $customer);
         return Redirect::route(self::CUSTOMER_INDEX);
     }
 

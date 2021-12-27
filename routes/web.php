@@ -29,7 +29,7 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return Inertia::render('Dashboard', ['products' =>  Product::with('images')->paginate(6)]);
+    return Inertia::render('Dashboard', ['products' =>  Product::with('images')->where('status', 1)->paginate(6)]);
 })->name('dashboard');
 
 Route::resource('customers', CustomerController::class)->except(['create', 'edit', 'show'])

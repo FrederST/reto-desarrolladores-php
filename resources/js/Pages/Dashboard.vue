@@ -6,7 +6,7 @@
             </h2>
         </template>
 
-        <div class="py-12">
+        <div v-if="products.data.length > 0" class="py-12">
             <input
                 class="w-full rounded-md text-lg p-4 border-2 border-gray-200"
                 v-model="searchTerm"
@@ -15,11 +15,22 @@
             <ul v-if="filteredProducts.length > 0">
                 <a-list size="small" bordered :data-source="filteredProducts">
                     <template #renderItem="{ item }">
-                        <a-list-item>{{ item.name }} - {{ item.sale_price }}</a-list-item>
+                        <a-list-item
+                            >{{ item.name }} -
+                            {{ item.sale_price }}</a-list-item
+                        >
                     </template>
                 </a-list>
             </ul>
+
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <a-pagination
+                    v-model:current="current"
+                    :total="products.total"
+                    :pageSize="products.per_page"
+                    show-less-items
+                    @change="onChange"
+                />
                 <div class="py-4 grid gap-4 md:grid-cols-4 grid-cols-2">
                     <ProductCard
                         v-for="product in products.data"
@@ -29,13 +40,21 @@
                 </div>
             </div>
         </div>
+
+        <div v-else>
+            <a-result status="403" title="No Products">
+                <template #extra>
+                </template>
+            </a-result>
+        </div>
     </app-layout>
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import ProductCard from "@/Pages/Product/Partials/ProductCard.vue";
+import { Inertia } from "@inertiajs/inertia";
 
 export default defineComponent({
     props: {
@@ -57,14 +76,26 @@ export default defineComponent({
         },
     },
     methods: {
+        onChange(pag) {
+            Inertia.get(route("dashboard", { page: pag }));
+        },
         searchProducts() {
             axios
                 .get("/api/products/search", {
                     params: { searchTerm: this.searchTerm },
                 })
                 .then((res) => (this.filteredProducts = res.data))
-                .catch((error) => {});
+                .catch((error) => {
+                    console.log(error);
+                });
         },
+    },
+    setup(props) {
+        const current = ref(props.products.current_page);
+
+        return {
+            current,
+        };
     },
 });
 </script>

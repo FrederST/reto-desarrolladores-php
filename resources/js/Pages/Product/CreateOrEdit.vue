@@ -52,7 +52,7 @@ export default defineComponent({
                 weight: this.product.weight,
                 price: this.product.price,
                 sale_price: this.product.sale_price,
-                status: this.product.status == 1,
+                status: this.product.status,
             }),
         };
     },
@@ -68,6 +68,7 @@ export default defineComponent({
         createProductInformation() {
             this.form.post(route("products.store"), {
                 preserveScroll: true,
+                onError: errors => console.log(errors),
                 onSuccess: () => this.closeModal(),
             });
         },

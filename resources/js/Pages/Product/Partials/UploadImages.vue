@@ -37,7 +37,11 @@ export default defineComponent({
             const index = this.fileList.indexOf(file);
             if (index > -1) {
                 Inertia.delete(route("products.images.destroy", file.uid), {
-                    "X-CSRF-TOKEN": this.$page.props.auth.csrf_token,
+                    headers: {
+                        "X-CSRF-TOKEN": this.$page.props.auth.csrf_token,
+                    },
+                    preserveScroll: true,
+                    onFinish: () => console.log("Work"),
                 });
                 this.fileList.splice(index, 1);
                 return true;

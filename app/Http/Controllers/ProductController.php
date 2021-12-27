@@ -17,7 +17,7 @@ class ProductController extends Controller
 
     public function index(): Response
     {
-        return Inertia::render('Product/Index', ['products' =>  Product::paginate(6)]);
+        return Inertia::render('Product/Index', ['products' =>  Product::with('images')->paginate(6)]);
     }
 
     public function store(Request $request, StorageAction $storageAction): RedirectResponse

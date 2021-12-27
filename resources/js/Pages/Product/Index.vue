@@ -6,9 +6,12 @@
             </h2>
         </template>
 
+
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <a-button type="primary" @click="createCustomer()"> New Product </a-button>
+                <a-button type="primary" @click="createCustomer()">
+                    New Product
+                </a-button>
                 <a-table
                     :columns="columns"
                     :data-source="products.data"
@@ -24,6 +27,8 @@
                         </template>
                         <template v-if="column.dataIndex === 'actions'">
                             <span>
+                                <a @click="uploadImages(record)">Images</a>
+                                <a-divider type="vertical" />
                                 <a @click="editProduct(record)">Edit</a>
                                 <a-divider type="vertical" />
                                 <a @click="deleteProduct(record)">Delete</a>
@@ -38,7 +43,6 @@
             :title="modalTitle"
             v-model:visible="visible"
             :destroyOnClose="true"
-            width="1000px"
             :footer="null"
         >
             <CreateOrEditProductInformationForm
@@ -47,6 +51,17 @@
                 :edit="modalEdit"
             ></CreateOrEditProductInformationForm>
         </a-modal>
+        <a-modal
+            :title="modalTitle"
+            v-model:visible="visibleUploadImages"
+            :destroyOnClose="true"
+            :footer="null"
+        >
+            <UploadImages
+                @close="modalClose"
+                :product="productForUploadImage"
+            ></UploadImages>
+        </a-modal>
     </app-layout>
 </template>
 
@@ -54,13 +69,18 @@
 import AppLayout from "@/Layouts/AppLayout";
 import { Link } from "@inertiajs/inertia-vue3";
 import CreateOrEditProductInformationForm from "@/Pages/Product/CreateOrEdit";
+import UploadImages from "@/Pages/Product/Partials/UploadImages";
 
 import { createVNode, computed } from "vue";
 import { Modal } from "ant-design-vue";
 import { Inertia } from "@inertiajs/inertia";
 import Button from "@/Jetstream/Button.vue";
 
-import { CheckOutlined, CloseOutlined, ExclamationCircleOutlined } from "@ant-design/icons-vue";
+import {
+    CheckOutlined,
+    CloseOutlined,
+    ExclamationCircleOutlined,
+} from "@ant-design/icons-vue";
 
 const columns = [
     {
@@ -88,7 +108,9 @@ export default {
     data() {
         return {
             productForEdit: Object,
+            productForUploadImage: Object,
             visible: false,
+            visibleUploadImages: false,
             modalEdit: true,
         };
     },
@@ -97,6 +119,7 @@ export default {
         Link,
         Button,
         CreateOrEditProductInformationForm,
+        UploadImages,
         CheckOutlined,
         CloseOutlined,
     },
@@ -134,8 +157,12 @@ export default {
             this.visible = true;
         },
         modalTitle() {
-            return this.modalEdit ? 'Edit' : 'Create';
-        }
+            return this.modalEdit ? "Edit" : "Create";
+        },
+        uploadImages(product) {
+            this.productForUploadImage = product;
+            this.visibleUploadImages = true;
+        },
     },
     setup(props) {
         const pagination = computed(() => ({

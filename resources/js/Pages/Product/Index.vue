@@ -58,7 +58,7 @@
             :footer="null"
         >
             <UploadImages
-                @close="modalClose"
+                @upload="reloadPage"
                 :product="productForUploadImage"
             ></UploadImages>
         </a-modal>
@@ -162,6 +162,10 @@ export default {
         uploadImages(product) {
             this.productForUploadImage = product;
             this.visibleUploadImages = true;
+        },
+        reloadPage() {
+            console.log('RELOADDDDDDDDDDDDDD');
+            Inertia.reload();
         },
     },
     setup(props) {

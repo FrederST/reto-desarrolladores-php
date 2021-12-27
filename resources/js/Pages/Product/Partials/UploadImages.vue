@@ -7,6 +7,7 @@
         :headers="{ 'X-CSRF-TOKEN': this.$page.props.auth.csrf_token }"
         list-type="picture-card"
         :remove="removeFile"
+        @change="handleChange"
     >
         <div v-if="fileList.length < 8">
             <plus-outlined />
@@ -19,6 +20,7 @@
 import { defineComponent, ref } from "vue";
 import { PlusOutlined } from "@ant-design/icons-vue";
 import { Inertia } from "@inertiajs/inertia";
+import { message } from "ant-design-vue";
 
 export default defineComponent({
     props: {
@@ -29,8 +31,8 @@ export default defineComponent({
         PlusOutlined,
     },
     methods: {
-        closeModal() {
-            this.$emit("close", true);
+        uploadImage(upload = false) {
+            this.$emit("upload", upload);
         },
 
         removeFile(file) {
@@ -41,16 +43,12 @@ export default defineComponent({
                         "X-CSRF-TOKEN": this.$page.props.auth.csrf_token,
                     },
                     preserveScroll: true,
-                    onFinish: () => console.log("Work"),
+                    onFinish: () => this.uploadImage(true),
                 });
                 this.fileList.splice(index, 1);
                 return true;
             }
             return false;
-        },
-
-        print() {
-            console.log(this.fileList);
         },
 
         loadImages() {
@@ -62,6 +60,19 @@ export default defineComponent({
                     url: image.path,
                 });
             });
+        },
+
+        handleChange(info) {
+            const status = info.file.status;
+            if (status !== "uploading") {
+                console.log(info.file, info.fileList);
+            }
+            if (status === "done") {
+                message.success(`${info.file.name} file uploaded successfully.`);
+                this.uploadImage(true);
+            } else if (status === "error") {
+                message.error(`${info.file.name} file upload failed.`);
+            }
         },
     },
     setup() {

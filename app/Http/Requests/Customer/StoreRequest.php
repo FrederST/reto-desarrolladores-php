@@ -2,14 +2,11 @@
 
 namespace App\Http\Requests\Customer;
 
-use App\Actions\Fortify\PasswordValidationRules;
 use Illuminate\Foundation\Http\FormRequest;
 use Laravel\Jetstream\Jetstream;
 
 class StoreRequest extends FormRequest
 {
-    use PasswordValidationRules;
-
     public function authorize(): bool
     {
         return true;

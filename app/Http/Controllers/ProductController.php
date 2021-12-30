@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Actions\Product\StorageAction;
 use App\Actions\Product\UpdateAction;
 use App\Http\Requests\Product\StoreRequest;
+use App\Http\Requests\Product\UpdateRequest;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
@@ -27,7 +28,7 @@ class ProductController extends Controller
         return Redirect::route(self::PRODUCT_INDEX);
     }
 
-    public function update(StoreRequest $request, Product $product, UpdateAction $updateAction): RedirectResponse
+    public function update(UpdateRequest $request, Product $product, UpdateAction $updateAction): RedirectResponse
     {
         $updateAction->execute($request->validated(), $product);
         return Redirect::route(self::PRODUCT_INDEX);

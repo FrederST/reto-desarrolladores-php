@@ -2,12 +2,11 @@
 
 namespace App\Http\Requests\Product;
 
-use App\Actions\Fortify\PasswordValidationRules;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreRequest extends FormRequest
 {
-    use PasswordValidationRules;
+    private const GTE_RULE = 'gte:0';
 
     public function authorize(): bool
     {
@@ -17,13 +16,13 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'min:1', 'max:100'],
             'description' => ['required', 'string'],
-            'quantity' => ['required', 'numeric'],
-            'weight' => ['required', 'numeric'],
-            'price' => ['required', 'numeric'],
-            'sale_price' => ['required', 'numeric'],
-            'status' => ['required'],
+            'quantity' => ['required', 'numeric', self::GTE_RULE],
+            'weight' => ['required', 'numeric', self::GTE_RULE],
+            'price' => ['required', 'numeric', self::GTE_RULE],
+            'sale_price' => ['required', 'numeric', 'gte:price'],
+            'status' => ['required', 'boolean'],
         ];
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Customer;
 
 use App\Models\User;
 use Database\Seeders\PermissionsSeeder;

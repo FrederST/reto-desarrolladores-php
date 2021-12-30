@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Product;
 
 use App\Models\Product;
 use App\Models\User;
@@ -14,9 +14,21 @@ class ProductTest extends TestCase
 
     public const PRODUCT_PATH = '/products';
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->createUser();
+    }
+
+    public function test_index_screen_can_be_rendered()
+    {
+        $response = $this->get(self::PRODUCT_PATH);
+
+        $response->assertStatus(200);
+    }
+
     public function test_new_product_can_register()
     {
-        $this->createUser();
         $product = $this->productProvider()['product'];
 
         $response = $this->post(self::PRODUCT_PATH, $product);
@@ -27,7 +39,6 @@ class ProductTest extends TestCase
 
     public function test_product_information_can_be_updated()
     {
-        $this->createUser();
         $product = Product::factory()->create();
 
         $this->put(self::PRODUCT_PATH . '/' . $product->id, [
@@ -53,8 +64,9 @@ class ProductTest extends TestCase
     private function createUser(): User
     {
         $this->seed(PermissionsSeeder::class);
-        $this->actingAs($user = User::factory()->create());
+        $user = User::factory()->create();
         $user->assignRole('admin');
+        $this->actingAs($user);
         return $user;
     }
 
@@ -66,8 +78,9 @@ class ProductTest extends TestCase
                 'description' => 'New Product Description',
                 'quantity' => 8,
                 'weight' => 0,
-                'price'=> 8.000,
-                'sale_price' => 10.000,
+                'price'=> 80000,
+                'sale_price' => 100000,
+                'status' => true
             ],
         ];
     }

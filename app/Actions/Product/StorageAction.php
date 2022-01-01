@@ -14,8 +14,10 @@ class StorageAction extends Action
         $product->description = $data['description'];
         $product->quantity = $data['quantity'];
         $product->weight = $data['weight'];
+        $product->weight_unit_id = $data['weight_unit_id'];
         $product->price = $data['price'];
         $product->sale_price = $data['sale_price'];
+        $product->currency_id = $data['currency_id'];
 
         $product->save();
 

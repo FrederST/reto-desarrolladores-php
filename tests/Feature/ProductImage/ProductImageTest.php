@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\User;
 use Database\Seeders\PermissionsSeeder;
+use Database\Seeders\WeightUnitSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -57,7 +58,6 @@ class ProductImageTest extends TestCase
 
     private function createUser(): User
     {
-        $this->seed(PermissionsSeeder::class);
         $user = User::factory()->create();
         $user->assignRole('admin');
         $this->actingAs($user);

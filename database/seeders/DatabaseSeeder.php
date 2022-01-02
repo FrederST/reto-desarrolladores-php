@@ -9,9 +9,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            PermissionsSeeder:: class,
+            PermissionsSeeder::class,
             CurrencySeeder::class,
-            WeightUnitSeeder::class
+            WeightUnitSeeder::class,
+            UserSeeder::class,
         ]);
     }
 }

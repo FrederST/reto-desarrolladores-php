@@ -48,6 +48,8 @@
             <CreateOrEditProductInformationForm
                 @close="modalClose"
                 :product="productForEdit"
+                :weight_units="weight_units"
+                :currencies="currencies"
                 :edit="modalEdit"
             ></CreateOrEditProductInformationForm>
         </a-modal>
@@ -104,6 +106,8 @@ const columns = [
 export default {
     props: {
         products: Object,
+        weight_units: Object,
+        currencies: Object
     },
     data() {
         return {
@@ -164,7 +168,6 @@ export default {
             this.visibleUploadImages = true;
         },
         reloadPage() {
-            console.log('RELOADDDDDDDDDDDDDD');
             Inertia.reload();
         },
     },

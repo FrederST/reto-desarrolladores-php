@@ -7,6 +7,7 @@ use App\Actions\Product\UpdateAction;
 use App\Http\Requests\Product\StoreRequest;
 use App\Http\Requests\Product\UpdateRequest;
 use App\Models\Product;
+use App\ViewModels\Product\IndexViewModel;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
@@ -19,7 +20,7 @@ class ProductController extends Controller
 
     public function index(): Response
     {
-        return Inertia::render('Product/Index', ['products' =>  Product::with('images')->paginate(6)]);
+        return Inertia::render('Product/Index', (new IndexViewModel())->toArray());
     }
 
     public function store(StoreRequest $request, StorageAction $storageAction): RedirectResponse

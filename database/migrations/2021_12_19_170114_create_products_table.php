@@ -14,8 +14,8 @@ class CreateProductsTable extends Migration
             $table->text('description')->nullable();
             $table->unsignedInteger('quantity');
             $table->decimal('weight', 8, 2)->nullable();
-            $table->decimal('price', 8, 2)->nullable();
-            $table->decimal('sale_price', 8, 2)->nullable();
+            $table->unsignedBigInteger('price');
+            $table->unsignedBigInteger('sale_price');
             $table->boolean('status')->default(1);
             $table->timestamps();
         });

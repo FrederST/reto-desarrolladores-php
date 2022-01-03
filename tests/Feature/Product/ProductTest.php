@@ -2,11 +2,9 @@
 
 namespace Tests\Feature\Product;
 
+use App\Helpers\CurrencyHelper;
 use App\Models\Product;
 use App\Models\User;
-use Database\Seeders\CurrencySeeder;
-use Database\Seeders\PermissionsSeeder;
-use Database\Seeders\WeightUnitSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -20,6 +18,7 @@ class ProductTest extends TestCase
     {
         parent::setUp();
         $this->createUser();
+        $this->withoutExceptionHandling();
     }
 
     public function test_index_screen_can_be_rendered(): void
@@ -35,6 +34,7 @@ class ProductTest extends TestCase
         $response = $this->post(self::PRODUCT_PATH, $product);
 
         $response->assertRedirect(self::PRODUCT_PATH);
+        $product['sale_price'] = CurrencyHelper::parseCurrency($product['sale_price']);
         $this->assertDatabaseHas('products', $product);
     }
 
@@ -81,7 +81,6 @@ class ProductTest extends TestCase
                 'weight_unit_id' => 2,
                 'price'=> 80000,
                 'sale_price' => 100000,
-                'currency_id' => 1,
                 'status' => true,
             ],
         ];

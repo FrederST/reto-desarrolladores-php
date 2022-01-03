@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Helpers\CurrencyHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Middleware;
@@ -46,6 +47,7 @@ class HandleInertiaRequests extends Middleware
                         'csrf_token' => csrf_token(),
                 ] : null;
             },
+            'default_currency' =>  CurrencyHelper::getDefaultCurrency(),
         ]);
     }
 }

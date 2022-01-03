@@ -8,8 +8,12 @@
         </a-form-item>
         <a-form-item :wrapper-col="{ span: 14, offset: 4 }" label="Weight">
             <a-input v-model:value="form.weight" type="number" />
-            <a-select placeholder="Weight Unit" v-model:value="form.weight_unit_id">
-                <a-select-option class="m-left"
+            <a-select
+                placeholder="Weight Unit"
+                v-model:value="form.weight_unit_id"
+            >
+                <a-select-option
+                    class="m-left"
                     v-for="weight_unit in weight_units"
                     :key="weight_unit.id"
                     :value="weight_unit.id"
@@ -18,20 +22,29 @@
             </a-select>
         </a-form-item>
         <a-form-item label="Price">
-            <a-input v-model:value="form.price" type="number" />
+            <a-input-number
+                style="width: 200px"
+                :formatter="
+                    (value) =>
+                        `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                "
+                :parser="(value) => value.replace(/\$\s?|(,*)/g, '')"
+                v-model:value="form.price"
+            >
+            </a-input-number>
         </a-form-item>
         <a-form-item label="Sale Price">
-            <a-input v-model:value="form.sale_price" type="number" />
-        </a-form-item>
-        <a-form-item label="Currency">
-            <a-select placeholder="Currency" v-model:value="form.currency_id">
-                <a-select-option class="m-left"
-                    v-for="currency in currencies"
-                    :key="currency.id"
-                    :value="currency.id"
-                    >{{ currency.name }}</a-select-option
-                >
-            </a-select>
+            <a-input-number
+                style="width: 200px"
+                :formatter="
+                    (value) =>
+                        `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                "
+                :parser="(value) => value.replace(/\$\s?|(,*)/g, '')"
+                v-model:value="form.sale_price"
+            >
+            </a-input-number>
+            {{ this.$page.props.default_currency.alphabetic_code }}
         </a-form-item>
         <a-form-item label="Active">
             <a-switch v-model:checked="form.status" />
@@ -41,9 +54,7 @@
         </a-form-item>
         <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
             <a-button type="primary" @click="saveInfo">Save</a-button>
-            <a-button class="m-left" @click="closeModal"
-                >Cancel</a-button
-            >
+            <a-button class="m-left" @click="closeModal">Cancel</a-button>
         </a-form-item>
     </a-form>
 </template>
@@ -110,7 +121,7 @@ export default defineComponent({
 </script>
 
 <style>
-    .m-left{
-        margin-left: 10px
-    }
+.m-left {
+    margin-left: 10px;
+}
 </style>

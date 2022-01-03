@@ -31,7 +31,6 @@ class ProductValidationsTest extends TestCase
             'weight_unit_id' => 'The weight unit id field is required.',
             'price' => 'The price field is required.',
             'sale_price' => 'The sale price field is required.',
-            'currency_id' => 'The currency id field is required.',
             'status' => 'The status field is required.',
         ]);
 
@@ -46,19 +45,6 @@ class ProductValidationsTest extends TestCase
 
         $response->assertSessionHasErrors([
             'weight_unit_id' => 'The selected weight unit id is invalid.',
-        ]);
-
-        $this->assertDatabaseMissing('products', $product);
-    }
-
-    public function test_not_can_create_if_currency_no_exits(): void
-    {
-        $product = $this->productProvider()['product'];
-        $product['currency_id'] = 0;
-        $response = $this->post(self::PRODUCT_PATH, $product);
-
-        $response->assertSessionHasErrors([
-            'currency_id' => 'The selected currency id is invalid.',
         ]);
 
         $this->assertDatabaseMissing('products', $product);
@@ -113,7 +99,6 @@ class ProductValidationsTest extends TestCase
                 'weight_unit_id' => 0,
                 'price' => 80000,
                 'sale_price' => 100000,
-                'currency_id' => 1,
                 'status' => true,
             ],
         ];

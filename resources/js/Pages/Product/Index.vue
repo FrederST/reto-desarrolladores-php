@@ -98,6 +98,10 @@ const columns = [
         dataIndex: "price",
     },
     {
+        title: "Sale Price",
+        dataIndex: "sale_price",
+    },
+    {
         title: "Actions",
         dataIndex: "actions",
     },

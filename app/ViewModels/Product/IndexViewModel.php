@@ -43,6 +43,7 @@ class IndexViewModel extends ViewModel
                 'name',
                 'description',
                 'sale_price',
+                'weight_unit_id',
                 ])
             ->with('images')
             ->paginate()

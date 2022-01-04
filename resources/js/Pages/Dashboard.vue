@@ -12,10 +12,10 @@
                             ></a-input>
                         </a-form-item>
                     </a-col>
-                    <a-col :span="8">
+                    <a-col :span="6">
                         <a-form-item label="Sale Price">
                             <a-input-number
-                                style="width: 200px"
+                                style="width: 150px"
                                 :formatter="formatNumber"
                                 :parser="parseNumber"
                                 v-model:value="sale_price"
@@ -25,6 +25,27 @@
                                 this.$page.props.default_currency
                                     .alphabetic_code
                             }}
+                        </a-form-item>
+                    </a-col>
+                    <a-col :span="6">
+                        <a-form-item
+                            :wrapper-col="{ span: 14, offset: 4 }"
+                            label="Weight"
+                        >
+                            <a-select
+                                placeholder="Weight Unit"
+                                v-model:value="weight_unit_id"
+                            >
+                                <a-select-option
+                                    class="m-left"
+                                    v-for="weight_unit in weight_units"
+                                    :key="weight_unit.id"
+                                    :value="weight_unit.id"
+                                    >{{
+                                        weight_unit.weight_unit_name
+                                    }}</a-select-option
+                                >
+                            </a-select>
                         </a-form-item>
                     </a-col>
                     <a-button @click="filterInfo">Search</a-button>
@@ -66,11 +87,13 @@ import { Inertia } from "@inertiajs/inertia";
 export default defineComponent({
     props: {
         products: Object,
+        weight_units: Object,
     },
     data() {
         return {
             searchValue: "",
-            sale_price: 0
+            sale_price: 0,
+            weight_unit_id: "",
         };
     },
     components: {
@@ -85,7 +108,8 @@ export default defineComponent({
             const filter = {
                 name: this.searchValue,
                 description: this.searchValue,
-                sale_price: this.sale_price
+                sale_price: this.sale_price,
+                weight_unit_id: this.weight_unit_id,
             };
             Inertia.get(
                 route("dashboard", {

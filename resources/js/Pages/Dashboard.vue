@@ -28,13 +28,16 @@
                         </a-form-item>
                     </a-col>
                     <a-col :span="6">
-                        <a-form-item
-                            label="Weight"
-                        >
+                        <a-form-item label="Weight">
                             <a-select
                                 placeholder="Weight Unit"
                                 v-model:value="weight_unit_id"
                             >
+                            <a-select-option
+                                    class="m-left"
+                                    value=""
+                                    >All</a-select-option
+                                >
                                 <a-select-option
                                     class="m-left"
                                     v-for="weight_unit in weight_units"
@@ -47,7 +50,7 @@
                             </a-select>
                         </a-form-item>
                     </a-col>
-                    <a-button @click="filterInfo">Search</a-button>
+                    <a-button @click="changePage(0)">Search</a-button>
                 </a-row>
             </a-form>
             <a-pagination
@@ -55,28 +58,23 @@
                 :total="products.total"
                 :pageSize="products.per_page"
                 show-less-items
-                @change="onChange"
+                @change="changePage"
             />
         </div>
 
-        <div v-if="products.data.length > 0" class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div
+            v-if="products.data.length > 0"
+            class="max-w-7xl mx-auto sm:px-6 lg:px-8"
+        >
             <a-row>
-                <a-col v-for="product in products.data" :key="product.id" :span="8">
-                     <ProductCard
-                        :key="product.id"
-                        :product="product"
-                    />
+                <a-col
+                    v-for="product in products.data"
+                    :key="product.id"
+                    :span="8"
+                >
+                    <ProductCard :key="product.id" :product="product" />
                 </a-col>
             </a-row>
-            <!-- <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="py-4 grid gap-4 md:grid-cols-4 grid-cols-2">
-                    <ProductCard
-                        v-for="product in products.data"
-                        :key="product.id"
-                        :product="product"
-                    />
-                </div>
-            </div> -->
         </div>
 
         <div v-else>
@@ -108,10 +106,7 @@ export default defineComponent({
         ProductCard,
     },
     methods: {
-        onChange(pag) {
-            Inertia.get(route("dashboard", { page: pag }));
-        },
-        filterInfo() {
+        changePage(pag) {
             const filter = {
                 name: this.searchValue,
                 description: this.searchValue,
@@ -119,11 +114,16 @@ export default defineComponent({
                 weight_unit_id: this.weight_unit_id,
             };
             Inertia.get(
-                route("dashboard", {
-                    page: this.current,
+                route("dashboard"),
+                {
+                    page: pag,
                     filter,
-                })
+                },
+                {
+                    preserveState: true
+                }
             );
+
         },
         formatNumber(value) {
             return `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",");

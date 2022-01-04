@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\WeightUnit;
 use App\ViewModels\ViewModel;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class IndexViewModel extends ViewModel
 {
@@ -35,13 +36,19 @@ class IndexViewModel extends ViewModel
         return 'Products';
     }
 
-    private function getProductsMapped()
+    private function getProductsMapped(): LengthAwarePaginator
     {
-        return $this->model()->with('images')->paginate(6)
-        ->through(function ($product) {
-            $product['sale_price'] = CurrencyHelper::toCurrencyFormat($product['sale_price'], Currency::find($product['currency_id'])->alphabetic_code);
-
-            return $product;
-         });
+        return QueryBuilder::for($this->model()::class)
+            ->allowedFilters([
+                'name',
+                'description',
+                'sale_price',
+                ])
+            ->with('images')
+            ->paginate()
+            ->through(function ($product) {
+                $product['sale_price'] = CurrencyHelper::toCurrencyFormat($product['sale_price'], Currency::find($product['currency_id'])->alphabetic_code);
+                return $product;
+            });
     }
 }

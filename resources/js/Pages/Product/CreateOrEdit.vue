@@ -24,11 +24,8 @@
         <a-form-item label="Price">
             <a-input-number
                 style="width: 200px"
-                :formatter="
-                    (value) =>
-                        `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                "
-                :parser="(value) => value.replace(/\$\s?|(,*)/g, '')"
+                :formatter="formatNumber"
+                :parser="parseNumber"
                 v-model:value="form.price"
             >
             </a-input-number>
@@ -36,11 +33,8 @@
         <a-form-item label="Sale Price">
             <a-input-number
                 style="width: 200px"
-                :formatter="
-                    (value) =>
-                        `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                "
-                :parser="(value) => value.replace(/\$\s?|(,*)/g, '')"
+                :formatter="formatNumber"
+                :parser="parseNumber"
                 v-model:value="form.sale_price"
             >
             </a-input-number>
@@ -115,6 +109,14 @@ export default defineComponent({
 
         closeModal() {
             this.$emit("close", true);
+        },
+
+        formatNumber(value) {
+            return `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        },
+
+        parseNumber(value) {
+            return value.replace(/\$\s?|(,*)/g, "");
         },
     },
 });

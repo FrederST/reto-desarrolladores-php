@@ -1,36 +1,46 @@
 <template>
     <app-layout title="Dashboard">
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Welcome
-            </h2>
-        </template>
+        <br />
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <a-form>
+                <a-row :gutter="24">
+                    <a-col :span="8">
+                        <a-form-item label="Name">
+                            <a-input
+                                v-model:value="searchValue"
+                                placeholder="Name"
+                            ></a-input>
+                        </a-form-item>
+                    </a-col>
+                    <a-col :span="8">
+                        <a-form-item label="Sale Price">
+                            <a-input-number
+                                style="width: 200px"
+                                :formatter="formatNumber"
+                                :parser="parseNumber"
+                                v-model:value="sale_price"
+                            >
+                            </a-input-number>
+                            {{
+                                this.$page.props.default_currency
+                                    .alphabetic_code
+                            }}
+                        </a-form-item>
+                    </a-col>
+                    <a-button @click="filterInfo">Search</a-button>
+                </a-row>
+            </a-form>
+            <a-pagination
+                v-model:current="current"
+                :total="products.total"
+                :pageSize="products.per_page"
+                show-less-items
+                @change="onChange"
+            />
+        </div>
 
         <div v-if="products.data.length > 0" class="py-12">
-            <input
-                class="w-full rounded-md text-lg p-4 border-2 border-gray-200"
-                v-model="searchTerm"
-                placeholder="Search Product"
-            />
-            <ul v-if="filteredProducts.length > 0">
-                <a-list size="small" bordered :data-source="filteredProducts">
-                    <template #renderItem="{ item }">
-                        <a-list-item
-                            >{{ item.name }} -
-                            {{ item.sale_price }}</a-list-item
-                        >
-                    </template>
-                </a-list>
-            </ul>
-
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <a-pagination
-                    v-model:current="current"
-                    :total="products.total"
-                    :pageSize="products.per_page"
-                    show-less-items
-                    @change="onChange"
-                />
                 <div class="py-4 grid gap-4 md:grid-cols-4 grid-cols-2">
                     <ProductCard
                         v-for="product in products.data"
@@ -42,10 +52,7 @@
         </div>
 
         <div v-else>
-            <a-result status="403" title="No Products">
-                <template #extra>
-                </template>
-            </a-result>
+            <a-result status="403" title="No Products"></a-result>
         </div>
     </app-layout>
 </template>
@@ -62,32 +69,36 @@ export default defineComponent({
     },
     data() {
         return {
-            searchTerm: "",
-            filteredProducts: [],
+            searchValue: "",
+            sale_price: 0
         };
     },
     components: {
         AppLayout,
         ProductCard,
     },
-    watch: {
-        searchTerm() {
-            this.searchProducts();
-        },
-    },
     methods: {
         onChange(pag) {
             Inertia.get(route("dashboard", { page: pag }));
         },
-        searchProducts() {
-            axios
-                .get("/api/products/search", {
-                    params: { searchTerm: this.searchTerm },
+        filterInfo() {
+            const filter = {
+                name: this.searchValue,
+                description: this.searchValue,
+                sale_price: this.sale_price
+            };
+            Inertia.get(
+                route("dashboard", {
+                    page: this.current,
+                    filter,
                 })
-                .then((res) => (this.filteredProducts = res.data))
-                .catch((error) => {
-                    console.log(error);
-                });
+            );
+        },
+        formatNumber(value) {
+            return `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        },
+        parseNumber(value) {
+            return value.replace(/\$\s?|(,*)/g, "");
         },
     },
     setup(props) {

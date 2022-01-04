@@ -29,7 +29,6 @@
                     </a-col>
                     <a-col :span="6">
                         <a-form-item
-                            :wrapper-col="{ span: 14, offset: 4 }"
                             label="Weight"
                         >
                             <a-select
@@ -60,8 +59,16 @@
             />
         </div>
 
-        <div v-if="products.data.length > 0" class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div v-if="products.data.length > 0" class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <a-row>
+                <a-col v-for="product in products.data" :key="product.id" :span="8">
+                     <ProductCard
+                        :key="product.id"
+                        :product="product"
+                    />
+                </a-col>
+            </a-row>
+            <!-- <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="py-4 grid gap-4 md:grid-cols-4 grid-cols-2">
                     <ProductCard
                         v-for="product in products.data"
@@ -69,7 +76,7 @@
                         :product="product"
                     />
                 </div>
-            </div>
+            </div> -->
         </div>
 
         <div v-else>

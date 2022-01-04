@@ -4,25 +4,32 @@
             <a-input v-model:value="form.name" />
         </a-form-item>
         <a-form-item label="Quantity">
-            <a-input v-model:value="form.quantity" type="number" />
+            <a-input-number :min="0" v-model:value="form.quantity" />
         </a-form-item>
-        <a-form-item :wrapper-col="{ span: 14, offset: 4 }" label="Weight">
-            <a-input v-model:value="form.weight" type="number" />
-            <a-select
-                placeholder="Weight Unit"
-                v-model:value="form.weight_unit_id"
-            >
-                <a-select-option
-                    class="m-left"
-                    v-for="weight_unit in weight_units"
-                    :key="weight_unit.id"
-                    :value="weight_unit.id"
-                    >{{ weight_unit.weight_unit_name }}</a-select-option
-                >
-            </a-select>
+        <a-form-item label="Weight">
+            <a-row>
+                <a-col>
+                    <a-input-number :min="0" v-model:value="form.weight" />
+                </a-col>
+                <a-col>
+                    <a-select
+                        placeholder="Weight Unit"
+                        v-model:value="form.weight_unit_id"
+                    >
+                        <a-select-option
+                            class="m-left"
+                            v-for="weight_unit in weight_units"
+                            :key="weight_unit.id"
+                            :value="weight_unit.id"
+                            >{{ weight_unit.weight_unit_name }}</a-select-option
+                        >
+                    </a-select>
+                </a-col>
+            </a-row>
         </a-form-item>
         <a-form-item label="Price">
             <a-input-number
+                :min="0"
                 style="width: 200px"
                 :formatter="formatNumber"
                 :parser="parseNumber"

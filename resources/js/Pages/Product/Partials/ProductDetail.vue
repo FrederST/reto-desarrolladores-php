@@ -24,6 +24,12 @@
                     </a-button>
                 </a-space>
             </a-typography-title>
+            <a-typography-title :level="3">
+                {{ product.sale_price }} -
+                {{
+                    this.$page.props.default_currency.alphabetic_code
+                }}</a-typography-title
+            >
             <a-divider />
             <a-descriptions>
                 <a-descriptions-item label="Quantity">{{
@@ -68,7 +74,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-/* For demo */
 .ant-carousel :deep(.slick-dots) {
     position: relative;
     height: auto;

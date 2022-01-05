@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateProductsTable extends Migration
 {
-
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
@@ -15,8 +14,8 @@ class CreateProductsTable extends Migration
             $table->text('description')->nullable();
             $table->unsignedInteger('quantity');
             $table->decimal('weight', 8, 2)->nullable();
-            $table->decimal('price', 8, 2)->nullable();
-            $table->decimal('sale_price', 8, 2)->nullable();
+            $table->unsignedBigInteger('price');
+            $table->unsignedBigInteger('sale_price');
             $table->boolean('status')->default(1);
             $table->timestamps();
         });

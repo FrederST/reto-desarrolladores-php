@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Actions\Product\StorageAction;
 use App\Actions\Product\UpdateAction;
+use App\Events\ProductCreatedOrUpdated;
 use App\Http\Requests\Product\StoreRequest;
 use App\Http\Requests\Product\UpdateRequest;
 use App\Models\Product;
+use App\ViewModels\Product\IndexViewModel;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
@@ -19,18 +21,20 @@ class ProductController extends Controller
 
     public function index(): Response
     {
-        return Inertia::render('Product/Index', ['products' =>  Product::with('images')->paginate(6)]);
+        return Inertia::render('Product/Index', (new IndexViewModel())->toArray());
     }
 
     public function store(StoreRequest $request, StorageAction $storageAction): RedirectResponse
     {
-        $storageAction->execute($request->validated(), new Product);
+        $product = $storageAction->execute($request->validated(), new Product);
+        ProductCreatedOrUpdated::dispatch($product);
         return Redirect::route(self::PRODUCT_INDEX);
     }
 
     public function update(UpdateRequest $request, Product $product, UpdateAction $updateAction): RedirectResponse
     {
-        $updateAction->execute($request->validated(), $product);
+        $product = $updateAction->execute($request->validated(), $product);
+        ProductCreatedOrUpdated::dispatch($product, 'Product Updated');
         return Redirect::route(self::PRODUCT_INDEX);
     }
 

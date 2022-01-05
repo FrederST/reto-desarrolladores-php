@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\Providers\RouteServiceProvider;
-use Database\Seeders\PermissionsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Fortify\Features;
 use Laravel\Jetstream\Jetstream;
@@ -40,8 +39,6 @@ class RegistrationTest extends TestCase
         if (!Features::enabled(Features::registration())) {
             return $this->markTestSkipped('Registration support is not enabled.');
         }
-
-        $this->seed(PermissionsSeeder::class);
 
         $response = $this->post('/register', [
             'name' => 'Test User',

@@ -3,7 +3,6 @@
 namespace Tests\Feature\Customer;
 
 use App\Models\User;
-use Database\Seeders\PermissionsSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Jetstream\Jetstream;
 use Tests\TestCase;
@@ -68,7 +67,6 @@ class CustomerTest extends TestCase
 
     private function createUser(): User
     {
-        $this->seed(PermissionsSeeder::class);
         $this->actingAs($user = User::factory()->create());
         $user->assignRole('admin');
         return $user;

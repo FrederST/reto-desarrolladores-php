@@ -6,7 +6,6 @@
             </h2>
         </template>
 
-
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <a-button type="primary" @click="createCustomer()">
@@ -18,6 +17,9 @@
                     :pagination="pagination"
                     @change="handleTableChange"
                 >
+                    <template #emptyText>
+                        <a-result status="403" title="No Products"> </a-result>
+                    </template>
                     <template #bodyCell="{ column, record }">
                         <template v-if="column.dataIndex === 'status'">
                             <span>
@@ -48,6 +50,8 @@
             <CreateOrEditProductInformationForm
                 @close="modalClose"
                 :product="productForEdit"
+                :weight_units="weight_units"
+                :currencies="currencies"
                 :edit="modalEdit"
             ></CreateOrEditProductInformationForm>
         </a-modal>
@@ -96,6 +100,10 @@ const columns = [
         dataIndex: "price",
     },
     {
+        title: "Sale Price",
+        dataIndex: "sale_price",
+    },
+    {
         title: "Actions",
         dataIndex: "actions",
     },
@@ -104,6 +112,8 @@ const columns = [
 export default {
     props: {
         products: Object,
+        weight_units: Object,
+        currencies: Object,
     },
     data() {
         return {
@@ -164,7 +174,6 @@ export default {
             this.visibleUploadImages = true;
         },
         reloadPage() {
-            console.log('RELOADDDDDDDDDDDDDD');
             Inertia.reload();
         },
     },

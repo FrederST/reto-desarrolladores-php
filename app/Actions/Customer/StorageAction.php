@@ -17,7 +17,6 @@ class StorageAction extends Action
         $user->password = Hash::make('password');
         $user->save();
         $user->assignRole('customer');
-        Log::channel('customer')->info('Customer/User Created', $user->toArray());
         return $user;
     }
 

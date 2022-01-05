@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\Customer\StorageAction;
 use App\Actions\Customer\UpdateAction;
+use App\Events\CustomerCreatedOrUpdated;
 use App\Http\Requests\Customer\StoreRequest;
 use App\Http\Requests\Customer\UpdateRequest;
 use App\Models\User;
@@ -23,13 +24,15 @@ class CustomerController extends Controller
 
     public function store(StoreRequest $request, StorageAction $createAction): RedirectResponse
     {
-        $createAction->execute($request->validated(), new User);
+        $customer = $createAction->execute($request->validated(), new User);
+        CustomerCreatedOrUpdated::dispatch($customer);
         return Redirect::route(self::CUSTOMER_INDEX);
     }
 
     public function update(UpdateRequest $request, User $customer, UpdateAction $updateAction): RedirectResponse
     {
-        $updateAction->execute($request->validated(), $customer);
+        $customer = $updateAction->execute($request->validated(), $customer);
+        CustomerCreatedOrUpdated::dispatch($customer, 'Customer/User Updated');
         return Redirect::route(self::CUSTOMER_INDEX);
     }
 

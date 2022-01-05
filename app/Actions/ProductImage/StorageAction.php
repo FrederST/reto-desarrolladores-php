@@ -17,7 +17,6 @@ class StorageAction extends Action
         $productImage->product_id = $productId;
         $productImage->path = $image->storeAs($storagePath, $imageName);
         $productImage->save();
-        Log::channel('product')->info('Crated Product Image', $productImage->toArray());
         return $productImage;
     }
 }

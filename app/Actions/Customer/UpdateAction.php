@@ -28,8 +28,6 @@ class UpdateAction extends Action
             ]);
             $user->sendEmailVerificationNotification();
         }
-
-        Log::channel('customer')->info('Customer/User Updated', $user->toArray());
         return $user;
     }
 

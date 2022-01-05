@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\Product\StorageAction;
 use App\Actions\Product\UpdateAction;
+use App\Events\ProductCreatedOrUpdated;
 use App\Http\Requests\Product\StoreRequest;
 use App\Http\Requests\Product\UpdateRequest;
 use App\Models\Product;
@@ -25,13 +26,15 @@ class ProductController extends Controller
 
     public function store(StoreRequest $request, StorageAction $storageAction): RedirectResponse
     {
-        $storageAction->execute($request->validated(), new Product);
+        $product = $storageAction->execute($request->validated(), new Product);
+        ProductCreatedOrUpdated::dispatch($product);
         return Redirect::route(self::PRODUCT_INDEX);
     }
 
     public function update(UpdateRequest $request, Product $product, UpdateAction $updateAction): RedirectResponse
     {
-        $updateAction->execute($request->validated(), $product);
+        $product = $updateAction->execute($request->validated(), $product);
+        ProductCreatedOrUpdated::dispatch($product, 'Product Updated');
         return Redirect::route(self::PRODUCT_INDEX);
     }
 

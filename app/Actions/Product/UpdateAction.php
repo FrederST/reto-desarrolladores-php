@@ -21,7 +21,6 @@ class UpdateAction extends Action
 
         $product->save();
 
-        Log::channel('product')->info('Product Updated', $product->toArray());
         return $product;
     }
 }

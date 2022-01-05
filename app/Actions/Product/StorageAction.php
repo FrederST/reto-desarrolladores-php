@@ -23,7 +23,6 @@ class StorageAction extends Action
 
         $product->save();
 
-        Log::channel('product')->info('Product Created', $product->toArray());
         return $product;
     }
 

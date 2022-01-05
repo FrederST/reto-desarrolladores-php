@@ -33,9 +33,7 @@
                                 placeholder="Weight Unit"
                                 v-model:value="weight_unit_id"
                             >
-                            <a-select-option
-                                    class="m-left"
-                                    value=""
+                                <a-select-option class="m-left" value=""
                                     >All</a-select-option
                                 >
                                 <a-select-option
@@ -66,7 +64,7 @@
             v-if="products.data.length > 0"
             class="max-w-7xl mx-auto sm:px-6 lg:px-8"
         >
-            <a-row>
+            <a-row :gutter="32">
                 <a-col
                     v-for="product in products.data"
                     :key="product.id"
@@ -120,10 +118,9 @@ export default defineComponent({
                     filter,
                 },
                 {
-                    preserveState: true
+                    preserveState: true,
                 }
             );
-
         },
         formatNumber(value) {
             return `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",");

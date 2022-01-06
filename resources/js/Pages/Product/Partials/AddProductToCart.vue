@@ -9,8 +9,9 @@
         :destroyOnClose="true"
         @ok="addToCart"
     >
-        Cantidad:  <a-input-number
+        <strong>Quantity:</strong>  <a-input-number
             style="width: 350px"
+            :max="product.quantity"
             :min="1"
             v-model:value="addCartForm.quantity"
         />

@@ -94,6 +94,9 @@
                                 </jet-dropdown>
                             </div>
 
+                            <a-button @click="goCart()">
+                                <shopping-cart-outlined key="shopping" />
+                            </a-button>
                             <!-- Settings Dropdown -->
                             <div class="ml-3 relative">
                                 <jet-dropdown align="right" width="48">
@@ -253,6 +256,7 @@
     import JetNavLink from '@/Jetstream/NavLink.vue'
     import JetResponsiveNavLink from '@/Jetstream/ResponsiveNavLink.vue'
     import { Head, Link } from '@inertiajs/inertia-vue3';
+    import { ShoppingCartOutlined } from "@ant-design/icons-vue";
 
     export default defineComponent({
         props: {
@@ -268,6 +272,7 @@
             JetNavLink,
             JetResponsiveNavLink,
             Link,
+            ShoppingCartOutlined
         },
 
         data() {
@@ -288,6 +293,10 @@
             logout() {
                 this.$inertia.post(route('logout'));
             },
+
+            goCart() {
+                this.$inertia.get(route('shoppingCart.index'));
+            }
         }
     })
 </script>

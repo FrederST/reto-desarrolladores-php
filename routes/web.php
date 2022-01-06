@@ -3,7 +3,7 @@
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductImageController;
-use App\Models\Product;
+use App\Http\Controllers\ShoppingCartController;
 use App\ViewModels\Product\IndexViewModel;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -43,3 +43,6 @@ Route::group(['prefix' => 'productImages'], function () {
     Route::post('upload/{productId}', [ProductImageController::class, 'upload'])->name('products.images.upload');
     Route::delete('{productImage}', [ProductImageController::class, 'destroy'])->name('products.images.destroy');
 });
+
+Route::resource('shoppingCart', ShoppingCartController::class)->except(['create', 'edit', 'show'])
+->middleware(['auth:sanctum', 'verified']);

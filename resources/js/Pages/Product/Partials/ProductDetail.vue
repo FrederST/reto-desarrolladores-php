@@ -19,9 +19,7 @@
                     <a-button type="primary">
                         <shopping-outlined key="shop" />
                     </a-button>
-                    <a-button type="primary">
-                        <shopping-cart-outlined key="shopping" />
-                    </a-button>
+                    <AddProductToCart :product="product" />
                 </a-space>
             </a-typography-title>
             <a-typography-title :level="3">
@@ -49,6 +47,7 @@
 <script>
 import { defineComponent } from "vue";
 import { ShoppingOutlined, ShoppingCartOutlined } from "@ant-design/icons-vue";
+import AddProductToCart from "@/Pages/Product/Partials/AddProductToCart.vue";
 
 export default defineComponent({
     props: {
@@ -57,6 +56,7 @@ export default defineComponent({
     components: {
         ShoppingOutlined,
         ShoppingCartOutlined,
+        AddProductToCart
     },
     methods: {
         getImgUrl(i) {

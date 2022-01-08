@@ -10,8 +10,7 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <a-table
                     :columns="columns"
-                    :data-source="shoppingCarts.data"
-                    :pagination="pagination"
+                    :data-source="shoppingCart"
                     @change="handleTableChange"
                 >
                     <template #emptyText>
@@ -20,21 +19,18 @@
                     <template #bodyCell="{ column, record }">
                         <template v-if="column.dataIndex === 'product'">
                             <span>
-                                {{record.product.name}}
+                                {{ record.product.name }}
                             </span>
                         </template>
                         <template v-if="column.dataIndex === 'actions'">
                             <span>
-                                <a @click="uploadImages(record)">Add</a>
-                                <a-divider type="vertical" />
-                                <a @click="editProduct(record)">Remove</a>
+                                <a @click="removeProduct(record)">Remove</a>
                             </span>
                         </template>
                     </template>
                 </a-table>
             </div>
         </div>
-
     </app-layout>
 </template>
 
@@ -50,7 +46,7 @@ import {
     CloseOutlined,
     ExclamationCircleOutlined,
 } from "@ant-design/icons-vue";
-import { Modal } from 'ant-design-vue';
+import { Modal } from "ant-design-vue";
 
 const columns = [
     {
@@ -73,7 +69,7 @@ const columns = [
 
 export default {
     props: {
-        shoppingCarts: Object,
+        shoppingCart: Object,
     },
     components: {
         AppLayout,
@@ -83,17 +79,12 @@ export default {
         CloseOutlined,
     },
     methods: {
-        deleteProduct(product) {
+        removeProduct(cartItem) {
             Modal.confirm({
-                title: "Do you Want to Delete these Product?",
+                title: "Do you Want to Remote this these Item?",
                 icon: createVNode(ExclamationCircleOutlined),
-                content: createVNode(
-                    "div",
-                    { style: "color:red;" },
-                    "Some descriptions"
-                ),
                 onOk() {
-                    Inertia.delete(route("products.destroy", product.id));
+                    Inertia.delete(route("shoppingCartItems.destroy", cartItem.id));
                 },
             });
         },
@@ -107,15 +98,15 @@ export default {
         },
     },
     setup(props) {
-        const pagination = computed(() => ({
-            total: props.shoppingCarts.total,
-            current: props.shoppingCarts.current_page,
-            pageSize: props.shoppingCarts.per_page,
-        }));
+        // const pagination = computed(() => ({
+        //     total: ,
+        //     current: 0,
+        //     pageSize: 0,
+        // }));
 
         return {
             columns,
-            pagination,
+            //pagination,
         };
     },
 };

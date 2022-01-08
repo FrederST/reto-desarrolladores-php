@@ -295,7 +295,7 @@
             },
 
             goCart() {
-                this.$inertia.get(route('shoppingCart.index'));
+                this.$inertia.get(route('shoppingCartItems.index'));
             }
         }
     })

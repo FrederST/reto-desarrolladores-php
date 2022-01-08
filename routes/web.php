@@ -3,7 +3,7 @@
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductImageController;
-use App\Http\Controllers\ShoppingCartController;
+use App\Http\Controllers\ShoppingCartItemController;
 use App\ViewModels\Product\IndexViewModel;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -44,5 +44,5 @@ Route::group(['prefix' => 'productImages'], function () {
     Route::delete('{productImage}', [ProductImageController::class, 'destroy'])->name('products.images.destroy');
 });
 
-Route::resource('shoppingCart', ShoppingCartController::class)->except(['create', 'edit', 'show'])
+Route::resource('shoppingCartItems', ShoppingCartItemController::class)->except(['create', 'edit', 'show'])
 ->middleware(['auth:sanctum', 'verified']);

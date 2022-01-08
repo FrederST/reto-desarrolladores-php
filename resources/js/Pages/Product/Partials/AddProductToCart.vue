@@ -46,7 +46,7 @@ export default defineComponent({
         },
         addToCart() {
             this.confirmLoading = true;
-            this.addCartForm.post(route('shoppingCart.store'));
+            this.addCartForm.post(route('shoppingCartItems.store'));
         },
     },
 });

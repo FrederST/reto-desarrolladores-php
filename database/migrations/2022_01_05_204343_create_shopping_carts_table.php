@@ -11,9 +11,6 @@ class CreateShoppingCartsTable extends Migration
         Schema::create('shopping_carts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
-            $table->foreignId('product_id')->constrained();
-            $table->unsignedInteger('quantity');
-            $table->unsignedBigInteger('total');
             $table->timestamps();
         });
     }

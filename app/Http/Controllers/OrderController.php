@@ -19,6 +19,10 @@ class OrderController extends Controller
 {
     public const SHOPPING_CART_INDEX = 'shoppingCartItems.index';
 
+    public function __construct() {
+        $this->middleware('ensure_order_is_from_current_user', ['only' => ['show', 'retryPayment']]);
+    }
+
     public function index(): Response
     {
         return Inertia::render('Order/Index', (new IndexViewModel())->toArray());

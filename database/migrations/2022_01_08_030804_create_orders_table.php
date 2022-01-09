@@ -20,11 +20,13 @@ class CreateOrdersTable extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->text('address');
-            $table->string('city');
-            $table->string('country');
+            $table->foreignId('country_id')->references('id')->on('world_countries');
+            $table->foreignId('city_id')->references('id')->on('world_cities');
             $table->string('post_code');
             $table->string('phone_number');
             $table->text('notes')->nullable();
+            $table->text('payment_process_id')->nullable();
+            $table->text('payment_process_url')->nullable();
             $table->timestamps();
         });
     }

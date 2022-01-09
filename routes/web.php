@@ -48,7 +48,7 @@ Route::group(['prefix' => 'productImages'], function () {
 Route::resource('shoppingCartItems', ShoppingCartItemController::class)->except(['create', 'edit', 'show'])
 ->middleware(['auth:sanctum', 'verified']);
 
-Route::resource('orders', OrderController::class)->except(['edit', 'show'])
+Route::resource('orders', OrderController::class)->except(['edit'])
 ->middleware(['auth:sanctum', 'verified']);
 
-Route::get('orders/check/{order}', [OrderController::class, 'checkOrder']);
+Route::get('orders/retry/{order}', [OrderController::class, 'retryPayment'])->name('orders.retry');

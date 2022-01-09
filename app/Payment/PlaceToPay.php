@@ -47,7 +47,7 @@ class PlaceToPay implements PaymentContract
 
     public function getStatus(Order $order): array
     {
-        $response = Http::get($this->config['api_url'] . 'api/session/' . $order->payment_process_id);
+        $response = Http::post($this->config['api_url'] . 'api/session/' . $order->payment_process_id, $this->createAuth());
         if ($response->ok()) {
             return $response->json();
         }
@@ -94,7 +94,7 @@ class PlaceToPay implements PaymentContract
             'ipAddress' => request()->ip(),
             'userAgent' => request()->userAgent(),
             'expiration' => date('c', strtotime('+1 hour')),
-            'returnUrl' => route('orders.index'),
+            'returnUrl' => route('orders.show', $order->id),
             'skipResult' => false,
             'noBuyerFill' => false,
             'captureAddress' => false,

@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Order\CheckOrderAction;
+use App\Actions\Order\RetryPaymentAction;
 use App\Actions\Order\StorageAction;
 use App\Http\Requests\Order\StoreRequest;
 use App\Models\Order;
 use App\ViewModels\Order\CreateViewModel;
 use App\ViewModels\Order\IndexViewModel;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response as HttpResponse;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -26,16 +29,21 @@ class OrderController extends Controller
         return Inertia::render('Order/CreateOrEdit', (new CreateViewModel())->toArray());
     }
 
-    public function store(StoreRequest $request, StorageAction $storageAction): RedirectResponse
+    public function store(StoreRequest $request, StorageAction $storageAction): HttpResponse
     {
         $order = $storageAction->execute($request->validated(), new Order());
-        return new RedirectResponse($order->payment_process_url);
+        return Inertia::location($order->payment_process_url);
     }
 
-    public function checkOrder(Order $order, CheckOrderAction $checkOrderAction): Response
+    public function show(Order $order, CheckOrderAction $checkOrderAction): Response
     {
-        dd($order);
-        $upOrder = $checkOrderAction->execute($order);
-        return Inertia::render('Order/CreateOrEdit', ['order' => $upOrder]);
+        $upOrder = $checkOrderAction->execute($order)->with('orderItems.product')->first();
+        return Inertia::render('Order/Info', ['order' => $upOrder]);
+    }
+
+    public function retryPayment(Order $order, RetryPaymentAction $retryPaymentAction): RedirectResponse
+    {
+        $upOrder = $retryPaymentAction->execute($order);
+        return Redirect::to($upOrder->payment_process_url);
     }
 }

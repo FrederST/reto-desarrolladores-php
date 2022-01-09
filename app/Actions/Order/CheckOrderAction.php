@@ -12,16 +12,9 @@ class CheckOrderAction
     {
         $payment_class = PaymentBuilder::build($order->payment_method, config('shop.payment_methods.' . $order->payment_method));
 
-        $statusInfo = $payment_class->getStatus($order);
-        $currenStatus = $statusInfo['status']['status'];
+        $payment_class->checkStatus($order);
 
-        if ($currenStatus == OrderStatus::STATUS_APPROVED) {
-            $order->status = OrderStatus::STATUS_APPROVED;
-        } elseif ($currenStatus == OrderStatus::STATUS_REJECTED) {
-            $order->status = OrderStatus::STATUS_REJECTED;
-        }
-
-        $order->save();
+        $order->refresh();
 
         return $order;
     }

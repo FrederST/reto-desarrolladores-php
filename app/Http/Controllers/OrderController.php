@@ -9,8 +9,6 @@ use App\Models\Order;
 use App\ViewModels\Order\CreateViewModel;
 use App\ViewModels\Order\IndexViewModel;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -31,7 +29,7 @@ class OrderController extends Controller
     public function store(StoreRequest $request, StorageAction $storageAction): RedirectResponse
     {
         $order = $storageAction->execute($request->validated(), new Order());
-        return Redirect::route($order->payment_process_url);
+        return new RedirectResponse($order->payment_process_url);
     }
 
     public function checkOrder(Order $order, CheckOrderAction $checkOrderAction): Response

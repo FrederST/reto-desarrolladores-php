@@ -8,7 +8,7 @@ interface PaymentContract
 {
     public function makePayment(Order $order): string;
 
-    public function isApproved(Order $order): bool;
+    public function checkStatus(Order $order): void;
 
     public function getStatus(Order $order): array;
 

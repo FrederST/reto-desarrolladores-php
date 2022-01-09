@@ -31,14 +31,18 @@ class PlaceToPay implements PaymentContract
         }
     }
 
-    public function isApproved(Order $order): bool
+    public function checkStatus(Order $order): void
     {
         $statusInfo = $this->getStatus($order);
-        if ($statusInfo) {
-            $status = $statusInfo['status']['status'];
-            return $status == 'APPROVED';
+        $currenStatus = $statusInfo['status']['status'];
+
+        if ($currenStatus == 'APPROVED') {
+            $order->status = OrderStatus::STATUS_APPROVED;
+        } elseif ($currenStatus == 'REJECTED') {
+            $order->status = OrderStatus::STATUS_REJECTED;
         }
-        return false;
+
+        $order->save();
     }
 
     public function getStatus(Order $order): array
@@ -81,9 +85,9 @@ class PlaceToPay implements PaymentContract
             ],
             'payment' => [
                 'reference' => $order->id,
-                'description' => 'purchase for ' . $order->item_count . 'items',
+                'description' => 'purchase for ' . $order->item_count . ' items',
                 'amount' => [
-                    'currency' => CurrencyHelper::getDefaultCurrency(),
+                    'currency' => CurrencyHelper::getDefaultCurrency()->alphabetic_code,
                     'total' => CurrencyHelper::toCurrencyFormat($order->grand_total),
                 ],
             ],

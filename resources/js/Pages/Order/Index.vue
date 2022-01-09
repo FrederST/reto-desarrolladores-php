@@ -10,21 +10,16 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <a-table
                     :columns="columns"
-                    :data-source="shoppingCart"
+                    :data-source="orders.data"
                     @change="handleTableChange"
                 >
                     <template #emptyText>
                         <a-result status="403" title="No Products"> </a-result>
                     </template>
                     <template #bodyCell="{ column, record }">
-                        <template v-if="column.dataIndex === 'product'">
-                            <span>
-                                {{ record.product.name }}
-                            </span>
-                        </template>
                         <template v-if="column.dataIndex === 'actions'">
                             <span>
-                                <a @click="removeProduct(record)">Remove</a>
+                                <a @click="removeOrder(record)">Remove</a>
                             </span>
                         </template>
                     </template>
@@ -37,7 +32,7 @@
 <script>
 import AppLayout from "@/Layouts/AppLayout";
 import { Link } from "@inertiajs/inertia-vue3";
-import { createVNode, computed } from "vue";
+import { computed } from "vue";
 import { Inertia } from "@inertiajs/inertia";
 import Button from "@/Jetstream/Button.vue";
 
@@ -48,20 +43,20 @@ import {
 
 const columns = [
     {
-        title: "Name",
-        dataIndex: "product",
+        title: "Order Number",
+        dataIndex: "order_number",
     },
     {
-        title: "Quantity",
-        dataIndex: "quantity",
+        title: "Status",
+        dataIndex: "status",
+    },
+    {
+        title: "Items",
+        dataIndex: "item_count",
     },
     {
         title: "Total",
-        dataIndex: "total",
-    },
-    {
-        title: "Actions",
-        dataIndex: "actions",
+        dataIndex: "grand_total",
     },
 ];
 

@@ -46,4 +46,9 @@ class OrderController extends Controller
         $upOrder = $retryPaymentAction->execute($order);
         return Redirect::to($upOrder->payment_process_url);
     }
+
+    public function all(): Response
+    {
+        return Inertia::render('Order/Index', ['orders' => Order::paginate()]);
+    }
 }

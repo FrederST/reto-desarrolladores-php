@@ -51,4 +51,10 @@ Route::resource('shoppingCartItems', ShoppingCartItemController::class)->except(
 Route::resource('orders', OrderController::class)->except(['edit'])
 ->middleware(['auth:sanctum', 'verified']);
 
-Route::get('orders/retry/{order}', [OrderController::class, 'retryPayment'])->name('orders.retry');
+Route::get('orders/retry/{order}', [OrderController::class, 'retryPayment'])
+->middleware(['auth:sanctum', 'verified'])
+->name('orders.retry');
+
+Route::get('all/orders', [OrderController::class, 'all'])
+->middleware(['auth:sanctum', 'verified', 'role:admin'])
+->name('orders.all');

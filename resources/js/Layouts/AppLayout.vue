@@ -37,8 +37,11 @@
                                 </jet-nav-link>
                             </div>
 
-                             <div v-role="'admin'" class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <jet-nav-link :href="route('orders.index')" :active="route().current('orders.index')">
+                             <div  class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                                <jet-nav-link v-role="'admin'" :href="route('orders.all')" :active="route().current('orders.all')">
+                                    Orders
+                                </jet-nav-link>
+                                <jet-nav-link v-role="'customer'" :href="route('orders.index')" :active="route().current('orders.index')">
                                     Orders
                                 </jet-nav-link>
                             </div>

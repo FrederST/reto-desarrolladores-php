@@ -64,7 +64,10 @@
                         <a-typography>
                             <a-typography-title :level="2"
                                 >Total Cost
-                                <a-statistic :value="112893" />
+                                <a-statistic
+                                    prefix="$"
+                                    :value="calculateCost()"
+                                />
                             </a-typography-title>
                             <a-typography-paragraph>
                                 <a-button
@@ -92,6 +95,7 @@ export default {
     props: {
         order: Object,
         countries: Object,
+        shoppingCart: Object,
     },
     components: {
         AppLayout,
@@ -105,7 +109,9 @@ export default {
                 first_name: this.order?.first_name,
                 last_name: this.order?.last_name,
                 address: this.order?.address,
-                country_id: this.order ? this.order.country : this.setDefaultCountry(),
+                country_id: this.order
+                    ? this.order.country
+                    : this.setDefaultCountry(),
                 city_id: this.order?.city,
                 post_code: this.order?.post_code,
                 phone_number: this.order?.phone_number,
@@ -122,17 +128,24 @@ export default {
                 .catch((error) => message.error(error))
                 .finally(() => (this.loadingCities = false));
         },
-        setDefaultCountry(){
+        setDefaultCountry() {
             this.searchCities();
             return 187;
         },
-        createOrder(){
+        createOrder() {
             this.form.post(route("orders.store"), {
                 preserveScroll: true,
-                onError: (errors) => console.log(errors),
-                onSuccess: () => message.success('Order Created'),
+                onError: (errors) => message.error(errors),
+                onSuccess: () => message.success("Order Created"),
             });
-        }
+        },
+        calculateCost() {
+            let cost = 0;
+            this.shoppingCart?.forEach((item) => {
+                cost += item.total;
+            });
+            return cost;
+        },
     },
 };
 </script>

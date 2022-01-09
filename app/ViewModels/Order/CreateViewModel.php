@@ -17,6 +17,7 @@ class CreateViewModel extends ViewModel
     {
         return array_merge(parent::toArray(), [
             'countries' => World::Countries(),
+            'shoppingCart' => auth()->user()->shoppingCart->shoppingCartItems()->with('product')->get(),
         ]);
     }
 

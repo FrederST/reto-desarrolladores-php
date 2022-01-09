@@ -36,11 +36,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'two_factor_secret',
     ];
 
-
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
 
     protected $appends = [
         'profile_photo_url',
@@ -49,5 +47,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function shoppingCart(): HasOne
     {
         return $this->hasOne(ShoppingCart::class);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
     }
 }

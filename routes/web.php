@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductImageController;
 use App\Http\Controllers\ShoppingCartItemController;
@@ -46,3 +47,8 @@ Route::group(['prefix' => 'productImages'], function () {
 
 Route::resource('shoppingCartItems', ShoppingCartItemController::class)->except(['create', 'edit', 'show'])
 ->middleware(['auth:sanctum', 'verified']);
+
+Route::resource('orders', OrderController::class)->except(['edit', 'show'])
+->middleware(['auth:sanctum', 'verified']);
+
+Route::get('orders/check/{order}', [OrderController::class, 'checkOrder']);

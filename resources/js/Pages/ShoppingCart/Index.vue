@@ -1,35 +1,51 @@
 <template>
     <app-layout>
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Cart
-            </h2>
-        </template>
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <a-page-header title="Cart" sub-title="Ready for buy ?">
+                <template #tags>
+                    <a-tag color="blue">Running</a-tag>
+                </template>
+                <a-row justify="center" align="middle">
+                    <a-col>
+                        <a-statistic title="Items" :value="calculateItems()" />
+                    </a-col>
+                    <a-col>
+                        <a-statistic
+                            title="Price"
+                            prefix="$"
+                            :value="calculateCost()"
+                            :style="{
+                                margin: '0 32px',
+                            }"
+                        />
+                    </a-col>
+                    <a-col :span="12">
+                        <a-button block type="primary" @click="goToCreateOrder()">Buy</a-button>
+                    </a-col>
+                </a-row>
+            </a-page-header>
 
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <a-table
-                    :columns="columns"
-                    :data-source="shoppingCart"
-                    @change="handleTableChange"
-                >
-                    <template #emptyText>
-                        <a-result status="403" title="No Products"> </a-result>
+            <a-table
+                :columns="columns"
+                :data-source="shoppingCart"
+                @change="handleTableChange"
+            >
+                <template #emptyText>
+                    <a-result status="403" title="No Products"> </a-result>
+                </template>
+                <template #bodyCell="{ column, record }">
+                    <template v-if="column.dataIndex === 'product'">
+                        <span>
+                            {{ record.product.name }}
+                        </span>
                     </template>
-                    <template #bodyCell="{ column, record }">
-                        <template v-if="column.dataIndex === 'product'">
-                            <span>
-                                {{ record.product.name }}
-                            </span>
-                        </template>
-                        <template v-if="column.dataIndex === 'actions'">
-                            <span>
-                                <a @click="removeProduct(record)">Remove</a>
-                            </span>
-                        </template>
+                    <template v-if="column.dataIndex === 'actions'">
+                        <span>
+                            <a @click="removeProduct(record)">Remove</a>
+                        </span>
                     </template>
-                </a-table>
-            </div>
+                </template>
+            </a-table>
         </div>
     </app-layout>
 </template>
@@ -84,17 +100,31 @@ export default {
                 title: "Do you Want to Remote this these Item?",
                 icon: createVNode(ExclamationCircleOutlined),
                 onOk() {
-                    Inertia.delete(route("shoppingCartItems.destroy", cartItem.id));
+                    Inertia.delete(
+                        route("shoppingCartItems.destroy", cartItem.id)
+                    );
                 },
             });
         },
         handleTableChange(pag) {
             Inertia.get(route("products.index", { page: pag.current }));
         },
-        editProduct(customer) {
-            this.productForEdit = customer;
-            this.modalEdit = true;
-            this.visible = true;
+        calculateItems() {
+            let items = 0;
+            this.shoppingCart.forEach((item) => {
+                items += item.quantity;
+            });
+            return items;
+        },
+        calculateCost() {
+            let cost = 0;
+            this.shoppingCart.forEach((item) => {
+                cost += item.total;
+            });
+            return cost;
+        },
+        goToCreateOrder() {
+            Inertia.get(route("orders.create"));
         },
     },
     setup(props) {

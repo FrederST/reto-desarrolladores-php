@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Khsing\World\Models\City;
+use Khsing\World\Models\Country;
 
 class Order extends Model
 {
@@ -19,11 +21,13 @@ class Order extends Model
         'first_name',
         'last_name',
         'address',
-        'city',
-        'country',
+        'city_id',
+        'country_id',
         'post_code',
         'phone_number',
         'notes',
+        'payment_process_id',
+        'payment_process_url',
     ];
 
     public function user()
@@ -34,5 +38,15 @@ class Order extends Model
     public function orderItems()
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class);
     }
 }

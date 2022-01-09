@@ -57,7 +57,6 @@
 import AppLayout from "@/Layouts/AppLayout";
 import { Link } from "@inertiajs/inertia-vue3";
 import StatusMessage from "@/Pages/Order/Partials/StatusMessage.vue";
-import { Inertia } from "@inertiajs/inertia";
 
 export default {
     props: {

@@ -14,12 +14,12 @@
                     @change="handleTableChange"
                 >
                     <template #emptyText>
-                        <a-result status="403" title="No Products"> </a-result>
+                        <a-result status="403" title="No Orders"> </a-result>
                     </template>
                     <template #bodyCell="{ column, record }">
                         <template v-if="column.dataIndex === 'actions'">
-                            <span>
-                                <a @click="removeOrder(record)">Remove</a>
+                            <span v-if="record.status != 'APPROVED'">
+                                <a v-if="record.user_id == $page.props.user.id" :href="route('orders.retry', record.id)">Retry</a>
                             </span>
                         </template>
                     </template>
@@ -57,6 +57,10 @@ const columns = [
     {
         title: "Total",
         dataIndex: "grand_total",
+    },
+    {
+        title: "Actions",
+        dataIndex: "actions",
     },
 ];
 

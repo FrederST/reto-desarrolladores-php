@@ -41,7 +41,7 @@ class OrderController extends Controller
 
     public function show(Order $order, CheckOrderAction $checkOrderAction): Response
     {
-        $upOrder = $checkOrderAction->execute($order)->with('orderItems.product')->first();
+        $upOrder = $checkOrderAction->execute($order)->with('orderItems.product')->find($order->id);
         return Inertia::render('Order/Info', ['order' => $upOrder]);
     }
 

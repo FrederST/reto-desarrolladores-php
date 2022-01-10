@@ -122,6 +122,15 @@ class OrderTest extends TestCase
         Http::assertSentCount(5);
     }
 
+    public function test_no_can_access_order_if_not_mine(): void
+    {
+        $order = $this->initFakeHTTPAndOrder();
+        $this->createUser();
+
+        $response = $this->get(self::ORDER_PATH . '/retry/' . $order->id);
+        $response->assertRedirect(route('orders.index'));
+    }
+
     private function createUser(): User
     {
         $user = User::factory()->create();

@@ -31,7 +31,6 @@ class ProductValidationsTest extends TestCase
             'weight_unit_id' => 'The weight unit id field is required.',
             'price' => 'The price field is required.',
             'sale_price' => 'The sale price field is required.',
-            'status' => 'The status field is required.',
         ]);
 
         $this->assertDatabaseCount('products', 0);
@@ -99,7 +98,6 @@ class ProductValidationsTest extends TestCase
                 'weight_unit_id' => 0,
                 'price' => 80000,
                 'sale_price' => 100000,
-                'status' => true,
             ],
         ];
     }

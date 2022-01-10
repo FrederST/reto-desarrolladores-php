@@ -5,7 +5,6 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductImageController;
 use App\Http\Controllers\ShoppingCartItemController;
-use App\Models\Product;
 use App\ViewModels\Product\IndexViewModel;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -37,6 +36,10 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 
 Route::resource('customers', CustomerController::class)->except(['create', 'edit', 'show'])
 ->middleware(['auth:sanctum', 'verified', 'role:admin']);
+
+Route::put('customers/disable/{customer}', [CustomerController::class, 'disable'])
+->middleware(['auth:sanctum', 'verified', 'role:admin'])
+->name('customers.disable');
 
 Route::resource('products', ProductController::class)->except(['create', 'edit', 'show'])
 ->middleware(['auth:sanctum', 'verified', 'role:admin']);

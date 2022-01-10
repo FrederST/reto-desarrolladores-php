@@ -19,9 +19,10 @@ class ProductController extends Controller
 {
     public const PRODUCT_INDEX = 'products.index';
 
-    public function index(): Response
+    public function index(IndexViewModel $indexViewModel): Response
     {
-        return Inertia::render('Product/Index', (new IndexViewModel())->toArray());
+        $products = Product::filter(request()->input('filter', []))->with('images')->paginate();
+        return Inertia::render('Product/Index', $indexViewModel->collection($products));
     }
 
     public function store(StoreRequest $request, StorageAction $storageAction): RedirectResponse

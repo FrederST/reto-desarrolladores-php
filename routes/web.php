@@ -5,6 +5,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductImageController;
 use App\Http\Controllers\ShoppingCartItemController;
+use App\Models\Product;
 use App\ViewModels\Product\IndexViewModel;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -30,8 +31,9 @@ Route::get('/', function () {
     ]);
 });
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return Inertia::render('Dashboard', (new IndexViewModel())->toArray());
+Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function (IndexViewModel $indexViewModel) {
+    $products = Product::filter(request()->input('filter', []))->with('images')->paginate();
+    return Inertia::render('Dashboard', $indexViewModel->collection($products));
 })->name('dashboard');
 
 Route::resource('customers', CustomerController::class)->except(['create', 'edit', 'show'])

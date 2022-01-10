@@ -2,9 +2,6 @@
     <app-layout>
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <a-page-header title="Cart" sub-title="Ready for buy ?">
-                <template #tags>
-                    <a-tag color="blue">Running</a-tag>
-                </template>
                 <a-row justify="center" align="middle">
                     <a-col>
                         <a-statistic title="Items" :value="calculateItems()" />
@@ -19,8 +16,13 @@
                             }"
                         />
                     </a-col>
-                    <a-col :span="12">
-                        <a-button block type="primary" @click="goToCreateOrder()">Buy</a-button>
+                    <a-col v-if="shoppingCart.length > 0" :span="12">
+                        <a-button
+                            block
+                            type="primary"
+                            @click="goToCreateOrder()"
+                            >Buy</a-button
+                        >
                     </a-col>
                 </a-row>
             </a-page-header>

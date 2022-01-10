@@ -44,11 +44,13 @@
                             </a-form-item>
                             <a-form-item label="Post Code">
                                 <a-input-number
+                                style="width: 100%"
                                     v-model:value="form.post_code"
                                 />
                             </a-form-item>
                             <a-form-item label="Phone Number">
                                 <a-input-number
+                                style="width: 100%"
                                     v-model:value="form.phone_number"
                                 />
                             </a-form-item>
@@ -106,7 +108,7 @@ export default {
             cities: [],
             loadingCities: false,
             form: useForm({
-                first_name: this.order?.first_name,
+                first_name: this.order ? this.order.first_name : this.$page.props.user.name,
                 last_name: this.order?.last_name,
                 address: this.order?.address,
                 country_id: this.order
@@ -146,6 +148,9 @@ export default {
             });
             return cost;
         },
+        getCurrentUserName() {
+            return this.$page.props.user.name;
+        }
     },
 };
 </script>

@@ -47,8 +47,8 @@ class OrderController extends Controller
 
     public function retryPayment(Order $order, RetryPaymentAction $retryPaymentAction): RedirectResponse
     {
-        $upOrder = $retryPaymentAction->execute($order);
-        return Redirect::to($upOrder->payment_process_url);
+        $urlOrder = $retryPaymentAction->execute($order);
+        return Redirect::to($urlOrder);
     }
 
     public function all(): Response

@@ -22,10 +22,7 @@ class ViewTest extends TestCase
                 fn (Assert $page) => $page
                 ->component('Order/Index')
                 ->has(
-                    'orders',
-                    fn (Assert $page) => $page
-                ->has('data.0.id')
-                )
+                    'orders')
             );
     }
 

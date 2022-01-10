@@ -2,6 +2,7 @@
 
 namespace App\Actions\Fortify;
 
+use App\Models\ShoppingCart;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -30,6 +31,7 @@ class CreateNewUser implements CreatesNewUsers
             'password' => Hash::make($input['password']),
         ]);
         $user->assignRole('customer');
+        $user->shoppingCart()->save(new ShoppingCart(['user_id' => $user->id]));
         Log::channel('auth')->info('User Created', $user->toArray());
         return $user;
     }

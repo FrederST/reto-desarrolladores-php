@@ -6,11 +6,14 @@ use App\Constants\OrderStatus;
 use App\Models\Order;
 use App\Models\ShoppingCart;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class OrderTest extends TestCase
 {
+
+    use RefreshDatabase;
 
     public const ORDER_PATH = '/orders';
 
@@ -60,6 +63,24 @@ class OrderTest extends TestCase
         $this->assertEquals(OrderStatus::STATUS_APPROVED, $order->status);
     }
 
+    public function test_can_check_order_was_is_pending_rejected_result(): void
+    {
+        $placeToPayResponse = $this->placeToPayResponse('REJECTED');
+        Http::fake([
+            'dev.placetopay.com/redirection/api/session/*' => Http::response($placeToPayResponse, 200),
+        ]);
+
+        $order = Order::factory()->hasOrderItems(3)->create();
+        $this->actingAs($order->user);
+
+        $response = $this->get(self::ORDER_PATH . '/' . $order->id);
+
+        $order->refresh();
+
+        $response->assertStatus(200);
+        $this->assertEquals(OrderStatus::STATUS_REJECTED, $order->status);
+    }
+
     public function test_no_check_order_was_is_approved(): void
     {
         Http::fake();
@@ -107,6 +128,21 @@ class OrderTest extends TestCase
         $response = $this->get(self::ORDER_PATH . '/retry/' . $order->id);
         $response->assertRedirect(route('orders.index'));
         Http::assertNothingSent();
+    }
+
+    public function test_can_check_no_approved_orders(): void
+    {
+        $placeToPayResponse = $this->placeToPayResponse('APPROVED');
+        Http::fake([
+            'dev.placetopay.com/redirection/api/session/*' => Http::response($placeToPayResponse, 200),
+        ]);
+
+        Order::factory()->hasOrderItems(3)->count(5)->create();
+        $this->travel(8)->minutes();
+
+        $this->artisan('check:orders')->assertExitCode(0);
+
+        Http::assertSentCount(5);
     }
 
     private function createUser(): User

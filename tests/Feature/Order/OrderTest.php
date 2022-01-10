@@ -6,8 +6,10 @@ use App\Constants\OrderStatus;
 use App\Models\Order;
 use App\Models\ShoppingCart;
 use App\Models\User;
+use App\Notifications\OrderStatusChange;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
 class OrderTest extends TestCase
@@ -109,17 +111,26 @@ class OrderTest extends TestCase
 
     public function test_can_check_no_approved_orders(): void
     {
+        Notification::fake();
         $placeToPayResponse = $this->placeToPayResponse('APPROVED');
         Http::fake([
             'dev.placetopay.com/redirection/api/session/*' => Http::response($placeToPayResponse, 200),
         ]);
 
-        Order::factory()->hasOrderItems(3)->count(5)->create();
+        $orders = Order::factory()->hasOrderItems(3)->count(5)->create();
         $this->travel(8)->minutes();
 
-        $this->artisan('check:orders')->assertExitCode(0);
+        $this->artisan('check:orders')
+        ->assertExitCode(0);
 
         Http::assertSentCount(5);
+
+        foreach ($orders as $order) {
+            Notification::assertSentTo(
+                [$order->user], OrderStatusChange::class
+            );
+        }
+
     }
 
     public function test_no_can_access_order_if_not_mine(): void

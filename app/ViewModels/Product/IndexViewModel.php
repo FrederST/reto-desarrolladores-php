@@ -46,10 +46,6 @@ class IndexViewModel extends ViewModel
                 'weight_unit_id',
                 ])
             ->with('images')
-            ->paginate()
-            ->through(function ($product) {
-                $product['sale_price'] = CurrencyHelper::toCurrencyFormat($product['sale_price'], Currency::find($product['currency_id'])->alphabetic_code);
-                return $product;
-            });
+            ->paginate();
     }
 }

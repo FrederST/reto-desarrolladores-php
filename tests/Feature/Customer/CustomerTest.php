@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Customer;
 
+use App\Models\ShoppingCart;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Jetstream\Jetstream;
@@ -69,6 +70,7 @@ class CustomerTest extends TestCase
     {
         $this->actingAs($user = User::factory()->create());
         $user->assignRole('admin');
+        $user->shoppingCart()->save(new ShoppingCart(['user_id' => $user->id]));
         return $user;
     }
 }

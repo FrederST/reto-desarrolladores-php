@@ -36,6 +36,15 @@
                                     Products
                                 </jet-nav-link>
                             </div>
+
+                             <div  class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                                <jet-nav-link v-role="'admin'" :href="route('orders.all')" :active="route().current('orders.all')">
+                                    Orders
+                                </jet-nav-link>
+                                <jet-nav-link v-role="'customer'" :href="route('orders.index')" :active="route().current('orders.index')">
+                                    Orders
+                                </jet-nav-link>
+                            </div>
                         </div>
 
                         <div class="hidden sm:flex sm:items-center sm:ml-6">
@@ -94,6 +103,9 @@
                                 </jet-dropdown>
                             </div>
 
+                            <a-button @click="goCart()">
+                                <shopping-cart-outlined key="shopping" />
+                            </a-button>
                             <!-- Settings Dropdown -->
                             <div class="ml-3 relative">
                                 <jet-dropdown align="right" width="48">
@@ -253,6 +265,7 @@
     import JetNavLink from '@/Jetstream/NavLink.vue'
     import JetResponsiveNavLink from '@/Jetstream/ResponsiveNavLink.vue'
     import { Head, Link } from '@inertiajs/inertia-vue3';
+    import { ShoppingCartOutlined } from "@ant-design/icons-vue";
 
     export default defineComponent({
         props: {
@@ -268,6 +281,7 @@
             JetNavLink,
             JetResponsiveNavLink,
             Link,
+            ShoppingCartOutlined
         },
 
         data() {
@@ -288,6 +302,10 @@
             logout() {
                 this.$inertia.post(route('logout'));
             },
+
+            goCart() {
+                this.$inertia.get(route('shoppingCartItems.index'));
+            }
         }
     })
 </script>

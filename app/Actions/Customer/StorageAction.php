@@ -3,9 +3,9 @@
 namespace App\Actions\Customer;
 
 use App\Actions\Action;
+use App\Models\ShoppingCart;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 
 class StorageAction extends Action
 {
@@ -17,7 +17,7 @@ class StorageAction extends Action
         $user->password = Hash::make('password');
         $user->save();
         $user->assignRole('customer');
+        $user->shoppingCart()->save(new ShoppingCart(['user_id' => $user->id]));
         return $user;
     }
-
 }

@@ -15,9 +15,7 @@
             <a-button type="primary" @click="showProductInfo()">
                 <file-search-outlined key="search" />
             </a-button>
-            <a-button type="primary" >
-                <shopping-cart-outlined key="shopping" />
-            </a-button>
+            <AddProductToCart :product="product" />
         </template>
         <a-card-meta>
             <template #description>
@@ -45,6 +43,8 @@
 <script>
 import { defineComponent } from "vue";
 import ProductDetail from "@/Pages/Product/Partials/ProductDetail.vue";
+import AddProductToCart from "@/Pages/Product/Partials/AddProductToCart.vue";
+
 import {
     FileSearchOutlined,
     ShoppingCartOutlined,
@@ -63,6 +63,7 @@ export default defineComponent({
         FileSearchOutlined,
         ShoppingCartOutlined,
         ProductDetail,
+        AddProductToCart
     },
     methods: {
         showProductInfo(){

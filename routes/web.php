@@ -1,9 +1,10 @@
 <?php
 
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductImageController;
-use App\Models\Product;
+use App\Http\Controllers\ShoppingCartItemController;
 use App\ViewModels\Product\IndexViewModel;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -43,3 +44,17 @@ Route::group(['prefix' => 'productImages'], function () {
     Route::post('upload/{productId}', [ProductImageController::class, 'upload'])->name('products.images.upload');
     Route::delete('{productImage}', [ProductImageController::class, 'destroy'])->name('products.images.destroy');
 });
+
+Route::resource('shoppingCartItems', ShoppingCartItemController::class)->except(['create', 'edit', 'show'])
+->middleware(['auth:sanctum', 'verified']);
+
+Route::resource('orders', OrderController::class)->except(['edit'])
+->middleware(['auth:sanctum', 'verified']);
+
+Route::get('orders/retry/{order}', [OrderController::class, 'retryPayment'])
+->middleware(['auth:sanctum', 'verified'])
+->name('orders.retry');
+
+Route::get('all/orders', [OrderController::class, 'all'])
+->middleware(['auth:sanctum', 'verified', 'role:admin'])
+->name('orders.all');

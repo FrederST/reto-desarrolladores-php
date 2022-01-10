@@ -33,6 +33,7 @@ class ProductImageTest extends TestCase
         $image = $this->post(self::PRODUCT_IMAGES_PATH . '/upload/' . $product->id, [
             'image' => UploadedFile::fake()->image('avatar.jpg'),
         ])->json();
+        unset($image['product']);
 
         Storage::disk('local')->assertExists($image['path']);
         $this->assertDatabaseHas('product_images', $image);

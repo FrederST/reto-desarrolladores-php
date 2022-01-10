@@ -21,7 +21,7 @@ class Product extends Model
         'price',
         'sale_price',
         'currency_id',
-        'status',
+        'disabled_at',
     ];
 
     public function weightUnit(): HasOne

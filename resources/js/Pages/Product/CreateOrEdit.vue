@@ -47,9 +47,6 @@
             </a-input-number>
             {{ this.$page.props.default_currency.alphabetic_code }}
         </a-form-item>
-        <a-form-item label="Active">
-            <a-switch v-model:checked="form.status" />
-        </a-form-item>
         <a-form-item label="Description">
             <a-textarea v-model:value="form.description" type="textarea" />
         </a-form-item>
@@ -86,7 +83,6 @@ export default defineComponent({
                 price: this.product.price,
                 sale_price: this.product.sale_price,
                 currency_id: this.product.currency_id,
-                status: this.product.status,
             }),
         };
     },

@@ -62,6 +62,15 @@ class ProductTest extends TestCase
         $this->assertDeleted('products', $product->toArray());
     }
 
+    public function test_product_can_be_disable(): void
+    {
+        $product = Product::factory()->create();
+
+        $this->put(self::PRODUCT_PATH . '/disable/' . $product->id);
+
+        $this->assertEquals(now(), $product->fresh()->disabled_at);
+    }
+
     private function createUser(): User
     {
         $user = User::factory()->create();
@@ -81,7 +90,7 @@ class ProductTest extends TestCase
                 'weight_unit_id' => 2,
                 'price'=> 80000,
                 'sale_price' => 100000,
-                'status' => true,
+                'disabled_at' => null,
             ],
         ];
     }

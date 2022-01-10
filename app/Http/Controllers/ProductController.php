@@ -48,4 +48,10 @@ class ProductController extends Controller
         return Redirect::route(self::PRODUCT_INDEX);
     }
 
+    public function disable(Product $product): RedirectResponse
+    {
+        $product->update(['disabled_at' => now()]);
+        return Redirect::route(self::PRODUCT_INDEX);
+    }
+
 }

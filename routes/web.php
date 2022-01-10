@@ -5,6 +5,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductImageController;
 use App\Http\Controllers\ShoppingCartItemController;
+use App\Models\Product;
 use App\ViewModels\Product\IndexViewModel;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -39,6 +40,10 @@ Route::resource('customers', CustomerController::class)->except(['create', 'edit
 
 Route::resource('products', ProductController::class)->except(['create', 'edit', 'show'])
 ->middleware(['auth:sanctum', 'verified', 'role:admin']);
+
+Route::put('products/disable/{product}', [ProductController::class, 'disable'])
+->middleware(['auth:sanctum', 'verified', 'role:admin'])
+->name('products.disable');
 
 Route::group(['prefix' => 'productImages'], function () {
     Route::post('upload/{productId}', [ProductImageController::class, 'upload'])->name('products.images.upload');

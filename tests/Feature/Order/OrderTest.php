@@ -12,7 +12,6 @@ use Tests\TestCase;
 
 class OrderTest extends TestCase
 {
-
     use RefreshDatabase;
 
     public const ORDER_PATH = '/orders';
@@ -47,13 +46,7 @@ class OrderTest extends TestCase
 
     public function test_can_check_order_was_is_pending(): void
     {
-        $placeToPayResponse = $this->placeToPayResponse('APPROVED');
-        Http::fake([
-            'dev.placetopay.com/redirection/api/session/*' => Http::response($placeToPayResponse, 200),
-        ]);
-
-        $order = Order::factory()->hasOrderItems(3)->create();
-        $this->actingAs($order->user);
+        $order = $this->initFakeHTTPAndOrder('APPROVED');
 
         $response = $this->get(self::ORDER_PATH . '/' . $order->id);
 
@@ -65,13 +58,7 @@ class OrderTest extends TestCase
 
     public function test_can_check_order_was_is_pending_rejected_result(): void
     {
-        $placeToPayResponse = $this->placeToPayResponse('REJECTED');
-        Http::fake([
-            'dev.placetopay.com/redirection/api/session/*' => Http::response($placeToPayResponse, 200),
-        ]);
-
-        $order = Order::factory()->hasOrderItems(3)->create();
-        $this->actingAs($order->user);
+        $order = $this->initFakeHTTPAndOrder('REJECTED');
 
         $response = $this->get(self::ORDER_PATH . '/' . $order->id);
 
@@ -83,10 +70,7 @@ class OrderTest extends TestCase
 
     public function test_no_check_order_was_is_approved(): void
     {
-        Http::fake();
-
-        $order = Order::factory()->hasOrderItems(3)->create();
-        $this->actingAs($order->user);
+        $order = $this->initFakeHTTPAndOrder();
         $order->status = OrderStatus::STATUS_APPROVED;
         $order->save();
 
@@ -99,12 +83,8 @@ class OrderTest extends TestCase
     public function test_can_retry_order_was_is_different_of_approved(): void
     {
         $placeToPayResponse = $this->placeToPayResponse();
-        Http::fake([
-            'dev.placetopay.com/redirection/api/session' => Http::response($placeToPayResponse, 200),
-        ]);
 
-        $order = Order::factory()->hasOrderItems(3)->create();
-        $this->actingAs($order->user);
+        $order = $this->initFakeHTTPAndOrder(url: 'dev.placetopay.com/redirection/api/session');
 
         $response = $this->get(self::ORDER_PATH . '/retry/' . $order->id);
         $response->assertRedirect($placeToPayResponse['processUrl']);
@@ -118,10 +98,7 @@ class OrderTest extends TestCase
 
     public function test_no_can_retry_order_was_is_approved(): void
     {
-        Http::fake();
-
-        $order = Order::factory()->hasOrderItems(3)->create();
-        $this->actingAs($order->user);
+        $order = $this->initFakeHTTPAndOrder();
         $order->status = OrderStatus::STATUS_APPROVED;
         $order->save();
 
@@ -151,6 +128,18 @@ class OrderTest extends TestCase
         $user->assignRole('admin');
         $this->actingAs($user);
         return $user;
+    }
+
+    private function initFakeHTTPAndOrder($status = 'OK', $url = 'dev.placetopay.com/redirection/api/session/*'): Order
+    {
+        $placeToPayResponse = $this->placeToPayResponse($status);
+        Http::fake([
+            $url => Http::response($placeToPayResponse, 200),
+        ]);
+
+        $order = Order::factory()->hasOrderItems(3)->create();
+        $this->actingAs($order->user);
+        return $order;
     }
 
     public function orderProvider(): array

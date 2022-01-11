@@ -48,9 +48,6 @@ jobs:
           DB_PASSWORD: root
           DB_PORT: ${{ job.services.mysql.ports[3306] }}
       - name: Execute JS tests via Node
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '14'
       - run: npm install
       - run: npm run test
       - name: Fix results PHP coverage files

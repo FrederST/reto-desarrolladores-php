@@ -1,6 +1,5 @@
 <template>
     <jet-validation-errors class="mb-4" />
-
     <a-form>
         <a-form-item label="Name">
             <a-input v-model:value="form.name" />

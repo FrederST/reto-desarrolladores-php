@@ -4,6 +4,7 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <a-row :gutter="20">
                     <a-col :span="16">
+                        <jet-validation-errors class="mb-4" />
                         <a-form>
                             <a-form-item label="Fist Name">
                                 <a-input v-model:value="form.first_name" />
@@ -92,6 +93,7 @@ import AppLayout from "@/Layouts/AppLayout";
 import { Link, useForm } from "@inertiajs/inertia-vue3";
 import axios from "axios";
 import { message } from "ant-design-vue";
+import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 
 export default {
     props: {
@@ -102,6 +104,7 @@ export default {
     components: {
         AppLayout,
         Link,
+        JetValidationErrors
     },
     data() {
         return {

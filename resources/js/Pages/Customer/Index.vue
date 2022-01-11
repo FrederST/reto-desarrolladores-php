@@ -26,7 +26,9 @@
                             <span>
                                 <a @click="editCustomer(record)">Edit</a>
                                 <a-divider type="vertical" />
-                                <a @click="deleteCustomer(record)">Disable</a>
+                                <a @click="deleteCustomer(record)">Delete</a>
+                                <a-divider type="vertical" />
+                                <a @click="disableCustomer(record)">Disable</a>
                             </span>
                         </template>
                     </template>
@@ -59,7 +61,11 @@ import { Modal } from "ant-design-vue";
 import { Inertia } from "@inertiajs/inertia";
 import Button from "@/Jetstream/Button.vue";
 
-import { CheckOutlined, CloseOutlined, ExclamationCircleOutlined } from "@ant-design/icons-vue";
+import {
+    CheckOutlined,
+    CloseOutlined,
+    ExclamationCircleOutlined,
+} from "@ant-design/icons-vue";
 
 const columns = [
     {
@@ -133,8 +139,11 @@ export default {
             this.visible = true;
         },
         modalTitle() {
-            return this.modalEdit ? 'Edit' : 'Create';
-        }
+            return this.modalEdit ? "Edit" : "Create";
+        },
+        disableCustomer() {
+            Inertia.put(route("customers.disable", customer.id));
+        },
     },
     setup(props) {
         const pagination = computed(() => ({

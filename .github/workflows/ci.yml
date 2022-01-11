@@ -47,7 +47,7 @@ jobs:
         env:
           DB_PASSWORD: root
           DB_PORT: ${{ job.services.mysql.ports[3306] }}
-      - name: Fix results files
+      - name: Fix results PHP coverage files
         run: sed -i -e "s%$GITHUB_WORKSPACE/%%g" *.xml
         working-directory: results
       - name: Store results

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Filters\Concerns\HasFilters;
 use App\Helpers\CurrencyHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Product extends Model
 {
     use HasFactory;
+    use HasFilters;
 
     protected $fillable = [
         'name',
@@ -21,17 +23,12 @@ class Product extends Model
         'price',
         'sale_price',
         'currency_id',
-        'status',
+        'disabled_at',
     ];
 
     public function weightUnit(): HasOne
     {
         return $this->hasOne(WeightUnit::class);
-    }
-
-    public function currency(): HasOne
-    {
-        return $this->hasOne(Currency::class);
     }
 
     public function images(): HasMany

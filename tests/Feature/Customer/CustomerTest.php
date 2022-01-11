@@ -61,9 +61,22 @@ class CustomerTest extends TestCase
     {
         $user = $this->createUser();
 
-        $this->delete(self::CUSTOMER_PATH . '/' . $user->id);
+        $this->put(self::CUSTOMER_PATH . '/disable/' . $user->id);
 
         $this->assertEquals(now(), $user->fresh()->banned_at);
+    }
+
+    public function test_customer_can_be_deleted(): void
+    {
+        $this->createUser();
+        $user = User::factory()->create()->toArray();
+
+        unset($user['profile_photo_url']);
+        unset($user['roles']);
+
+        $this->delete(self::CUSTOMER_PATH . '/' . $user['id']);
+
+        $this->assertDeleted('users', $user);
     }
 
     private function createUser(): User

@@ -4,6 +4,7 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <a-row :gutter="20">
                     <a-col :span="16">
+                        <jet-validation-errors class="mb-4" />
                         <a-form>
                             <a-form-item label="Fist Name">
                                 <a-input v-model:value="form.first_name" />
@@ -44,11 +45,13 @@
                             </a-form-item>
                             <a-form-item label="Post Code">
                                 <a-input-number
+                                    style="width: 100%"
                                     v-model:value="form.post_code"
                                 />
                             </a-form-item>
                             <a-form-item label="Phone Number">
                                 <a-input-number
+                                    style="width: 100%"
                                     v-model:value="form.phone_number"
                                 />
                             </a-form-item>
@@ -90,6 +93,7 @@ import AppLayout from "@/Layouts/AppLayout";
 import { Link, useForm } from "@inertiajs/inertia-vue3";
 import axios from "axios";
 import { message } from "ant-design-vue";
+import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 
 export default {
     props: {
@@ -100,13 +104,16 @@ export default {
     components: {
         AppLayout,
         Link,
+        JetValidationErrors
     },
     data() {
         return {
             cities: [],
             loadingCities: false,
             form: useForm({
-                first_name: this.order?.first_name,
+                first_name: this.order
+                    ? this.order.first_name
+                    : this.$page.props.user.name,
                 last_name: this.order?.last_name,
                 address: this.order?.address,
                 country_id: this.order
@@ -145,6 +152,9 @@ export default {
                 cost += item.total;
             });
             return cost;
+        },
+        getCurrentUserName() {
+            return this.$page.props.user.name;
         },
     },
 };

@@ -1,4 +1,5 @@
 <template>
+    <jet-validation-errors class="mb-4" />
     <a-form>
         <a-form-item label="Name">
             <a-input v-model:value="form.name" />
@@ -47,9 +48,6 @@
             </a-input-number>
             {{ this.$page.props.default_currency.alphabetic_code }}
         </a-form-item>
-        <a-form-item label="Active">
-            <a-switch v-model:checked="form.status" />
-        </a-form-item>
         <a-form-item label="Description">
             <a-textarea v-model:value="form.description" type="textarea" />
         </a-form-item>
@@ -64,6 +62,7 @@
 import { defineComponent } from "vue";
 import { useForm } from "@inertiajs/inertia-vue3";
 import { PlusOutlined } from "@ant-design/icons-vue";
+import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 
 export default defineComponent({
     props: {
@@ -74,6 +73,7 @@ export default defineComponent({
     },
     components: {
         PlusOutlined,
+        JetValidationErrors
     },
     data() {
         return {
@@ -86,7 +86,6 @@ export default defineComponent({
                 price: this.product.price,
                 sale_price: this.product.sale_price,
                 currency_id: this.product.currency_id,
-                status: this.product.status,
             }),
         };
     },

@@ -16,7 +16,7 @@ class CreateProductsTable extends Migration
             $table->decimal('weight', 8, 2)->nullable();
             $table->unsignedBigInteger('price');
             $table->unsignedBigInteger('sale_price');
-            $table->boolean('status')->default(1);
+            $table->timestamp('disabled_at')->nullable();
             $table->timestamps();
         });
     }

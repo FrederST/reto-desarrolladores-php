@@ -23,7 +23,6 @@ class StoreRequest extends FormRequest
             'weight_unit_id' => ['required', 'numeric', 'exists:weight_units,id', self::GTE_RULE],
             'price' => ['required', 'numeric', self::GTE_RULE],
             'sale_price' => ['required', 'numeric', 'gte:price'],
-            'status' => ['required', 'boolean'],
         ];
     }
 }

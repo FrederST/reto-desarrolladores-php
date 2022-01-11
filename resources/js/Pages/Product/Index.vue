@@ -21,9 +21,9 @@
                         <a-result status="403" title="No Products"> </a-result>
                     </template>
                     <template #bodyCell="{ column, record }">
-                        <template v-if="column.dataIndex === 'status'">
+                        <template v-if="column.dataIndex === 'active'">
                             <span>
-                                <check-outlined v-if="!record.status" />
+                                <check-outlined v-if="!record.disabled_at" />
                                 <close-outlined v-else />
                             </span>
                         </template>
@@ -34,6 +34,8 @@
                                 <a @click="editProduct(record)">Edit</a>
                                 <a-divider type="vertical" />
                                 <a @click="deleteProduct(record)">Delete</a>
+                                <a-divider type="vertical" />
+                                <a @click="disableProduct(record)">Disable</a>
                             </span>
                         </template>
                     </template>
@@ -102,6 +104,10 @@ const columns = [
     {
         title: "Sale Price",
         dataIndex: "sale_price",
+    },
+    {
+        title: "Active",
+        dataIndex: "active",
     },
     {
         title: "Actions",
@@ -176,6 +182,9 @@ export default {
         reloadPage() {
             Inertia.reload();
         },
+        disableProduct(product){
+            Inertia.put(route("products.disable", product.id));
+        }
     },
     setup(props) {
         const pagination = computed(() => ({

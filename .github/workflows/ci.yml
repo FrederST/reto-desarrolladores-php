@@ -56,7 +56,7 @@ jobs:
       - name: Fix results PHP coverage files
         run: sed -i -e "s%$GITHUB_WORKSPACE/%%g" *.xml
         working-directory: results
-      - name: Fix results PHP coverage files
+      - name: Fix results JS coverage files
         run: sed -i -e "s%$GITHUB_WORKSPACE/%%g" *.info
         working-directory: results
       - name: Store results

@@ -1,4 +1,6 @@
 <template>
+    <jet-validation-errors class="mb-4" />
+
     <a-form>
         <a-form-item label="Name">
             <a-input v-model:value="form.name" />
@@ -61,6 +63,7 @@
 import { defineComponent } from "vue";
 import { useForm } from "@inertiajs/inertia-vue3";
 import { PlusOutlined } from "@ant-design/icons-vue";
+import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 
 export default defineComponent({
     props: {
@@ -71,6 +74,7 @@ export default defineComponent({
     },
     components: {
         PlusOutlined,
+        JetValidationErrors
     },
     data() {
         return {

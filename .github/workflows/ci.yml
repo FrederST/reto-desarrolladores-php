@@ -48,9 +48,9 @@ jobs:
           DB_PASSWORD: root
           DB_PORT: ${{ job.services.mysql.ports[3306] }}
       - name: Install Node Modules
-      - run: npm install
+        run: npm install
       - name: Execute JS tests via Node
-      - run: npm run test
+        run: npm run test
       - name: Fix results PHP coverage files
         run: sed -i -e "s%$GITHUB_WORKSPACE/%%g" *.xml
         working-directory: results

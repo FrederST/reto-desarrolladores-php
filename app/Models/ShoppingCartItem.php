@@ -18,11 +18,6 @@ class ShoppingCartItem extends Model
         'total'
     ];
 
-    public function shoppingCart(): BelongsTo
-    {
-        return $this->belongsTo(ShoppingCart::class);
-    }
-
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);

@@ -31,11 +31,6 @@ class Product extends Model
         return $this->hasOne(WeightUnit::class);
     }
 
-    public function currency(): HasOne
-    {
-        return $this->hasOne(Currency::class);
-    }
-
     public function images(): HasMany
     {
         return $this->hasMany(ProductImage::class);

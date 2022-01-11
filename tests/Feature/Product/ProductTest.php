@@ -21,13 +21,6 @@ class ProductTest extends TestCase
         $this->withoutExceptionHandling();
     }
 
-    public function test_index_screen_can_be_rendered(): void
-    {
-        $response = $this->get(self::PRODUCT_PATH);
-
-        $response->assertStatus(200);
-    }
-
     public function test_new_product_can_register(): void
     {
         $product = $this->productProvider()['product'];

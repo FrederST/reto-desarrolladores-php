@@ -2,20 +2,20 @@
 
 namespace Database\Seeders;
 
+use File;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
-use File;
 
 class PermissionsSeeder extends Seeder
 {
     public function run(): void
     {
-        $permissions = json_decode(File::get("database/data/permissions.json"));
+        $permissions = json_decode(File::get('database/data/permissions.json'));
 
         foreach ($permissions->permissions as $value) {
             Permission::create([
-                'name' => $value
+                'name' => $value,
             ]);
         }
 

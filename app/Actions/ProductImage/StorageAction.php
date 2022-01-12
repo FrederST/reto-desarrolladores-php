@@ -4,7 +4,6 @@ namespace App\Actions\ProductImage;
 
 use App\Actions\Action;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Log;
 
 class StorageAction extends Action
 {

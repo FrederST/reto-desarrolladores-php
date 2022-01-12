@@ -11,7 +11,6 @@ class EnsureOrderIsFromCurrentUser
 {
     public function handle(Request $request, Closure $next): Response|RedirectResponse
     {
-
         if (auth()->user()->id == $request->route('order')->user_id) {
             return $next($request);
         }

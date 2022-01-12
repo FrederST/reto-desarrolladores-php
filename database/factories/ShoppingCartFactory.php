@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ShoppingCartFactory extends Factory
 {
-
     public function definition(): array
     {
         return [

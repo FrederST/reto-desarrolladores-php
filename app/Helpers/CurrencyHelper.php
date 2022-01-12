@@ -37,7 +37,7 @@ class CurrencyHelper
 
     public static function getDefaultCurrency(): ModelsCurrency
     {
-        return Cache::rememberForever('default_currency', function(){
+        return Cache::rememberForever('default_currency', function () {
             return ModelsCurrency::where('alphabetic_code', config('shop.default_currency'))->first();
         });
     }

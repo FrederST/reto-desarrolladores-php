@@ -2,9 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Currency;
-use App\Models\WeightUnit;
-use File;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 

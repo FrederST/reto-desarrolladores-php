@@ -11,5 +11,4 @@ interface PaymentContract
     public function checkStatus(Order $order): void;
 
     public function getStatus(Order $order): array;
-
 }

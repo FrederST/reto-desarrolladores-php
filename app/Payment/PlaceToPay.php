@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Http;
 
 class PlaceToPay implements PaymentContract
 {
-
     private array $config;
 
     public function __construct(array $config)
@@ -21,7 +20,7 @@ class PlaceToPay implements PaymentContract
     public function makePayment(Order $order): string
     {
         $request = $this->createAuth() + $this->createRequest($order);
-        $response =  Http::post($this->config['api_url'] . 'api/session', $request);
+        $response = Http::post($this->config['api_url'] . 'api/session', $request);
         if ($response->ok() && $this->validateSessionStatus($response->json())) {
             $data = $response->json();
             $order->payment_process_id = $data['requestId'];
@@ -53,7 +52,6 @@ class PlaceToPay implements PaymentContract
         }
     }
 
-
     private function createAuth(): array
     {
         $nonce = bin2hex(openssl_random_pseudo_bytes(16));
@@ -64,7 +62,7 @@ class PlaceToPay implements PaymentContract
                 'tranKey'=> base64_encode(sha1($nonce . $seed . $this->config['secretkey'], true)),
                 'nonce' => base64_encode($nonce),
                 'seed' => $seed,
-            ]
+            ],
         ];
     }
 

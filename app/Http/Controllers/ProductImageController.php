@@ -10,10 +10,9 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductImageController extends Controller
 {
-
     public function upload(StoreRequest $request, string $productId, StorageAction $storageAction): ProductImage
     {
-        $productImage = $storageAction->execute(array_merge($request->validated(), ['product_id' => $productId]), new ProductImage);
+        $productImage = $storageAction->execute(array_merge($request->validated(), ['product_id' => $productId]), new ProductImage());
         ProductCreatedOrUpdated::dispatch($productImage->product, 'Created Product Image');
         return $productImage;
     }

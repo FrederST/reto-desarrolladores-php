@@ -22,7 +22,7 @@ class CheckOrders extends Command
         foreach ($ordersPending as $item) {
             $order = $checkOrderAction->execute($item);
             $order->user->notify(new OrderStatusChange($order));
-            $this->info('Checked Order '. $order->id);
+            $this->info('Checked Order ' . $order->id);
         }
     }
 }

@@ -30,5 +30,4 @@ class CreateViewModel extends ViewModel
     {
         return 'Orders';
     }
-
 }

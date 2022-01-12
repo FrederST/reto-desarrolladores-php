@@ -8,7 +8,6 @@ use Khsing\World\Models\Country;
 
 class OrderFactory extends Factory
 {
-
     public function definition(): array
     {
         $country = Country::first();

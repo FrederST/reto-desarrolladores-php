@@ -50,7 +50,7 @@ abstract class Filter
 
     private function getCondition(string $condition): Condition
     {
-        return new $this->applicableConditions[$condition];
+        return new $this->applicableConditions[$condition]();
     }
 
     protected function joins(): self

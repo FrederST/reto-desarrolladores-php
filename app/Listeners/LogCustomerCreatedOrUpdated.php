@@ -5,6 +5,7 @@ namespace App\Listeners;
 use App\Events\CustomerCreatedOrUpdated;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+
 class LogCustomerCreatedOrUpdated
 {
     public function handle(CustomerCreatedOrUpdated $event): void

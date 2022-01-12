@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import CreateOrEdit from "../../js/Pages/Customer/CreateOrEdit.vue";
+import CreateOrEdit from "../../resources/js/Pages/Customer/CreateOrEdit.vue";
 
 test("uses mounts", async () => {
     const wrapper = mount(CreateOrEdit, {
@@ -19,5 +19,6 @@ test("uses mounts", async () => {
             },
         },
     });
+    wrapper.vm.saveInfo();
     expect(wrapper.html()).toContain('Customer Information')
 });

@@ -7,7 +7,6 @@ use App\Constants\OrderStatus;
 use App\Models\Order;
 use App\Notifications\OrderStatusChange;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Notification;
 
 class CheckOrders extends Command
 {

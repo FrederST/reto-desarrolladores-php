@@ -98,9 +98,6 @@ export default defineComponent({
     methods: {
 
         saveInfo() {
-            if (this.$refs.photo) {
-                this.form.photo = this.$refs.photo.files[0];
-            }
             if (this.edit) {
                 this.updateCustomerInformation();
             }else{
@@ -123,38 +120,7 @@ export default defineComponent({
             });
         },
 
-        selectNewPhoto() {
-            this.$refs.photo.click();
-        },
-
-        updatePhotoPreview() {
-            const photo = this.$refs.photo.files[0];
-
-            if (!photo) return;
-
-            const reader = new FileReader();
-
-            reader.onload = (e) => {
-                this.photoPreview = e.target.result;
-            };
-
-            reader.readAsDataURL(photo);
-        },
-
-        deletePhoto() {
-            this.$inertia.delete(route("current-user-photo.destroy"), {
-                preserveScroll: true,
-                onSuccess: () => {
-                    this.photoPreview = null;
-                    this.clearPhotoFileInput();
-                },
-            });
-        },
-
         clearPhotoFileInput() {
-            if (this.$refs.photo?.value) {
-                this.$refs.photo.value = null;
-            }
             this.$emit("close", true);
         },
     },

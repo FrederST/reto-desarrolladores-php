@@ -131,7 +131,6 @@ export default defineComponent({
     },
     setup(props) {
         const current = ref(props.products.current_page);
-
         return {
             current,
         };

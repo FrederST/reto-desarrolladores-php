@@ -12,7 +12,7 @@ class RetryPaymentAction
     {
         $payment_class = PaymentBuilder::build($order->payment_method, config('shop.payment_methods.' . $order->payment_method));
 
-        if ($order->status == OrderStatus::STATUS_APPROVED) {
+        if ($order->status == OrderStatus::STATUS_APPROVED || $order->status == OrderStatus::STATUS_PENDING) {
             return route('orders.index');
         }
 

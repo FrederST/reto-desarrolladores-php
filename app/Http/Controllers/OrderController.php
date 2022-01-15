@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Actions\Order\CheckOrderAction;
 use App\Actions\Order\RetryPaymentAction;
 use App\Actions\Order\StorageAction;
+use App\Events\OrderCreatedOrUpdated;
 use App\Http\Requests\Order\StoreRequest;
 use App\Models\Order;
 use App\ViewModels\Order\CreateViewModel;
@@ -37,6 +38,7 @@ class OrderController extends Controller
     public function store(StoreRequest $request, StorageAction $storageAction): HttpResponse
     {
         $order = $storageAction->execute($request->validated(), new Order());
+        OrderCreatedOrUpdated::dispatch($order);
         return Inertia::location($order->payment_process_url);
     }
 
@@ -48,8 +50,9 @@ class OrderController extends Controller
 
     public function retryPayment(Order $order, RetryPaymentAction $retryPaymentAction): RedirectResponse
     {
-        $urlOrder = $retryPaymentAction->execute($order);
-        return Redirect::to($urlOrder);
+        $dbOrder = $retryPaymentAction->execute($order);
+        OrderCreatedOrUpdated::dispatch($dbOrder, 'Order Retry');
+        return Redirect::to($order->payment_process_url);
     }
 
     public function all(): Response

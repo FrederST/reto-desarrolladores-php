@@ -8,7 +8,7 @@ use App\Payment\PlaceToPay;
 class PaymentBuilder
 {
     private const PAYMENT_METHODS = [
-        'place_to_pay' => PlaceToPay::class
+        'place_to_pay' => PlaceToPay::class,
     ];
 
     public static function build(string $payment, array $config): PaymentContract

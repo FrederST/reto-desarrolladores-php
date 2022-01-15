@@ -4,9 +4,7 @@ namespace App\Actions\Product;
 
 use App\Actions\Action;
 use App\Helpers\CurrencyHelper;
-use App\Models\Currency;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Log;
 
 class StorageAction extends Action
 {
@@ -25,5 +23,4 @@ class StorageAction extends Action
 
         return $product;
     }
-
 }

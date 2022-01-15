@@ -11,7 +11,7 @@ class ProductController extends Controller
 {
     public function search(Request $request): JsonResponse
     {
-        $data = Product::where('name', 'LIKE','%'.$request->searchTerm.'%')->get();
+        $data = Product::where('name', 'LIKE', '%' . $request->searchTerm . '%')->get();
         return response()->json($data);
     }
 }

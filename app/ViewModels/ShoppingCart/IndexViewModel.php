@@ -4,7 +4,6 @@ namespace App\ViewModels\ShoppingCart;
 
 use App\Models\ShoppingCart;
 use App\ViewModels\ViewModel;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 class IndexViewModel extends ViewModel
 {
@@ -29,5 +28,4 @@ class IndexViewModel extends ViewModel
     {
         return 'Shopping Cart';
     }
-
 }

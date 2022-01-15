@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateProductImagesTable extends Migration
 {
-
     public function up(): void
     {
         Schema::create('product_images', function (Blueprint $table) {

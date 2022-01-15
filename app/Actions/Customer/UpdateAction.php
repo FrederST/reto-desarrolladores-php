@@ -5,7 +5,6 @@ namespace App\Actions\Customer;
 use App\Actions\Action;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Log;
 
 class UpdateAction extends Action
 {
@@ -30,6 +29,4 @@ class UpdateAction extends Action
         }
         return $user;
     }
-
-
 }

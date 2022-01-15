@@ -10,9 +10,9 @@ class CheckBanned
     public function handle(Request $request, Closure $next)
     {
         if (auth()->check() && auth()->user()->banned_at) {
-           auth('web')->logout();
-           $request->session()->invalidate();
-           $request->session()->regenerateToken();
+            auth('web')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
 
             return redirect()->route('login')->with('status', 'Your Account is suspended, please contact Admin.');
         }

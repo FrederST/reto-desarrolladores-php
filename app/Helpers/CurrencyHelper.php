@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Models\Currency as ModelsCurrency;
+use Illuminate\Support\Facades\Cache;
 use Money\Currencies\ISOCurrencies;
 use Money\Currency;
 use Money\Formatter\DecimalMoneyFormatter;
@@ -36,6 +37,8 @@ class CurrencyHelper
 
     public static function getDefaultCurrency(): ModelsCurrency
     {
-        return ModelsCurrency::where('alphabetic_code', config('shop.default_currency'))->first();
+        return Cache::rememberForever('default_currency', function () {
+            return ModelsCurrency::where('alphabetic_code', config('shop.default_currency'))->first();
+        });
     }
 }

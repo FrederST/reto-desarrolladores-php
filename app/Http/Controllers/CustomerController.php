@@ -24,7 +24,7 @@ class CustomerController extends Controller
 
     public function store(StoreRequest $request, StorageAction $createAction): RedirectResponse
     {
-        $customer = $createAction->execute($request->validated(), new User);
+        $customer = $createAction->execute($request->validated(), new User());
         CustomerCreatedOrUpdated::dispatch($customer);
         return Redirect::route(self::CUSTOMER_INDEX);
     }

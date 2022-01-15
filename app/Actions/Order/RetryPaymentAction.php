@@ -4,20 +4,26 @@ namespace App\Actions\Order;
 
 use App\Builders\PaymentBuilder;
 use App\Constants\OrderStatus;
+use App\Exceptions\OrderRetryException;
 use Illuminate\Database\Eloquent\Model;
 
 class RetryPaymentAction
 {
-    public function execute(Model $order): string
+    public function execute(Model $order): Model
     {
-        $payment_class = PaymentBuilder::build($order->payment_method, config('shop.payment_methods.' . $order->payment_method));
+        $paymentClass = PaymentBuilder::build($order->payment_method, config('shop.payment_methods.' . $order->payment_method));
 
-        if ($order->status == OrderStatus::STATUS_APPROVED) {
-            return route('orders.index');
-        }
+        throw_if(
+            $order->status == OrderStatus::STATUS_APPROVED || $order->status == OrderStatus::STATUS_PENDING,
+            OrderRetryException::class
+        );
 
-        $payment_class->makePayment($order);
+        throw_if(
+            $paymentClass->makePayment($order) == null,
+            OrderRetryException::class,
+            'Error Connecting to ' . $order->payment_method
+        );
         $order->refresh();
-        return $order->payment_process_url;
+        return $order;
     }
 }

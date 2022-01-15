@@ -15,12 +15,11 @@ class ShoppingCartItem extends Model
         'shopping_cart_id',
         'product_id',
         'quantity',
-        'total'
+        'total',
     ];
 
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
     }
-
 }

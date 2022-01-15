@@ -27,7 +27,7 @@ class ProductController extends Controller
 
     public function store(StoreRequest $request, StorageAction $storageAction): RedirectResponse
     {
-        $product = $storageAction->execute($request->validated(), new Product);
+        $product = $storageAction->execute($request->validated(), new Product());
         ProductCreatedOrUpdated::dispatch($product);
         return Redirect::route(self::PRODUCT_INDEX);
     }
@@ -54,5 +54,4 @@ class ProductController extends Controller
         $product->update(['disabled_at' => now()]);
         return Redirect::route(self::PRODUCT_INDEX);
     }
-
 }

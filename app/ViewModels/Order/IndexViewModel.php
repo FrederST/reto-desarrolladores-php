@@ -28,5 +28,4 @@ class IndexViewModel extends ViewModel
     {
         return 'Orders';
     }
-
 }

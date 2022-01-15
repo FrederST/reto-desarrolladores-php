@@ -42,9 +42,13 @@ class StorageAction extends Action
 
         $shoppingCart->shoppingCartItems()->delete();
 
-        $payment_class = PaymentBuilder::build($order->payment_method, config('shop.payment_methods.' . $order->payment_method));
+        $paymentClass = PaymentBuilder::build($order->payment_method, config('shop.payment_methods.' . $order->payment_method));
 
-        $payment_class->makePayment($order);
+        throw_if(
+            $paymentClass->makePayment($order) == null,
+            OrderRetryException::class,
+            'Error Connecting to ' . $order->payment_method
+        );
 
         $order->refresh();
 

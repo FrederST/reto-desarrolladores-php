@@ -3,7 +3,6 @@
 namespace App\Actions\ShoppingCart;
 
 use App\Actions\Action;
-use App\Helpers\CurrencyHelper;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Model;
 
@@ -22,5 +21,4 @@ class AddToCartAction extends Action
 
         return $shoppingCartItem;
     }
-
 }

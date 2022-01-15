@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class AddColumnsToUsersTable extends Migration
 {
-
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
@@ -14,5 +13,4 @@ class AddColumnsToUsersTable extends Migration
             $table->timestamp('banned_at')->nullable();
         });
     }
-
 }

@@ -48,6 +48,7 @@ class HandleInertiaRequests extends Middleware
                 ] : null;
             },
             'default_currency' =>  CurrencyHelper::getDefaultCurrency(),
+            'message' => fn () => $request->session()->get('message'),
         ]);
     }
 }

@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use App\Events\CustomerCreatedOrUpdated;
+use App\Events\OrderCreatedOrUpdated;
 use App\Events\ProductCreatedOrUpdated;
 use App\Listeners\LogCustomerCreatedOrUpdated;
+use App\Listeners\LogOrderCreatedOrUpdated;
 use App\Listeners\LogProductCreatedOrUpdated;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -27,6 +29,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         ProductCreatedOrUpdated::class => [
             LogProductCreatedOrUpdated::class,
+        ],
+        OrderCreatedOrUpdated::class => [
+            LogOrderCreatedOrUpdated::class,
         ],
     ];
 

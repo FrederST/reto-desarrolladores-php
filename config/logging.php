@@ -132,6 +132,12 @@ return [
             'level' => env('LOG_LEVEL', 'debug'),
         ],
 
+        'order' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/order.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+        ],
+
     ],
 
 ];

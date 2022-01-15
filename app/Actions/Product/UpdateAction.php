@@ -5,7 +5,6 @@ namespace App\Actions\Product;
 use App\Actions\Action;
 use App\Helpers\CurrencyHelper;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Log;
 
 class UpdateAction extends Action
 {

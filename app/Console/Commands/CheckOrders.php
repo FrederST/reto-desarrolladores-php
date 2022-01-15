@@ -7,7 +7,6 @@ use App\Constants\OrderStatus;
 use App\Models\Order;
 use App\Notifications\OrderStatusChange;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Notification;
 
 class CheckOrders extends Command
 {
@@ -23,7 +22,7 @@ class CheckOrders extends Command
         foreach ($ordersPending as $item) {
             $order = $checkOrderAction->execute($item);
             $order->user->notify(new OrderStatusChange($order));
-            $this->info('Checked Order '. $order->id);
+            $this->info('Checked Order ' . $order->id);
         }
     }
 }

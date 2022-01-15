@@ -39,6 +39,8 @@ class PlaceToPay implements PaymentContract
             $order->status = OrderStatus::STATUS_APPROVED;
         } elseif ($currenStatus == 'REJECTED') {
             $order->status = OrderStatus::STATUS_REJECTED;
+        } elseif ($currenStatus == 'PENDING') {
+            $order->status = OrderStatus::STATUS_PENDING;
         }
 
         $order->save();

@@ -18,7 +18,7 @@ export default {
             } else if (status == 'REJECTED' || status == 'FAILED') {
                 return 'error'
             }
-            return 'info'
+            return 'warning'
         }
     }
 };

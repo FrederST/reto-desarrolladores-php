@@ -6,8 +6,9 @@
             </h2>
         </template>
 
-        <div class="py-12">
+        <div class="py-8">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+             <a-alert v-if="$page.props.message" :message="$page.props.message" type="warning" show-icon />
                 <a-table
                     :columns="columns"
                     :data-source="orders.data"
@@ -81,6 +82,7 @@ export default {
         },
     },
     setup(props) {
+        console.log(props);
         const pagination = computed(() => ({
             total: props.orders.total,
             current: props.orders.current_page,

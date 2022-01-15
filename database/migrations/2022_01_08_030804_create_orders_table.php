@@ -13,7 +13,7 @@ class CreateOrdersTable extends Migration
             $table->id();
             $table->string('order_number')->unique();
             $table->foreignId('user_id')->constrained();
-            $table->enum('status', OrderStatus::STATUSES)->default(OrderStatus::STATUS_PENDING);
+            $table->enum('status', OrderStatus::STATUSES)->default(OrderStatus::STATUS_WAIT);
             $table->unsignedBigInteger('grand_total');
             $table->unsignedInteger('item_count');
             $table->string('payment_method')->nullable();

@@ -17,7 +17,7 @@ class PlaceToPay implements PaymentContract
         $this->config = $config;
     }
 
-    public function makePayment(Order $order): string
+    public function makePayment(Order $order): ?string
     {
         $request = $this->createAuth() + $this->createRequest($order);
         $response = Http::post($this->config['api_url'] . 'api/session', $request);
@@ -25,9 +25,11 @@ class PlaceToPay implements PaymentContract
             $data = $response->json();
             $order->payment_process_id = $data['requestId'];
             $order->payment_process_url = $data['processUrl'];
+            $order->status = OrderStatus::STATUS_PENDING;
             $order->save();
             return $data['processUrl'];
         }
+        return null;
     }
 
     public function checkStatus(Order $order): void

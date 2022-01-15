@@ -9,6 +9,7 @@ class OrderStatus
     public const STATUS_REJECTED = 'REJECTED';
     public const STATUS_FAILED = 'FAILED';
     public const STATUS_DECLINED = 'DECLINED';
+    public const STATUS_WAIT = 'WAIT';
 
     public const STATUSES = [
         self::STATUS_APPROVED,
@@ -16,5 +17,6 @@ class OrderStatus
         self::STATUS_REJECTED,
         self::STATUS_FAILED,
         self::STATUS_DECLINED,
+        self::STATUS_WAIT,
     ];
 }

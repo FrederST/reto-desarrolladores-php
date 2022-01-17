@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Actions\Product\StorageAction;
 use App\Actions\Product\UpdateAction;
 use App\Events\ProductCreatedOrUpdated;
+use App\Http\Requests\Product\ImportRequest;
 use App\Http\Requests\Product\StoreRequest;
 use App\Http\Requests\Product\UpdateRequest;
+use App\Jobs\ImportProducts;
 use App\Models\Product;
 use App\ViewModels\Product\IndexViewModel;
 use Illuminate\Http\RedirectResponse;
@@ -14,6 +16,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
+use League\Csv\Reader;
 
 class ProductController extends Controller
 {
@@ -52,6 +55,13 @@ class ProductController extends Controller
     public function disable(Product $product): RedirectResponse
     {
         $product->update(['disabled_at' => now()]);
+        return Redirect::route(self::PRODUCT_INDEX);
+    }
+
+    public function import(ImportRequest $importRequest): RedirectResponse
+    {
+        $path = $importRequest->file('products')->storeAs('imports/products', uniqid().'.csv');
+        ImportProducts::dispatch($path);
         return Redirect::route(self::PRODUCT_INDEX);
     }
 }

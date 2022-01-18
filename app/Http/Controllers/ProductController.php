@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Product\ImportAction;
 use App\Actions\Product\StorageAction;
 use App\Actions\Product\UpdateAction;
 use App\Events\ProductCreatedOrUpdated;
@@ -14,6 +15,7 @@ use App\ViewModels\Product\IndexViewModel;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use Inertia\Response;
 use League\Csv\Reader;
@@ -58,10 +60,10 @@ class ProductController extends Controller
         return Redirect::route(self::PRODUCT_INDEX);
     }
 
-    public function import(ImportRequest $importRequest): RedirectResponse
+    public function import(ImportRequest $importRequest, ImportAction $importAction): RedirectResponse
     {
         $path = $importRequest->file('products')->storeAs('imports/products', uniqid().'.csv');
-        ImportProducts::dispatch($path);
+        $importAction->execute($path);
         return Redirect::route(self::PRODUCT_INDEX);
     }
 }

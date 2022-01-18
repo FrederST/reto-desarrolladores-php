@@ -11,7 +11,6 @@ class CreateWeightUnitsTable extends Migration
         Schema::create('weight_units', function (Blueprint $table) {
             $table->id();
             $table->string('weight_unit_name', 50);
-            $table->string('weight_unit_alias', 50);
             $table->timestamps();
         });
     }

@@ -8,16 +8,26 @@
 
         <div class="py-6">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <a-alert
+                    v-if="$page.props.message"
+                    :message="$page.props.message"
+                    type="warning"
+                    show-icon
+                />
+
                 <a-button type="primary" @click="createCustomer()">
                     New Product
                 </a-button>
-                <a-popover title="Import"  trigger="focus">
+                <a-popover title="Import" trigger="focus">
                     <template #content>
                         <a-upload-dragger
                             name="products"
                             :multiple="false"
                             action="/products/import"
-                            :headers="{ 'X-CSRF-TOKEN': this.$page.props.auth.csrf_token }"
+                            :headers="{
+                                'X-CSRF-TOKEN':
+                                    this.$page.props.auth.csrf_token,
+                            }"
                             @change="handleChange"
                         >
                             <p class="ant-upload-drag-icon">
@@ -105,7 +115,7 @@ import {
     CheckOutlined,
     CloseOutlined,
     ExclamationCircleOutlined,
-    InboxOutlined
+    InboxOutlined,
 } from "@ant-design/icons-vue";
 
 const columns = [
@@ -207,6 +217,7 @@ export default {
             Inertia.put(route("products.disable", product.id));
         },
         handleChange(info) {
+            console.log(info);
             const status = info.file.status;
 
             if (status !== "uploading") {
@@ -217,6 +228,7 @@ export default {
                 message.success(
                     `${info.file.name} file uploaded successfully.`
                 );
+                location.reload();
             } else if (status === "error") {
                 message.error(`${info.file.name} file upload failed.`);
             }

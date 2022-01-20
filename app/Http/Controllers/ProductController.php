@@ -60,10 +60,10 @@ class ProductController extends Controller
         return Redirect::route(self::PRODUCT_INDEX);
     }
 
-    public function import(ImportRequest $importRequest, ImportAction $importAction): RedirectResponse
+    public function import(ImportRequest $importRequest): RedirectResponse
     {
         $path = $importRequest->file('products')->storeAs('imports/products', uniqid().'.csv');
-        $importAction->execute($path);
+        ImportProducts::dispatch($path);
         return Redirect::route(self::PRODUCT_INDEX);
     }
 }

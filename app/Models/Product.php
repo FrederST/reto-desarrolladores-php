@@ -15,6 +15,7 @@ class Product extends Model
     use HasFilters;
 
     protected $fillable = [
+        'code',
         'name',
         'description',
         'quantity',

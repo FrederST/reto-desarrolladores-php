@@ -102,7 +102,7 @@ export default defineComponent({
             this.form.post(route("products.store"), {
                 preserveScroll: true,
                 onError: (errors) => console.log(errors),
-                onSuccess: () => this.closeModal(),
+                onSuccess: (data) => { console.log(data); this.closeModal()},
             });
         },
 

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Cache;
 use Money\Currencies\ISOCurrencies;
 use Money\Currency;
 use Money\Formatter\DecimalMoneyFormatter;
+use Money\Formatter\IntlMoneyFormatter;
 use Money\Money;
 use Money\Parser\DecimalMoneyParser;
 
@@ -27,10 +28,11 @@ class CurrencyHelper
 
     public static function toCurrencyFormat(string $value, string $currency = null): string
     {
-        $money = new Money($value, new Currency($currency ? $currency : config(self::DEFAULT_CURRENCY_KEY)));
+        $money = new Money($value, new Currency($currency ? $currency : config('shop.default_currency')));
         $currencies = new ISOCurrencies();
 
-        $moneyFormatter = new DecimalMoneyFormatter($currencies);
+        $numberFormatter = new \NumberFormatter('en_US', \NumberFormatter::CURRENCY);
+        $moneyFormatter = new IntlMoneyFormatter($numberFormatter, $currencies);
 
         return $moneyFormatter->format($money);
     }

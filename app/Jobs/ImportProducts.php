@@ -2,10 +2,11 @@
 
 namespace App\Jobs;
 
+use App\Constants\ImportStatus;
 use App\Helpers\CurrencyHelper;
-use App\Http\Requests\Product\StoreRequest;
-use App\Models\Product;
+use App\Models\User;
 use App\Models\WeightUnit;
+use App\Notifications\ImportStatusChange;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -35,23 +36,34 @@ class ImportProducts implements ShouldQueue
         'products.*.sale_price' => ['required', 'numeric'],
     ];
 
-    private string $file_path;
+    private string $filePath;
+    private string $userId;
 
-    public function __construct(string $file_path)
+    public function __construct(string $filePath, string $userId)
     {
-        $this->file_path = $file_path;
+        $this->filePath = $filePath;
+        $this->userId = $userId;
     }
 
     public function handle(): void
     {
-        $csv = Reader::createFromPath(Storage::path($this->file_path))
+        $user = User::find($this->userId);
+
+        $csv = Reader::createFromPath(Storage::path($this->filePath))
         ->setHeaderOffset(0)
         ->setDelimiter(';');
 
-        foreach ($csv as $value) {
-            $product = $value;
-            $product['weight_unit_id'] = WeightUnit::where('weight_unit_alias', $product['weight_unit'])->first()->id;
-            $product['currency_id'] = CurrencyHelper::getDefaultCurrency()->id;
+        $validator = Validator::make(['products' => iterator_to_array($csv->getRecords())], self::RULES);
+
+        if ($validator->fails()) {
+            $user->notify(new ImportStatusChange(ImportStatus::STATUS_FAIL, $validator->errors()->__toString()));
+        } else {
+            foreach ($csv as $value) {
+                $product = $value;
+                $product['weight_unit_id'] = WeightUnit::where('weight_unit_alias', $product['weight_unit'])->first()->id;
+                $product['currency_id'] = CurrencyHelper::getDefaultCurrency()->id;
+            }
+            $user->notify(new ImportStatusChange(ImportStatus::STATUS_FAIL, 'All Good'));
         }
     }
 }

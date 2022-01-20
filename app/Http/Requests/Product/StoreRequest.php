@@ -16,6 +16,7 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'code' => ['string', 'digits_between:1,10'],
             'name' => ['required', 'string', 'min:1', 'max:100'],
             'description' => ['required', 'string'],
             'quantity' => ['required', 'numeric', self::GTE_RULE],

@@ -31,6 +31,16 @@ class CurrencyHelper
         $money = new Money($value, new Currency($currency ? $currency : config('shop.default_currency')));
         $currencies = new ISOCurrencies();
 
+        $moneyFormatter = new DecimalMoneyFormatter($currencies);
+
+        return $moneyFormatter->format($money);
+    }
+
+    public static function toCurrencyFormatWithSymbol(string $value, string $currency = null): string
+    {
+        $money = new Money($value, new Currency($currency ? $currency : config('shop.default_currency')));
+        $currencies = new ISOCurrencies();
+
         $numberFormatter = new \NumberFormatter('en_US', \NumberFormatter::CURRENCY);
         $moneyFormatter = new IntlMoneyFormatter($numberFormatter, $currencies);
 

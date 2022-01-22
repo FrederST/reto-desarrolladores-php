@@ -3,11 +3,10 @@
 namespace App\Models;
 
 use App\Filters\Concerns\HasFilters;
-use App\Helpers\CurrencyHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Product extends Model
 {
@@ -27,9 +26,9 @@ class Product extends Model
         'disabled_at',
     ];
 
-    public function weightUnit(): HasOne
+    public function weightUnit(): BelongsTo
     {
-        return $this->hasOne(WeightUnit::class);
+        return $this->belongsTo(WeightUnit::class);
     }
 
     public function images(): HasMany
@@ -37,8 +36,8 @@ class Product extends Model
         return $this->hasMany(ProductImage::class);
     }
 
-    public function getSalePriceAttribute(int $value)
+    public function currency(): BelongsTo
     {
-        return CurrencyHelper::toCurrencyFormat($value);
+        return $this->belongsTo(Currency::class);
     }
 }

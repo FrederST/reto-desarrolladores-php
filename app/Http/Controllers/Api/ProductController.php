@@ -10,9 +10,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Product\ImportRequest;
 use App\Http\Requests\Product\UpdateRequest;
 use App\Http\Requests\ProductImage\StoreRequest;
+use App\Http\Resources\Product as ResourcesProduct;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
@@ -21,6 +23,12 @@ class ProductController extends Controller
     {
         $data = Product::where('name', 'LIKE', '%' . $request->searchTerm . '%')->get();
         return response()->json($data);
+    }
+
+    public function index(): AnonymousResourceCollection
+    {
+        $products = Product::filter(request()->input('filter', []))->with('images')->paginate();
+        return ResourcesProduct::collection($products);
     }
 
     public function store(StoreRequest $request, StorageAction $storageAction): Product
@@ -55,7 +63,7 @@ class ProductController extends Controller
 
     public function import(ImportRequest $importRequest, ImportAction $importAction)
     {
-        $path = $importRequest->file('products')->storeAs('imports/products', uniqid().'.csv');
+        $path = $importRequest->file('products')->storeAs('imports/products', uniqid() . '.csv');
         $importAction->execute($path);
     }
 }

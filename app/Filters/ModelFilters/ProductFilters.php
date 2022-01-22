@@ -18,6 +18,7 @@ class ProductFilters extends Filter
     {
         $this->query->select(
             'products.id',
+            'products.code',
             'products.name',
             'products.description',
             'products.quantity',
@@ -27,6 +28,8 @@ class ProductFilters extends Filter
             'products.sale_price',
             'products.currency_id',
             'products.disabled_at',
+            'products.created_at',
+            'products.updated_at',
         );
 
         return $this;

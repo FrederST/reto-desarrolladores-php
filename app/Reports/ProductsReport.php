@@ -8,14 +8,18 @@ use App\Notifications\ReportStatusChange;
 use Illuminate\Support\Facades\Storage;
 use League\Csv\Writer;
 use SplTempFileObject;
+use Throwable;
 
 class ProductsReport extends ReportBase
 {
     public function handle(): void
     {
+        $this->report->update([
+            'status' => ReportStatus::STATUS_IN_PROCESS,
+        ]);
         $products = Product::all();
 
-        $csv = Writer::createFromFileObject(new SplTempFileObject);
+        $csv = Writer::createFromFileObject(new SplTempFileObject());
         $csv->insertOne(array_keys($products[0]->getAttributes()));
         $csv->insertAll($products->toArray());
 
@@ -23,11 +27,24 @@ class ProductsReport extends ReportBase
 
         Storage::disk('reports')->put($filePath, $csv->__toString());
 
-        $this->report->update([
-            'status' => ReportStatus::STATUS_FINISHED,
-            'path' => "reports/{$filePath}",
-            'info' => 'Report Created Successfully'
-        ]);
+        $this->setReportStatusInfoAndPath(ReportStatus::STATUS_FINISHED, 'Report Created Successfully', $filePath);
+
         $this->report->user->notify(new ReportStatusChange($this->report));
+    }
+
+    public function failed(Throwable $exception): void
+    {
+        $this->setReportStatusInfoAndPath(ReportStatus::STATUS_FINISHED, 'Report Fail ' . $exception->getMessage());
+        $this->report->refresh();
+        $this->report->user->notify(new ReportStatusChange($this->report));
+    }
+
+    private function setReportStatusInfoAndPath(string $reportStatus, string $info, string $filePath = ''): void
+    {
+        $this->report->update([
+            'status' => $reportStatus,
+            'path' => "reports/{$filePath}",
+            'info' => $info,
+        ]);
     }
 }

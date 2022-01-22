@@ -15,6 +15,8 @@ class CreateReportsTable extends Migration
             $table->enum('type', ReportTypes::TYPES);
             $table->enum('status', ReportStatus::STATUSES);
             $table->text('info')->nullable();
+            $table->string('path')->nullable();
+            $table->foreignId('user_id')->constrained();
             $table->timestamps();
         });
     }

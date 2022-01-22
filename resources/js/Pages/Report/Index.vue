@@ -28,21 +28,18 @@
                         <a-result status="403" title="No Products"> </a-result>
                     </template>
                     <template #bodyCell="{ column, record }">
-                        <!-- <template v-if="column.dataIndex === 'active'">
-                            <span>
-                                <check-outlined v-if="!record.disabled_at" />
-                                <close-outlined v-else />
-                            </span>
-                        </template> -->
                         <template v-if="column.dataIndex === 'actions'">
                             <span>
-                                <a @click="uploadImages(record)">Images</a>
-                                <a-divider type="vertical" />
-                                <a @click="editProduct(record)">Edit</a>
-                                <a-divider type="vertical" />
-                                <a @click="deleteProduct(record)">Delete</a>
-                                <a-divider type="vertical" />
-                                <a @click="disableProduct(record)">Disable</a>
+                                <a @click="details(record)">Details</a>
+                            </span>
+                            <a-divider type="vertical" />
+                            <span>
+                                <a
+                                    v-if="record.status == 'FINISHED'"
+                                    :href="route('reports.download', record.id)"
+                                    target="_blank"
+                                    >Download</a
+                                >
                             </span>
                         </template>
                     </template>
@@ -56,7 +53,10 @@
             :destroyOnClose="true"
             :footer="null"
         >
-            <CreateOrEditReportForm @close="modalClose" :reportTypes="reportTypes" />
+            <CreateOrEditReportForm
+                @close="modalClose"
+                :reportTypes="reportTypes"
+            />
         </a-modal>
     </app-layout>
 </template>
@@ -96,7 +96,7 @@ const columns = [
 export default {
     props: {
         reports: Object,
-        reportTypes: Object
+        reportTypes: Object,
     },
     data() {
         return {
@@ -133,15 +133,11 @@ export default {
         modalClose() {
             this.visible = false;
         },
-        uploadImages(product) {
-            this.productForUploadImage = product;
-            this.visibleUploadImages = true;
+        details(report) {
+            Inertia.get(route("reports.show", report.id));
         },
         reloadPage() {
             Inertia.reload();
-        },
-        disableProduct(product) {
-            Inertia.put(route("products.disable", product.id));
         },
         createReport() {
             this.visible = true;

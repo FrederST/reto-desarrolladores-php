@@ -76,6 +76,8 @@ Route::get('all/orders', [OrderController::class, 'all'])
 Route::resource('reports', ReportController::class)->except(['create', 'edit'])
 ->middleware(['auth:sanctum', 'verified', 'role:admin']);
 
+Route::get('reports/download/{report}', [ReportController::class, 'download'])->name('reports.download');
+
 Route::get('test', function () {
     //return sprintf('%010d', 1234567890);
     return uniqid();

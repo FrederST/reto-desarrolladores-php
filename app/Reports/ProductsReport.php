@@ -26,6 +26,7 @@ class ProductsReport extends ReportBase
         $this->report->update([
             'status' => ReportStatus::STATUS_FINISHED,
             'path' => "reports/{$filePath}",
+            'info' => 'Report Created Successfully'
         ]);
         $this->report->user->notify(new ReportStatusChange($this->report));
     }

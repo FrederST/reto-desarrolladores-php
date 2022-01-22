@@ -2,15 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\Product\UpdateAction;
 use App\Constants\ReportStatus;
-use App\Events\ProductCreatedOrUpdated;
-use App\Http\Requests\Product\ImportRequest;
-use App\Http\Requests\Product\UpdateRequest;
 use App\Http\Requests\Report\StoreRequest;
-use App\Jobs\ImportProducts;
 use App\Jobs\ProcessReport;
-use App\Models\Product;
 use App\Models\Report;
 use App\Reports\ReportBase;
 use App\ViewModels\Report\IndexViewModel;
@@ -19,10 +13,11 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ReportController extends Controller
 {
-    public const PRODUCT_INDEX = 'reports.index';
+    public const REPORT_INDEX = 'reports.index';
 
     public function index(IndexViewModel $indexViewModel): Response
     {
@@ -35,40 +30,28 @@ class ReportController extends Controller
         $report = Report::create([
             'status' => ReportStatus::STATUS_CREATED,
             'type' => $request->input('type'),
+            'info' => 'We notify when report is ready',
             'user_id' => auth()->user()->id,
         ]);
 
         ProcessReport::dispatch($report, $reportImpl);
-        return Redirect::route(self::PRODUCT_INDEX);
+        return Redirect::route(self::REPORT_INDEX);
     }
 
-    public function update(UpdateRequest $request, Product $product, UpdateAction $updateAction): RedirectResponse
+    public function show(Report $report): Response
     {
-        $product = $updateAction->execute($request->validated(), $product);
-        ProductCreatedOrUpdated::dispatch($product, 'Product Updated');
-        return Redirect::route(self::PRODUCT_INDEX);
+        return Inertia::render('Report/Show', ['report' => $report]);
     }
 
-    public function destroy(Product $product): RedirectResponse
+    public function destroy(Report $report): RedirectResponse
     {
-        foreach ($product->images() as $image) {
-            Storage::delete($image->path);
-            $image->delete();
-        }
-        $product->delete();
-        return Redirect::route(self::PRODUCT_INDEX);
+        Storage::delete($report->path);
+        $report->delete();
+        return Redirect::route(self::REPORT_INDEX);
     }
 
-    public function disable(Product $product): RedirectResponse
+    public function download(Report $report): StreamedResponse
     {
-        $product->update(['disabled_at' => now()]);
-        return Redirect::route(self::PRODUCT_INDEX);
-    }
-
-    public function import(ImportRequest $importRequest): RedirectResponse
-    {
-        $path = $importRequest->file('products')->storeAs('imports/products', uniqid() . '.csv');
-        ImportProducts::dispatch($path, auth()->user()->id);
-        return Redirect::route(self::PRODUCT_INDEX);
+        return Storage::download($report->path);
     }
 }

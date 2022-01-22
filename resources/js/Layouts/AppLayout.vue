@@ -45,6 +45,12 @@
                                     Orders
                                 </jet-nav-link>
                             </div>
+
+                            <div v-role="'admin'" class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                                <jet-nav-link :href="route('reports.index')" :active="route().current('reports.index')">
+                                    Reports
+                                </jet-nav-link>
+                            </div>
                         </div>
 
                         <div class="hidden sm:flex sm:items-center sm:ml-6">

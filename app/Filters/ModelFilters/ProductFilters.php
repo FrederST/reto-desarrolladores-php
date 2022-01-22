@@ -10,10 +10,6 @@ class ProductFilters extends Filter
 {
     protected string $model = Product::class;
 
-    protected array $applicableConditions = [
-        'product_query' => MerchantQuery::class,
-    ];
-
     protected function select(): Filter
     {
         $this->query->select(

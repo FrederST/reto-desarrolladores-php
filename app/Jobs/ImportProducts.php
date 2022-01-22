@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Constants\ImportStatus;
 use App\Helpers\CurrencyHelper;
+use App\Models\Product;
 use App\Models\User;
 use App\Models\WeightUnit;
 use App\Notifications\ImportStatusChange;
@@ -62,8 +63,9 @@ class ImportProducts implements ShouldQueue
                 $product = $value;
                 $product['weight_unit_id'] = WeightUnit::where('weight_unit_alias', $product['weight_unit'])->first()->id;
                 $product['currency_id'] = CurrencyHelper::getDefaultCurrency()->id;
+                Product::create($product);
             }
-            $user->notify(new ImportStatusChange(ImportStatus::STATUS_FAIL, 'All Good'));
+            $user->notify(new ImportStatusChange(ImportStatus::STATUS_SUCCESS, 'All Good'));
         }
     }
 }

@@ -4,6 +4,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductImageController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ShoppingCartItemController;
 use App\Models\Product;
 use App\ViewModels\Product\IndexViewModel;
@@ -71,3 +72,11 @@ Route::get('orders/retry/{order}', [OrderController::class, 'retryPayment'])
 Route::get('all/orders', [OrderController::class, 'all'])
 ->middleware(['auth:sanctum', 'verified', 'role:admin'])
 ->name('orders.all');
+
+Route::resource('reports', ReportController::class)->except(['create', 'edit'])
+->middleware(['auth:sanctum', 'verified', 'role:admin']);
+
+Route::get('test', function () {
+    //return sprintf('%010d', 1234567890);
+    return uniqid();
+});

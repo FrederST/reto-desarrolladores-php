@@ -28,7 +28,8 @@ class ImportStatusChange extends Notification
     {
         return (new MailMessage())
                     ->subject('Import Status: ' . $this->status)
-                    ->greeting('Hi your import of products ' . $this->message)
+                    ->greeting('Hi your import of products ' .  $this->status)
+                    ->line($this->message)
                     ->action('Can se the details click Here', route('products.index'))
                     ->line('Thank you for using our application!');
     }

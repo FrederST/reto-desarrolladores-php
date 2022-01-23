@@ -1,7 +1,9 @@
 <?php
 
-namespace Tests\Feature\Product;
+namespace Tests\Feature\Order;
 
+use App\Constants\OrderStatus;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -11,7 +13,7 @@ class IndexTest extends TestCase
 {
     use RefreshDatabase;
 
-    public const PRODUCT_PATH = '/products';
+    public const ORDER_PATH = '/orders';
 
     protected function setUp(): void
     {
@@ -21,7 +23,7 @@ class IndexTest extends TestCase
 
     public function test_index_screen_can_be_rendered(): void
     {
-        $response = $this->get(self::PRODUCT_PATH);
+        $response = $this->get(self::ORDER_PATH);
 
         $response->assertStatus(200);
     }
@@ -29,22 +31,15 @@ class IndexTest extends TestCase
     public function testItCanFilter(): void
     {
         $filters = [
-            'name' => 'Product 1',
-            'description' => 'Product 1 Description',
-            'sale_price' => 2000,
+            'status' => OrderStatus::STATUS_PENDING,
+            'payment_method' => 'place_to_pay',
+            'created_at' => now(),
         ];
-        $value = [
-            'name' => $filters['name'],
-            'description' => $filters['description'],
-            'sale_price' => 2000,
-        ];
-        Product::factory()->count(10)->create();
-        Product::factory()->create($value);
+        Order::factory()->hasOrderItems(3)->count(5)->create();
 
-        $response = $this->get(self::PRODUCT_PATH. '?' . http_build_query(['filter' => ['product_query' => $filters]]));
+        $response = $this->get(self::ORDER_PATH. '?' . http_build_query(['filter' => ['order_query' => $filters]]));
 
         $response->assertStatus(200);
-        $response->assertSee($filters);
     }
 
 

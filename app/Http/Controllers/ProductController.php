@@ -14,10 +14,8 @@ use App\ViewModels\Product\IndexViewModel;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use Inertia\Response;
-use League\Csv\Reader;
 
 class ProductController extends Controller
 {
@@ -61,7 +59,7 @@ class ProductController extends Controller
 
     public function import(ImportRequest $importRequest): RedirectResponse
     {
-        $path = $importRequest->file('products')->storeAs('imports/products', uniqid().'.csv');
+        $path = $importRequest->file('products')->storeAs('imports/products', uniqid() . '.csv');
         ImportProducts::dispatch($path, auth()->user()->id);
         return Redirect::route(self::PRODUCT_INDEX);
     }

@@ -2,12 +2,17 @@
 
 namespace App\Filters\ModelFilters;
 
+use App\Filters\Conditions\Order\OrderQuery;
 use App\Filters\Filter;
 use App\Models\Order;
 
 class OrderFilters extends Filter
 {
     protected string $model = Order::class;
+
+    protected array $applicableConditions = [
+        'order_query' => OrderQuery::class,
+    ];
 
     protected function select(): Filter
     {

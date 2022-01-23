@@ -25,9 +25,10 @@ class OrderController extends Controller
         $this->middleware('ensure_order_is_from_current_user', ['only' => ['show', 'retryPayment']]);
     }
 
-    public function index(): Response
+    public function index(IndexViewModel $indexViewModel): Response
     {
-        return Inertia::render('Order/Index', (new IndexViewModel())->toArray());
+        $orders = Order::filter(request()->input('filter', []))->paginate();
+        return Inertia::render('Order/Index', $indexViewModel->collection($orders));
     }
 
     public function create(): Response

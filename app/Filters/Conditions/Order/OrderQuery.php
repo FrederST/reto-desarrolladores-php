@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filters\Conditions\Product;
+namespace App\Filters\Conditions\Order;
 
 use App\Filters\Condition;
 use App\Filters\Criteria;

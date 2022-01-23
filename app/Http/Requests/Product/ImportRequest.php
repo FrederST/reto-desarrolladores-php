@@ -14,7 +14,7 @@ class ImportRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'products' => ['required'],
+            'products' => ['required', 'file'],
         ];
     }
 }

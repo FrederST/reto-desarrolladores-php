@@ -17,13 +17,14 @@ class ProductsReport extends ReportBase
         $this->report->update([
             'status' => ReportStatus::STATUS_IN_PROCESS,
         ]);
-        $products = Product::all();
+        $products = Product::filter($this->report->filters);
 
         if ($products->count() == 0) {
             $this->setReportStatusInfoAndPath(ReportStatus::STATUS_FINISHED, 'Not Found Products');
             $this->notify();
             return;
         }
+
         $csv = Writer::createFromFileObject(new SplTempFileObject());
         $csv->insertOne(array_keys($products[0]->getAttributes()));
         $csv->insertAll($products->toArray());

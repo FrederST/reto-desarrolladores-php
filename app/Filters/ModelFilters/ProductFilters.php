@@ -2,7 +2,6 @@
 
 namespace App\Filters\ModelFilters;
 
-use App\Filters\Conditions\Merchants\MerchantQuery;
 use App\Filters\Filter;
 use App\Models\Product;
 

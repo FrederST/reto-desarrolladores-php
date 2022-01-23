@@ -87,6 +87,8 @@ class OrderTest extends TestCase
         $placeToPayResponse = $this->placeToPayResponse();
 
         $order = $this->initFakeHTTPAndOrder(url: 'dev.placetopay.com/redirection/api/session');
+        $order->status = OrderStatus::STATUS_WAIT;
+        $order->save();
 
         $response = $this->get(self::ORDER_PATH . '/retry/' . $order->id);
         $response->assertRedirect($placeToPayResponse['processUrl']);

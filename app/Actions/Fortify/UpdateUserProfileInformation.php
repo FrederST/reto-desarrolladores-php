@@ -11,14 +11,7 @@ use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
 
 class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 {
-    /**
-     * Validate and update the given user's profile information.
-     *
-     * @param  mixed  $user
-     * @param  array  $input
-     * @return void
-     */
-    public function update($user, array $input)
+    public function update($user, array $input): void
     {
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
@@ -26,10 +19,6 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
             'phone' => ['required', 'numeric', 'digits:10'],
             'photo' => ['nullable', 'mimes:jpg,jpeg,png', 'max:1024'],
         ])->validateWithBag('updateProfileInformation');
-
-        if (isset($input['photo'])) {
-            $user->updateProfilePhoto($input['photo']);
-        }
 
         if ($input['email'] !== $user->email &&
             $user instanceof MustVerifyEmail) {
@@ -44,14 +33,8 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
         Log::channel('auth')->info('User Profile Info Updated ', $user->toArray());
     }
 
-    /**
-     * Update the given verified user's profile information.
-     *
-     * @param  mixed  $user
-     * @param  array  $input
-     * @return void
-     */
-    protected function updateVerifiedUser($user, array $input)
+
+    protected function updateVerifiedUser(User $user, array $input): void
     {
         $user->forceFill([
             'name' => $input['name'],

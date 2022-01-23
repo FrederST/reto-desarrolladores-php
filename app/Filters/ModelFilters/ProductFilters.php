@@ -2,12 +2,17 @@
 
 namespace App\Filters\ModelFilters;
 
+use App\Filters\Conditions\Product\ProductQuery;
 use App\Filters\Filter;
 use App\Models\Product;
 
 class ProductFilters extends Filter
 {
     protected string $model = Product::class;
+
+    protected array $applicableConditions = [
+        'product_query' => ProductQuery::class,
+    ];
 
     protected function select(): Filter
     {

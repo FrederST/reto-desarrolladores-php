@@ -11,11 +11,11 @@ class ProductQuery extends Condition
     public static function append(Builder $query, Criteria $criteria): void
     {
         $query->where(function ($q) use ($criteria) {
-            $q->where('products.name', 'like', "%{$criteria}%")
-                ->orWhere('products.description', 'like', "%{$criteria}%")
-                ->orWhere('products.sale_price', 'like', "%{$criteria}%")
-                ->orWhere('products.weight_unit_id', 'like', "%{$criteria}%")
-                ->orWhereDate('products.created_at', '=', "%{$criteria}%");
+            $q->where('name', 'like', "%{$criteria->getField('name')}%")
+                ->orWhere('description', 'like', "%{$criteria->getField('description')}%")
+                ->orWhere('sale_price', 'like', "%{$criteria->getField('sale_price')}%")
+                ->orWhere('weight_unit_id', 'like', "%{$criteria->getField('weight_unit_id')}%")
+                ->orWhereDate('created_at', '=', "%{$criteria->getField('created_at')}%");
         });
     }
 }

@@ -106,10 +106,12 @@ export default defineComponent({
     methods: {
         changePage(pag) {
             const filter = {
-                name: this.searchValue,
-                description: this.searchValue,
-                sale_price: this.sale_price,
-                weight_unit_id: this.weight_unit_id,
+                product_query: {
+                    name: this.searchValue,
+                    description: this.searchValue,
+                    sale_price: this.sale_price,
+                    weight_unit_id: this.weight_unit_id,
+                },
             };
             Inertia.get(
                 route("dashboard"),

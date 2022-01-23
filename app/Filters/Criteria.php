@@ -28,4 +28,17 @@ class Criteria
 
         return $this->value;
     }
+
+    public function getField(string $key): string
+    {
+        if (empty($this->value) || !is_array($this->value)) {
+            return '';
+        }
+
+        if (array_key_exists($key ,$this->value)) {
+            return $this->value[$key] ? $this->value[$key] : '';
+        }
+
+        return '';
+    }
 }

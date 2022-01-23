@@ -31,6 +31,7 @@ class ReportController extends Controller
             'status' => ReportStatus::STATUS_CREATED,
             'type' => $request->input('type'),
             'info' => 'We notify when report is ready',
+            'filters' => $request->input('filter', []),
             'user_id' => auth()->user()->id,
         ]);
 

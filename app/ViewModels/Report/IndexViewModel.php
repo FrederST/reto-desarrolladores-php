@@ -2,6 +2,8 @@
 
 namespace App\ViewModels\Report;
 
+use App\Builders\PaymentBuilder;
+use App\Constants\OrderStatus;
 use App\Constants\ReportTypes;
 use App\Models\Report;
 use App\ViewModels\Concerns\HasPaginator;
@@ -20,7 +22,8 @@ class IndexViewModel extends ViewModel
     {
         return array_merge(parent::toArray(), [
             'reports' => $this->collection,
-            'reportTypes' => ReportTypes::TYPES,
+            'orderStatuses' => OrderStatus::STATUSES,
+            'paymentMethods' => array_keys(config('shop.payment_methods')),
         ]);
     }
 

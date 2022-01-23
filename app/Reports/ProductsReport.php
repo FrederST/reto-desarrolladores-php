@@ -19,6 +19,11 @@ class ProductsReport extends ReportBase
         ]);
         $products = Product::all();
 
+        if ($products->count() == 0) {
+            $this->setReportStatusInfoAndPath(ReportStatus::STATUS_FINISHED, 'Not Found Products');
+            $this->notify();
+            return;
+        }
         $csv = Writer::createFromFileObject(new SplTempFileObject());
         $csv->insertOne(array_keys($products[0]->getAttributes()));
         $csv->insertAll($products->toArray());
@@ -29,22 +34,27 @@ class ProductsReport extends ReportBase
 
         $this->setReportStatusInfoAndPath(ReportStatus::STATUS_FINISHED, 'Report Created Successfully', $filePath);
 
-        $this->report->user->notify(new ReportStatusChange($this->report));
+        $this->notify();
     }
 
     public function failed(Throwable $exception): void
     {
         $this->setReportStatusInfoAndPath(ReportStatus::STATUS_FINISHED, 'Report Fail ' . $exception->getMessage());
-        $this->report->refresh();
-        $this->report->user->notify(new ReportStatusChange($this->report));
+        $this->notify();
     }
 
     private function setReportStatusInfoAndPath(string $reportStatus, string $info, string $filePath = ''): void
     {
         $this->report->update([
             'status' => $reportStatus,
-            'path' => "reports/{$filePath}",
+            'path' => $filePath ? "reports/{$filePath}" : null,
             'info' => $info,
         ]);
+    }
+
+    private function notify(): void
+    {
+        $this->report->refresh();
+        $this->report->user->notify(new ReportStatusChange($this->report));
     }
 }

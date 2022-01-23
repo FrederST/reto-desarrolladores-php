@@ -28,6 +28,7 @@ class ReportStatusChange extends Notification
         return (new MailMessage())
                     ->subject($this->report->status . ' Report')
                     ->greeting('Hi your report ' . $this->report->status)
+                    ->line($this->report->info)
                     ->action('Can se the details click Here', route('reports.show', $this->report->id))
                     ->line('Thank you for using our application!');
     }

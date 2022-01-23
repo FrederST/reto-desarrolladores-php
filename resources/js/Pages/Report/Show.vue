@@ -1,19 +1,15 @@
 <template>
     <app-layout>
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Report
-            </h2>
-        </template>
-
         <div class="py-6">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <!-- <StatusMessage :order="order" /> -->
                 <br />
                 <a-row :gutter="20">
                     <a-col :span="16">
                         <a-typography>
                             <a-typography-title :level="2">
+                                {{ report.type }}
+                            </a-typography-title>
+                            <a-typography-title :level="3">
                                 Info
                             </a-typography-title>
                             <a-typography-paragraph>
@@ -27,15 +23,24 @@
                         </a-typography-title>
                         <a-typography-paragraph>
                             <a-button
-                                v-if="report.status == 'FINISHED'"
+                                v-if="
+                                    report.status == 'FINISHED' && report.path
+                                "
                                 block
                                 type="primary"
                                 ><a
                                     :href="route('reports.download', report.id)"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                >Download</a
-                            ></a-button>
+                                    >Download</a
+                                ></a-button
+                            >
+                        </a-typography-paragraph>
+                        <a-typography-title :level="2"
+                            >Filters
+                        </a-typography-title>
+                        <a-typography-paragraph>
+                            {{ report.filters }}
                         </a-typography-paragraph>
                     </a-col>
                 </a-row>

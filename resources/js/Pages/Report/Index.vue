@@ -1,11 +1,5 @@
 <template>
     <app-layout>
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Report
-            </h2>
-        </template>
-
         <div class="py-6">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <a-alert
@@ -15,9 +9,22 @@
                     show-icon
                 />
 
-                <a-button type="primary" @click="createReport()">
-                    New Report
-                </a-button>
+                <a-dropdown>
+                    <template #overlay>
+                        <a-menu @click="handleMenuClick">
+                            <a-menu-item key="1" @click="createProductsReport()"
+                                >Products</a-menu-item
+                            >
+                            <a-menu-item key="2" @click="createOrdersReport()"
+                                >Orders</a-menu-item
+                            >
+                        </a-menu>
+                    </template>
+                    <a-button>
+                        New Report
+                        <DownOutlined />
+                    </a-button>
+                </a-dropdown>
                 <a-table
                     :columns="columns"
                     :data-source="reports.data"
@@ -35,7 +42,10 @@
                             <a-divider type="vertical" />
                             <span>
                                 <a
-                                    v-if="record.status == 'FINISHED'"
+                                    v-if="
+                                        record.status == 'FINISHED' &&
+                                        record.path
+                                    "
                                     :href="route('reports.download', record.id)"
                                     target="_blank"
                                     >Download</a
@@ -48,14 +58,24 @@
         </div>
 
         <a-modal
-            title="Create Report"
-            v-model:visible="visible"
+            title="Create Products Report"
+            v-model:visible="visibleProductsForm"
             :destroyOnClose="true"
             :footer="null"
         >
-            <CreateOrEditReportForm
+            <CreateForProductsForm @close="modalClose" />
+        </a-modal>
+
+        <a-modal
+            title="Create Orders Report"
+            v-model:visible="visibleOrdersForm"
+            :destroyOnClose="true"
+            :footer="null"
+        >
+            <CreateForOrdersForm
                 @close="modalClose"
-                :reportTypes="reportTypes"
+                :orderStatuses="orderStatuses"
+                :paymentMethods="paymentMethods"
             />
         </a-modal>
     </app-layout>
@@ -64,10 +84,11 @@
 <script>
 import AppLayout from "@/Layouts/AppLayout";
 import { Link } from "@inertiajs/inertia-vue3";
-import CreateOrEditReportForm from "@/Pages/Report/CreateOrEdit";
+import CreateForProductsForm from "@/Pages/Report/CreateForProducts";
+import CreateForOrdersForm from "@/Pages/Report/CreateForOrders";
 
 import { createVNode, computed } from "vue";
-import { message, Modal } from "ant-design-vue";
+import { Modal } from "ant-design-vue";
 import { Inertia } from "@inertiajs/inertia";
 import Button from "@/Jetstream/Button.vue";
 
@@ -76,6 +97,7 @@ import {
     CloseOutlined,
     ExclamationCircleOutlined,
     InboxOutlined,
+    DownOutlined,
 } from "@ant-design/icons-vue";
 
 const columns = [
@@ -96,21 +118,25 @@ const columns = [
 export default {
     props: {
         reports: Object,
-        reportTypes: Object,
+        orderStatuses: Object,
+        paymentMethods: Object,
     },
     data() {
         return {
-            visible: false,
+            visibleProductsForm: false,
+            visibleOrdersForm: false,
         };
     },
     components: {
         AppLayout,
         Link,
         Button,
-        CreateOrEditReportForm,
+        CreateForProductsForm,
+        CreateForOrdersForm,
         CheckOutlined,
         CloseOutlined,
         InboxOutlined,
+        DownOutlined,
     },
     methods: {
         deleteProduct(product) {
@@ -131,7 +157,8 @@ export default {
             Inertia.get(route("products.index", { page: pag.current }));
         },
         modalClose() {
-            this.visible = false;
+            this.visibleProductsForm = false;
+            this.visibleProductsForm = false;
         },
         details(report) {
             Inertia.get(route("reports.show", report.id));
@@ -139,8 +166,11 @@ export default {
         reloadPage() {
             Inertia.reload();
         },
-        createReport() {
-            this.visible = true;
+        createProductsReport() {
+            this.visibleProductsForm = true;
+        },
+        createOrdersReport() {
+            this.visibleOrdersForm = true;
         },
     },
     setup(props) {

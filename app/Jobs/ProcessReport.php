@@ -34,6 +34,6 @@ class ProcessReport implements ShouldQueue
 
     public function failed(Throwable $exception): void
     {
-        $this->reportImpl->failed($exception);
+        $this->reportImpl->setReport($this->report)->failed($exception);
     }
 }

@@ -17,12 +17,17 @@ class OrdersReport extends ReportBase
         $this->report->update([
             'status' => ReportStatus::STATUS_IN_PROCESS,
         ]);
-        $order = Order::all();
+        $orders = Order::all();
 
         $csv = Writer::createFromFileObject(new SplTempFileObject());
 
-        $csv->insertOne(array_keys($order[0]->getAttributes()));
-        $csv->insertAll($order->toArray());
+        if ($orders->count() == 0) {
+            $this->setReportStatusInfoAndPath(ReportStatus::STATUS_FINISHED, 'Not Found Orders');
+            $this->notify();
+            return;
+        }
+        $csv->insertOne(array_keys($orders[0]->getAttributes()));
+        $csv->insertAll($orders->toArray());
 
         $filePath = "products/export-{$this->report->id}-{$this->report->created_at->toDateString()}.csv";
 
@@ -30,22 +35,27 @@ class OrdersReport extends ReportBase
 
         $this->setReportStatusInfoAndPath(ReportStatus::STATUS_FINISHED, 'Report Created Successfully', $filePath);
 
-        $this->report->user->notify(new ReportStatusChange($this->report));
+        $this->notify();
     }
 
     public function failed(Throwable $exception): void
     {
-        $this->setReportStatusInfoAndPath(ReportStatus::STATUS_FINISHED, 'Report Fail ' . $exception->getMessage());
-        $this->report->refresh();
-        $this->report->user->notify(new ReportStatusChange($this->report));
+        $this->setReportStatusInfoAndPath(ReportStatus::STATUS_FAIL, 'Report Fail ' . $exception->getMessage());
+        $this->notify();
     }
 
     private function setReportStatusInfoAndPath(string $reportStatus, string $info, string $filePath = ''): void
     {
         $this->report->update([
             'status' => $reportStatus,
-            'path' => "reports/{$filePath}",
+            'path' => $filePath ? "reports/{$filePath}": null,
             'info' => $info,
         ]);
+    }
+
+    private function notify(): void
+    {
+        $this->report->refresh();
+        $this->report->user->notify(new ReportStatusChange($this->report));
     }
 }

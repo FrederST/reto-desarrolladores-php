@@ -15,7 +15,7 @@ class ProductQuery extends Condition
                 ->orWhere('products.description', 'like', "%{$criteria}%")
                 ->orWhere('products.sale_price', 'like', "%{$criteria}%")
                 ->orWhere('products.weight_unit_id', 'like', "%{$criteria}%")
-                ->orWhere('products.created_at', 'like', "%{$criteria}%");
+                ->orWhereDate('products.created_at', '=', "%{$criteria}%");
         });
     }
 }

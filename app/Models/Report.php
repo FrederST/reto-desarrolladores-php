@@ -15,7 +15,12 @@ class Report extends Model
         'status',
         'info',
         'path',
-        'user_id'
+        'filters',
+        'user_id',
+    ];
+
+    protected $casts = [
+        'filters' => 'array'
     ];
 
     public function user(): BelongsTo

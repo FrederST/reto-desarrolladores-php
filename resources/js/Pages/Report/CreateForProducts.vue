@@ -1,16 +1,12 @@
 <template>
     <jet-validation-errors class="mb-4" />
     <a-form>
-        <a-form-item label="Type">
-            <a-select placeholder="Type" v-model:value="form.type">
-                <a-select-option
-                    class="m-left"
-                    v-for="type in reportTypes"
-                    :key="type"
-                    :value="type"
-                    >{{ type }}</a-select-option
-                >
-            </a-select>
+        <a-form-item label="Date">
+            <a-date-picker
+                style="width: 100%"
+                :disabled-date="disabledDate"
+                v-model:value="form.filter.created_at"
+            />
         </a-form-item>
         <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
             <a-button type="primary" @click="saveInfo">Save</a-button>
@@ -26,9 +22,6 @@ import { PlusOutlined } from "@ant-design/icons-vue";
 import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 
 export default defineComponent({
-    props: {
-        reportTypes: Object,
-    },
     components: {
         PlusOutlined,
         JetValidationErrors,
@@ -36,7 +29,10 @@ export default defineComponent({
     data() {
         return {
             form: useForm({
-                type: "",
+                type: "PRODUCTS",
+                filter: {
+                    created_at: "",
+                },
             }),
         };
     },
@@ -51,7 +47,11 @@ export default defineComponent({
                 },
             });
         },
-
+        disabledDate(current) {
+            if (current > new Date()) {
+            return true;
+        }
+        },
         closeModal() {
             this.$emit("close", true);
         },

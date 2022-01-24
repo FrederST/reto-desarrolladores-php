@@ -2,6 +2,7 @@
 
 namespace App\ViewModels\Order;
 
+use App\Http\Resources\ShoppingCartResource;
 use App\Models\Order;
 use App\ViewModels\ViewModel;
 use Khsing\World\World;
@@ -17,7 +18,7 @@ class CreateViewModel extends ViewModel
     {
         return array_merge(parent::toArray(), [
             'countries' => World::Countries(),
-            'shoppingCart' => auth()->user()->shoppingCart->shoppingCartItems()->with('product')->get(),
+            'shoppingCart' => ShoppingCartResource::collection(auth()->user()->shoppingCart->shoppingCartItems()->with('product')->get()),
         ]);
     }
 

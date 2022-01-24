@@ -8,6 +8,7 @@ use App\Events\ProductCreatedOrUpdated;
 use App\Http\Requests\Product\ImportRequest;
 use App\Http\Requests\Product\StoreRequest;
 use App\Http\Requests\Product\UpdateRequest;
+use App\Http\Resources\ProductResource;
 use App\Jobs\ImportProducts;
 use App\Models\Product;
 use App\ViewModels\Product\IndexViewModel;
@@ -24,7 +25,7 @@ class ProductController extends Controller
     public function index(IndexViewModel $indexViewModel): Response
     {
         $products = Product::filter(request()->input('filter', []))->with('images')->paginate();
-        return Inertia::render('Product/Index', $indexViewModel->collection($products));
+        return Inertia::render('Product/Index', $indexViewModel->collection(ProductResource::collection($products)));
     }
 
     public function store(StoreRequest $request, StorageAction $storageAction): RedirectResponse

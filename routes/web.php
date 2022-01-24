@@ -7,6 +7,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductImageController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ShoppingCartItemController;
+use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use App\ViewModels\Product\IndexViewModel;
 use Illuminate\Foundation\Application;
@@ -34,8 +35,10 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function (IndexViewModel $indexViewModel) {
-    $products = Product::filter(FilterHelper::removeNullValues(request()->input('filter', [])))->with('images')->paginate();
-    return Inertia::render('Dashboard', $indexViewModel->collection($products));
+    $products = Product::filter(FilterHelper::removeNullValues(request()->input('filter', [])))
+    ->whereNull('disabled_at')
+    ->with('images')->paginate();
+    return Inertia::render('Dashboard', $indexViewModel->collection(ProductResource::collection($products)));
 })->name('dashboard');
 
 Route::resource('customers', CustomerController::class)->except(['create', 'edit', 'show'])

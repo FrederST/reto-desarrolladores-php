@@ -93,7 +93,6 @@ export default defineComponent({
             const filter = {
                 product_query: {
                     name: this.searchValue,
-                   // description: this.searchValue,
                     weight_unit_id: this.weight_unit_id,
                 },
             };

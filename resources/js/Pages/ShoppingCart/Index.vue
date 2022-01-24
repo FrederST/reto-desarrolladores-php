@@ -16,7 +16,7 @@
                             }"
                         />
                     </a-col>
-                    <a-col v-if="shoppingCart.length > 0" :span="12">
+                    <a-col v-if="shoppingCart.data.length > 0" :span="12">
                         <a-button
                             block
                             type="primary"
@@ -29,7 +29,7 @@
 
             <a-table
                 :columns="columns"
-                :data-source="shoppingCart"
+                :data-source="shoppingCart.data"
                 @change="handleTableChange"
             >
                 <template #emptyText>
@@ -144,14 +144,14 @@ export default {
         },
         calculateItems() {
             let items = 0;
-            this.shoppingCart.forEach((item) => {
+            this.shoppingCart.data.forEach((item) => {
                 items += item.quantity;
             });
             return items;
         },
         calculateCost() {
             let cost = 0;
-            this.shoppingCart.forEach((item) => {
+            this.shoppingCart.data.forEach((item) => {
                 cost += item.total;
             });
             return cost;
@@ -161,7 +161,7 @@ export default {
         },
         edit(id) {
             this.editableData[id] = cloneDeep(
-                this.shoppingCart.filter((item) => id === item.id)[0]
+                this.shoppingCart.data.filter((item) => id === item.id)[0]
             );
         },
         editQuantity(id) {

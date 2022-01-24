@@ -2,6 +2,7 @@
 
 namespace App\ViewModels\ShoppingCart;
 
+use App\Http\Resources\ShoppingCartResource;
 use App\Models\ShoppingCart;
 use App\ViewModels\ViewModel;
 
@@ -15,7 +16,7 @@ class IndexViewModel extends ViewModel
     public function toArray(): array
     {
         return array_merge(parent::toArray(), [
-            'shoppingCart' => auth()->user()->shoppingCart->shoppingCartItems()->with('product')->get(),
+            'shoppingCart' => ShoppingCartResource::collection(auth()->user()->shoppingCart->shoppingCartItems()->with('product')->get()),
         ]);
     }
 

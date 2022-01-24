@@ -148,7 +148,7 @@ export default {
         },
         calculateCost() {
             let cost = 0;
-            this.shoppingCart?.forEach((item) => {
+            this.shoppingCart?.data.forEach((item) => {
                 cost += item.total;
             });
             return cost;

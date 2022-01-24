@@ -50,6 +50,12 @@
                         <a-result status="403" title="No Products"> </a-result>
                     </template>
                     <template #bodyCell="{ column, record }">
+                        <template v-if="column.dataIndex === 'price'">
+                            {{ record.price.value }}
+                        </template>
+                        <template v-if="column.dataIndex === 'sale_price'">
+                            {{ record.sale_price.value }}
+                        </template>
                         <template v-if="column.dataIndex === 'active'">
                             <span>
                                 <check-outlined v-if="!record.disabled_at" />
@@ -119,6 +125,10 @@ import {
 } from "@ant-design/icons-vue";
 
 const columns = [
+    {
+        title: "Code",
+        dataIndex: "code",
+    },
     {
         title: "Name",
         dataIndex: "name",
@@ -217,7 +227,6 @@ export default {
             Inertia.put(route("products.disable", product.id));
         },
         handleChange(info) {
-            console.log(info);
             const status = info.file.status;
 
             if (status !== "uploading") {

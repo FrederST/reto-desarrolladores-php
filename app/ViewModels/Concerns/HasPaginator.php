@@ -3,12 +3,13 @@
 namespace App\ViewModels\Concerns;
 
 use Illuminate\Contracts\Pagination\Paginator;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 trait HasPaginator
 {
-    protected Paginator $collection;
+    protected Paginator|JsonResource $collection;
 
-    public function collection(Paginator $collection): self
+    public function collection(Paginator|JsonResource $collection): self
     {
         $this->collection = $collection;
         return $this;

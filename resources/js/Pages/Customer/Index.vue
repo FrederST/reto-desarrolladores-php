@@ -6,9 +6,9 @@
             </h2>
         </template>
 
-        <div class="py-12">
+        <div class="py-8">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <Button @click="createCustomer()"> New Customer </Button>
+                <a-button @click="createCustomer()" type="primary" > New Customer </a-button>
                 <a-table
                     :columns="columns"
                     :data-source="customers.data"

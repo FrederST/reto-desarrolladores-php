@@ -7,7 +7,7 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Resources\Json\JsonResource;
 use JsonSerializable;
 
-class Product extends JsonResource
+class ProductAPIResource extends JsonResource
 {
     public function toArray($request): array|Arrayable|JsonSerializable
     {
@@ -31,6 +31,7 @@ class Product extends JsonResource
             'disabled_at' => $this->disabled_at,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'images' => $this->whenLoaded('images'),
         ];
     }
 }

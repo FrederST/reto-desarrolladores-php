@@ -7,6 +7,7 @@ use App\Actions\Order\RetryPaymentAction;
 use App\Actions\Order\StorageAction;
 use App\Events\OrderCreatedOrUpdated;
 use App\Http\Requests\Order\StoreRequest;
+use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use App\ViewModels\Order\CreateViewModel;
 use App\ViewModels\Order\IndexViewModel;
@@ -58,6 +59,6 @@ class OrderController extends Controller
 
     public function all(): Response
     {
-        return Inertia::render('Order/Index', ['orders' => Order::paginate()]);
+        return Inertia::render('Order/Index', ['orders' => OrderResource::collection(Order::paginate())]);
     }
 }

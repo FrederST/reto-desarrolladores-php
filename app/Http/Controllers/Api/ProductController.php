@@ -9,11 +9,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Product\ImportRequest;
 use App\Http\Requests\Product\StoreRequest;
 use App\Http\Requests\Product\UpdateRequest;
-use App\Http\Resources\Product as ResourcesProduct;
+use App\Http\Resources\ProductAPIResource;
 use App\Jobs\ImportProducts;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,21 +30,21 @@ class ProductController extends Controller
     public function index(): AnonymousResourceCollection
     {
         $products = Product::filter(request()->input('filter', []))->with('images')->paginate();
-        return ResourcesProduct::collection($products);
+        return ProductAPIResource::collection($products);
     }
 
     public function store(StoreRequest $request, StorageAction $storageAction): JsonResponse
     {
         $product = $storageAction->execute($request->validated(), new Product());
         ProductCreatedOrUpdated::dispatch($product);
-        return response()->json(new ResourcesProduct($product), Response::HTTP_CREATED);
+        return response()->json(new ProductAPIResource($product), Response::HTTP_CREATED);
     }
 
     public function update(UpdateRequest $request, Product $product, UpdateAction $updateAction): JsonResponse
     {
         $product = $updateAction->execute($request->validated(), $product);
         ProductCreatedOrUpdated::dispatch($product, 'Product Updated');
-        return response()->json(new ResourcesProduct($product));
+        return response()->json(new ProductAPIResource($product));
     }
 
     public function destroy(Product $product): JsonResponse
@@ -55,13 +54,13 @@ class ProductController extends Controller
             $image->delete();
         }
         $product->delete();
-        return response()->json(new ResourcesProduct($product));
+        return response()->json(new ProductAPIResource($product));
     }
 
     public function disable(Product $product): JsonResponse
     {
         $product->update(['disabled_at' => now()]);
-        return response()->json(new ResourcesProduct($product));
+        return response()->json(new ProductAPIResource($product));
     }
 
     public function import(ImportRequest $importRequest): JsonResponse

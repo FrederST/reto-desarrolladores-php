@@ -20,7 +20,7 @@
         <a-card-meta>
             <template #description>
                 <h4>
-                    {{ product.name }} - {{ product.sale_price }} -
+                    {{ product.name }} - $ {{ product.sale_price.value }} -
                     {{ this.$page.props.default_currency.alphabetic_code }}
                 </h4>
                 {{ product.description }}

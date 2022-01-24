@@ -17,7 +17,7 @@ class ProductsReport extends ReportBase
         $this->report->update([
             'status' => ReportStatus::STATUS_IN_PROCESS,
         ]);
-        $products = Product::filter($this->report->filters)->get();
+        $products = Product::filter(['filter' => ['product_query' => $this->report->filters]])->get();
 
         if ($products->count() == 0) {
             $this->setReportStatusInfoAndPath(ReportStatus::STATUS_FINISHED, 'Not Found Products');

@@ -13,7 +13,10 @@
             </a-select>
         </a-form-item>
         <a-form-item label="Payment Method">
-            <a-select placeholder="Payment Method" v-model:value="form.filter.payment_method">
+            <a-select
+                placeholder="Payment Method"
+                v-model:value="form.filter.payment_method"
+            >
                 <a-select-option
                     class="m-left"
                     v-for="method in paymentMethods"
@@ -22,13 +25,6 @@
                     >{{ method }}</a-select-option
                 >
             </a-select>
-        </a-form-item>
-        <a-form-item label="Date">
-            <a-date-picker
-                style="width: 100%"
-                :disabled-date="disabledDate"
-                v-model:value="form.filter.created_at"
-            />
         </a-form-item>
         <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
             <a-button type="primary" @click="saveInfo">Save</a-button>
@@ -59,7 +55,7 @@ export default defineComponent({
                 filter: {
                     status: "",
                     payment_method: "",
-                }
+                },
             }),
         };
     },

@@ -1,5 +1,6 @@
 <?php
 
+use App\Helpers\FilterHelper;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
@@ -33,8 +34,7 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function (IndexViewModel $indexViewModel) {
-    $products = Product::filter(request()->input('filter', []))->with('images')->paginate();
-    //dd($products);
+    $products = Product::filter(FilterHelper::removeNullValues(request()->input('filter', [])))->with('images')->paginate();
     return Inertia::render('Dashboard', $indexViewModel->collection($products));
 })->name('dashboard');
 

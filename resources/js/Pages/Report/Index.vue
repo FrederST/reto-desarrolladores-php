@@ -158,7 +158,7 @@ export default {
         },
         modalClose() {
             this.visibleProductsForm = false;
-            this.visibleProductsForm = false;
+            this.visibleOrdersForm = false;
         },
         details(report) {
             Inertia.get(route("reports.show", report.id));

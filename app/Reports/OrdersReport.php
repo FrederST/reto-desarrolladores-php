@@ -17,7 +17,7 @@ class OrdersReport extends ReportBase
         $this->report->update([
             'status' => ReportStatus::STATUS_IN_PROCESS,
         ]);
-        $orders = Order::filter($this->report->filters)->get();
+        $orders = Order::filter(['order_query' => $this->report->filters])->get();
 
         $csv = Writer::createFromFileObject(new SplTempFileObject());
 
@@ -48,7 +48,7 @@ class OrdersReport extends ReportBase
     {
         $this->report->update([
             'status' => $reportStatus,
-            'path' => $filePath ? "reports/{$filePath}": null,
+            'path' => $filePath ? "reports/{$filePath}" : null,
             'info' => $info,
         ]);
     }

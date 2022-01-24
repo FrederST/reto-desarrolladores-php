@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Constants\ReportStatus;
+use App\Helpers\FilterHelper;
 use App\Http\Requests\Report\StoreRequest;
 use App\Jobs\ProcessReport;
 use App\Models\Report;
@@ -31,7 +32,7 @@ class ReportController extends Controller
             'status' => ReportStatus::STATUS_CREATED,
             'type' => $request->input('type'),
             'info' => 'We notify when report is ready',
-            'filters' => $request->input('filter', []),
+            'filters' => FilterHelper::removeNullValues($request->input('filter', [])),
             'user_id' => auth()->user()->id,
         ]);
 

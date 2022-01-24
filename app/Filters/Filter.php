@@ -39,7 +39,6 @@ abstract class Filter
     protected function where(): self
     {
         $apConditions = array_intersect_key($this->conditions, $this->applicableConditions);
-        // dd($this->conditions, $this->applicableConditions, $apConditions);
         foreach ($apConditions as $condition => $value) {
             $conditionClass = $this->getCondition($condition);
             $conditionClass::append($this->query, new Criteria($value));

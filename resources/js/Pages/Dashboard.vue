@@ -13,21 +13,6 @@
                         </a-form-item>
                     </a-col>
                     <a-col :span="6">
-                        <a-form-item label="Sale Price">
-                            <a-input-number
-                                style="width: 150px"
-                                :formatter="formatNumber"
-                                :parser="parseNumber"
-                                v-model:value="sale_price"
-                            >
-                            </a-input-number>
-                            {{
-                                this.$page.props.default_currency
-                                    .alphabetic_code
-                            }}
-                        </a-form-item>
-                    </a-col>
-                    <a-col :span="6">
                         <a-form-item label="Weight">
                             <a-select
                                 placeholder="Weight Unit"
@@ -108,8 +93,7 @@ export default defineComponent({
             const filter = {
                 product_query: {
                     name: this.searchValue,
-                    description: this.searchValue,
-                    sale_price: this.sale_price,
+                   // description: this.searchValue,
                     weight_unit_id: this.weight_unit_id,
                 },
             };

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Actions\Product\ImportAction;
 use App\Actions\Product\StorageAction;
 use App\Actions\Product\UpdateAction;
 use App\Events\ProductCreatedOrUpdated;
@@ -11,6 +10,7 @@ use App\Http\Requests\Product\ImportRequest;
 use App\Http\Requests\Product\UpdateRequest;
 use App\Http\Requests\ProductImage\StoreRequest;
 use App\Http\Resources\Product as ResourcesProduct;
+use App\Jobs\ImportProducts;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -19,6 +19,14 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('abilities:create', ['only' => ['store', 'import']]);
+        $this->middleware('abilities:read', ['only' => ['index']]);
+        $this->middleware('abilities:update', ['only' => ['update', 'disable']]);
+        $this->middleware('abilities:delete', ['only' => ['destroy']]);
+    }
+
     public function search(Request $request): JsonResponse
     {
         $data = Product::where('name', 'LIKE', '%' . $request->searchTerm . '%')->get();
@@ -61,9 +69,9 @@ class ProductController extends Controller
         return $product;
     }
 
-    public function import(ImportRequest $importRequest, ImportAction $importAction)
+    public function import(ImportRequest $importRequest): void
     {
         $path = $importRequest->file('products')->storeAs('imports/products', uniqid() . '.csv');
-        $importAction->execute($path);
+        ImportProducts::dispatch($path, auth()->user()->id);
     }
 }

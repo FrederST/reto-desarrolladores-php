@@ -32,11 +32,4 @@ class ReportStatusChange extends Notification
                     ->action('Can se the details click Here', route('reports.show', $this->report->id))
                     ->line('Thank you for using our application!');
     }
-
-    public function toArray($notifiable): array
-    {
-        return [
-            //
-        ];
-    }
 }

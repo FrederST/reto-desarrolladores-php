@@ -30,10 +30,5 @@ abstract class ViewModel implements Arrayable
         ];
     }
 
-    protected function model(): Model
-    {
-        return $this->model;
-    }
-
     abstract protected function title(): string;
 }

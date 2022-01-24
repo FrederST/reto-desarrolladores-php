@@ -24,6 +24,13 @@ class ReportTest extends TestCase
         $this->withoutExceptionHandling();
     }
 
+    public function test_index_screen_can_be_rendered()
+    {
+        $response = $this->get(self::REPORT_PATH);
+
+        $response->assertStatus(200);
+    }
+
     public function test_new_report_can_created_not_found(): void
     {
         $report = $this->reportProvider()['report'];

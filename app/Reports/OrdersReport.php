@@ -17,7 +17,7 @@ class OrdersReport extends ReportBase
         $this->report->update([
             'status' => ReportStatus::STATUS_IN_PROCESS,
         ]);
-        $orders = Order::filter($this->report->filters);
+        $orders = Order::filter($this->report->filters)->get();
 
         $csv = Writer::createFromFileObject(new SplTempFileObject());
 

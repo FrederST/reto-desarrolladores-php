@@ -34,6 +34,7 @@ Route::get('/', function () {
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function (IndexViewModel $indexViewModel) {
     $products = Product::filter(request()->input('filter', []))->with('images')->paginate();
+    //dd($products);
     return Inertia::render('Dashboard', $indexViewModel->collection($products));
 })->name('dashboard');
 

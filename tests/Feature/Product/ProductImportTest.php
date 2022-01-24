@@ -42,6 +42,7 @@ class ProductImportTest extends TestCase
 
         foreach ($products as $key => $value) {
             unset($products[$key]['weight_unit']);
+            $products[$key]['sale_price'] = CurrencyHelper::parseCurrency($products[$key]['sale_price']);
             $this->assertDatabaseHas('products', $products[$key]);
         }
     }

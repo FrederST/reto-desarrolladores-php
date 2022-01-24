@@ -26,7 +26,7 @@ class StorageAction extends Action
         return $product;
     }
 
-    private function generateProductCode() {
+    public function generateProductCode() {
         $number = mt_rand(1000000000, 9999999999);
 
         if ($this->codeNumberExists($number)) {
@@ -36,7 +36,7 @@ class StorageAction extends Action
         return $number;
     }
 
-    private function codeNumberExists($number) {
+    public function codeNumberExists($number) {
         return Product::where('code', $number)->exists();
     }
 }

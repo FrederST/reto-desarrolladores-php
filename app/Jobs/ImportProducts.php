@@ -2,8 +2,9 @@
 
 namespace App\Jobs;
 
+use App\Actions\Product\StorageAction;
+use App\Actions\Product\UpdateAction;
 use App\Constants\ImportStatus;
-use App\Helpers\CurrencyHelper;
 use App\Models\Product;
 use App\Models\User;
 use App\Models\WeightUnit;
@@ -16,6 +17,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use League\Csv\Reader;
+use Throwable;
 
 class ImportProducts implements ShouldQueue
 {
@@ -28,6 +30,7 @@ class ImportProducts implements ShouldQueue
 
     public const RULES = [
         'products' => 'array',
+        'products.*.code' => ['string', 'digits_between:1,10'],
         'products.*.name' => ['required', 'string', 'min:1', 'max:100'],
         'products.*.description' => ['required', 'string'],
         'products.*.quantity' => ['required', 'numeric', self::GTE_RULE],
@@ -39,11 +42,15 @@ class ImportProducts implements ShouldQueue
 
     private string $filePath;
     private string $userId;
+    private StorageAction $storageAction;
+    private UpdateAction $updateAction;
 
     public function __construct(string $filePath, string $userId)
     {
         $this->filePath = $filePath;
         $this->userId = $userId;
+        $this->storageAction = new StorageAction();
+        $this->updateAction = new UpdateAction();
     }
 
     public function handle(): void
@@ -62,10 +69,26 @@ class ImportProducts implements ShouldQueue
             foreach ($csv as $value) {
                 $product = $value;
                 $product['weight_unit_id'] = WeightUnit::where('weight_unit_alias', $product['weight_unit'])->first()->id;
-                $product['currency_id'] = CurrencyHelper::getDefaultCurrency()->id;
-                Product::create($product);
+                unset($product['weight_unit']);
+                $this->saveProduct($product);
             }
             $user->notify(new ImportStatusChange(ImportStatus::STATUS_SUCCESS, 'All Good'));
+        }
+    }
+
+    public function failed(Throwable $exception): void
+    {
+        $user = User::find($this->userId);
+        $user->notify(new ImportStatusChange(ImportStatus::STATUS_FAIL, $exception->getMessage()));
+    }
+
+    private function saveProduct(array $product): void
+    {
+        if (isset($product['code']) && $this->storageAction->codeNumberExists($product['code'])) {
+            $dbProduct = Product::where('code', $product['code'])->first();
+            $this->updateAction->execute($product, $dbProduct);
+        } else {
+            $this->storageAction->execute($product, new Product());
         }
     }
 }

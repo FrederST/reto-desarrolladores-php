@@ -16,9 +16,6 @@
             <a-typography-title :level="2">
                 <a-space>
                     {{ product.name }}
-                    <a-button type="primary">
-                        <shopping-outlined key="shop" />
-                    </a-button>
                     <AddProductToCart :product="product" />
                 </a-space>
             </a-typography-title>

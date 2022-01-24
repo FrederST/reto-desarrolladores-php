@@ -35,7 +35,35 @@
                 <template #emptyText>
                     <a-result status="403" title="No Products"> </a-result>
                 </template>
-                <template #bodyCell="{ column, record }">
+                <template #bodyCell="{ column, text, record }">
+                    <template v-if="column.dataIndex === 'quantity'">
+                        <div class="editable-cell">
+                            <div
+                                v-if="editableData[record.id]"
+                                class="editable-cell-input-wrapper"
+                            >
+                                <a-input-number
+                                    v-model:value="
+                                        editableData[record.id].quantity
+                                    "
+                                    :max="record.product.quantity"
+                                    :min="1"
+                                    @pressEnter="editQuantity(record.id)"
+                                />
+                                <check-outlined
+                                    class="editable-cell-icon-check"
+                                    @click="editQuantity(record.id)"
+                                />
+                            </div>
+                            <div v-else class="editable-cell-text-wrapper">
+                                {{ text || " " }}
+                                <edit-outlined
+                                    class="editable-cell-icon"
+                                    @click="edit(record.id)"
+                                />
+                            </div>
+                        </div>
+                    </template>
                     <template v-if="column.dataIndex === 'product'">
                         <span>
                             {{ record.product.name }}
@@ -55,16 +83,18 @@
 <script>
 import AppLayout from "@/Layouts/AppLayout";
 import { Link } from "@inertiajs/inertia-vue3";
-import { createVNode, computed } from "vue";
+import { createVNode, computed, reactive } from "vue";
 import { Inertia } from "@inertiajs/inertia";
 import Button from "@/Jetstream/Button.vue";
 
 import {
     CheckOutlined,
     CloseOutlined,
+    EditOutlined,
     ExclamationCircleOutlined,
 } from "@ant-design/icons-vue";
 import { Modal } from "ant-design-vue";
+import { cloneDeep } from "lodash";
 
 const columns = [
     {
@@ -95,6 +125,7 @@ export default {
         Button,
         CheckOutlined,
         CloseOutlined,
+        EditOutlined,
     },
     methods: {
         removeProduct(cartItem) {
@@ -128,18 +159,34 @@ export default {
         goToCreateOrder() {
             Inertia.get(route("orders.create"));
         },
+        edit(id) {
+            this.editableData[id] = cloneDeep(
+                this.shoppingCart.filter((item) => id === item.id)[0]
+            );
+        },
+        editQuantity(id) {
+            Inertia.put(
+                route("shoppingCartItems.update", id),
+                this.editableData[id]
+            );
+            delete this.editableData[id];
+        },
     },
-    setup(props) {
-        // const pagination = computed(() => ({
-        //     total: ,
-        //     current: 0,
-        //     pageSize: 0,
-        // }));
-
+    setup() {
+        const editableData = reactive({});
         return {
             columns,
-            //pagination,
+            editableData,
         };
     },
 };
 </script>
+
+<style>
+.editable-cell {
+    position: relative;
+}
+.editable-cell:hover .editable-cell-icon {
+    display: inline-block;
+}
+</style>

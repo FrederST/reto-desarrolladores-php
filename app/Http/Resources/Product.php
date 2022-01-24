@@ -21,7 +21,7 @@ class Product extends JsonResource
                 'unit' => $this->weightUnit->weight_unit_alias,
             ],
             'price' => [
-                'value' => CurrencyHelper::toCurrencyFormat($this->price),
+                'value' => $this->price,
                 'currency' => $this->currency->alphabetic_code,
             ],
             'sale_price' => [

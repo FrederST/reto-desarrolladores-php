@@ -37,6 +37,8 @@ class StorageAction extends Action
                 'price' => $item->total,
             ]);
 
+            $item->product->quantity -= $item->quantity;
+            $item->product->save();
             $order->orderItems()->save($orderItem);
         }
 

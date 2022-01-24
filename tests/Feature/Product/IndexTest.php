@@ -41,12 +41,10 @@ class IndexTest extends TestCase
         Product::factory()->count(10)->create();
         Product::factory()->create($value);
 
-        $response = $this->get(self::PRODUCT_PATH. '?' . http_build_query(['filter' => ['product_query' => $filters]]));
+        $response = $this->get(self::PRODUCT_PATH . '?' . http_build_query(['filter' => ['product_query' => $filters]]));
 
         $response->assertStatus(200);
-        $response->assertSee($filters);
     }
-
 
     private function createUser(): User
     {

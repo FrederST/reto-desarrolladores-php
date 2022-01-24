@@ -5,3 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::apiResource('products', ProductController::class)
 ->middleware(['auth:sanctum']);
+
+Route::put('products/disable/{product}', [ProductController::class, 'disable'])
+->middleware(['auth:sanctum'])
+->name('products.disable');

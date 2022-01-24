@@ -9,3 +9,7 @@ Route::apiResource('products', ProductController::class)
 Route::put('products/disable/{product}', [ProductController::class, 'disable'])
 ->middleware(['auth:sanctum'])
 ->name('products.disable');
+
+Route::post('products/import', [ProductController::class, 'import'])
+->middleware(['auth:sanctum'])
+->name('products.import');

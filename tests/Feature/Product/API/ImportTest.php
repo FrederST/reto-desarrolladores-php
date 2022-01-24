@@ -28,11 +28,11 @@ class ImportTest extends TestCase
 
         $file = new UploadedFile($importCSV, 'importProducts.csv', test:true);
 
-        $response = $this->post(self::PRODUCT_PATH . '/import', [
+        $response = $this->postJson(self::PRODUCT_PATH . '/import', [
             'products' => $file,
         ]);
 
-        $response->assertRedirect(self::PRODUCT_PATH);
+        $response->assertOk();
         $csv = Reader::createFromPath($importCSV)
         ->setHeaderOffset(0)
         ->setDelimiter(';');

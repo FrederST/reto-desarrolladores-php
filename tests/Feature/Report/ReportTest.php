@@ -31,9 +31,20 @@ class ReportTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_new_report_can_created_not_found(): void
+    public function test_new_order_report_not_can_created_not_found(): void
     {
         $report = $this->reportProvider()['report'];
+        $response = $this->post(self::REPORT_PATH, $report);
+
+        $response->assertRedirect(self::REPORT_PATH);
+        $this->assertDatabaseCount('reports', 1);
+        $this->assertDatabaseHas('reports', $report);
+    }
+
+    public function test_new_product_report_not_can_created_not_found(): void
+    {
+        $report = $this->reportProvider()['report'];
+        $report['type'] = ReportTypes::TYPE_PRODUCT;
         $response = $this->post(self::REPORT_PATH, $report);
 
         $response->assertRedirect(self::REPORT_PATH);

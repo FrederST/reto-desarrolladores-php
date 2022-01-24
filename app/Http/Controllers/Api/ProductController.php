@@ -28,12 +28,6 @@ class ProductController extends Controller
         $this->middleware('abilities:delete', ['only' => ['destroy']]);
     }
 
-    public function search(Request $request): JsonResponse
-    {
-        $data = Product::where('name', 'LIKE', '%' . $request->searchTerm . '%')->get();
-        return response()->json($data);
-    }
-
     public function index(): AnonymousResourceCollection
     {
         $products = Product::filter(request()->input('filter', []))->with('images')->paginate();

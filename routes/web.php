@@ -2,6 +2,7 @@
 
 use App\Helpers\FilterHelper;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductImageController;
@@ -34,12 +35,8 @@ Route::get('/', function () {
     ]);
 });
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function (IndexViewModel $indexViewModel) {
-    $products = Product::filter(FilterHelper::removeNullValues(request()->input('filter', [])))
-    ->whereNull('disabled_at')
-    ->with('images')->paginate();
-    return Inertia::render('Dashboard', $indexViewModel->collection(ProductResource::collection($products)));
-})->name('dashboard');
+Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', [DashboardController::class, 'index'])
+->name('dashboard');
 
 Route::resource('customers', CustomerController::class)->except(['create', 'edit', 'show'])
 ->middleware(['auth:sanctum', 'verified', 'role:admin']);

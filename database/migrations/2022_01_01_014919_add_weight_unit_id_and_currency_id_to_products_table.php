@@ -14,7 +14,7 @@ class AddWeightUnitIdAndCurrencyIdToProductsTable extends Migration
         });
     }
 
-    public function down()
+    public function down(): void
     {
         Schema::table('products', function (Blueprint $table) {
             $table->removeColumn('weight_unit_id');

@@ -38,9 +38,8 @@ abstract class Filter
 
     protected function where(): self
     {
-        foreach (
-            array_intersect_key($this->conditions, $this->applicableConditions)
-            as $condition => $value) {
+        $apConditions = array_intersect_key($this->conditions, $this->applicableConditions);
+        foreach ($apConditions as $condition => $value) {
             $conditionClass = $this->getCondition($condition);
             $conditionClass::append($this->query, new Criteria($value));
         }

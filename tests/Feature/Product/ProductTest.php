@@ -39,11 +39,16 @@ class ProductTest extends TestCase
             'name' => 'Product Update',
             'description' => 'Description Updated',
             'quantity' => 20,
+            'price' => 30000,
+            'sale_price' => 40000,
         ]);
+        $product->refresh();
 
-        $this->assertEquals('Product Update', $product->fresh()->name);
-        $this->assertEquals('Description Updated', $product->fresh()->description);
-        $this->assertEquals(20, $product->fresh()->quantity);
+        $this->assertEquals('Product Update', $product->name);
+        $this->assertEquals('Description Updated', $product->description);
+        $this->assertEquals(20, $product->quantity);
+        $this->assertEquals(30000, $product->price);
+        $this->assertEquals(CurrencyHelper::parseCurrency(40000), $product->sale_price);
     }
 
     public function test_product_can_be_deleted(): void

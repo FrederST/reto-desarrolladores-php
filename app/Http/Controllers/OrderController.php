@@ -7,6 +7,7 @@ use App\Actions\Order\RetryPaymentAction;
 use App\Actions\Order\StorageAction;
 use App\Events\OrderCreatedOrUpdated;
 use App\Http\Requests\Order\StoreRequest;
+use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use App\ViewModels\Order\CreateViewModel;
 use App\ViewModels\Order\IndexViewModel;
@@ -25,9 +26,10 @@ class OrderController extends Controller
         $this->middleware('ensure_order_is_from_current_user', ['only' => ['show', 'retryPayment']]);
     }
 
-    public function index(): Response
+    public function index(IndexViewModel $indexViewModel): Response
     {
-        return Inertia::render('Order/Index', (new IndexViewModel())->toArray());
+        $orders = Order::filter(request()->input('filter', []))->paginate();
+        return Inertia::render('Order/Index', $indexViewModel->collection(OrderResource::collection($orders)));
     }
 
     public function create(): Response
@@ -45,7 +47,7 @@ class OrderController extends Controller
     public function show(Order $order, CheckOrderAction $checkOrderAction): Response
     {
         $upOrder = $checkOrderAction->execute($order)->with('orderItems.product')->find($order->id);
-        return Inertia::render('Order/Info', ['order' => $upOrder]);
+        return Inertia::render('Order/Info', ['order' => new OrderResource($upOrder)]);
     }
 
     public function retryPayment(Order $order, RetryPaymentAction $retryPaymentAction): RedirectResponse
@@ -57,6 +59,6 @@ class OrderController extends Controller
 
     public function all(): Response
     {
-        return Inertia::render('Order/Index', ['orders' => Order::paginate()]);
+        return Inertia::render('Order/Index', ['orders' => OrderResource::collection(Order::paginate())]);
     }
 }

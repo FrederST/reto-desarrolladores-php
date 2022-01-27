@@ -14,7 +14,7 @@ class CheckOrders extends Command
 
     protected $description = 'Command description';
 
-    public function handle(CheckOrderAction $checkOrderAction)
+    public function handle(CheckOrderAction $checkOrderAction): void
     {
         $ordersPending = Order::where('status', OrderStatus::STATUS_PENDING)
         ->whereRaw('TIMESTAMPDIFF(MINUTE, created_at, "' . now() . '") > 7')->get();

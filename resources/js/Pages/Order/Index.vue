@@ -82,7 +82,6 @@ export default {
         },
     },
     setup(props) {
-        console.log(props);
         const pagination = computed(() => ({
             total: props.orders.total,
             current: props.orders.current_page,

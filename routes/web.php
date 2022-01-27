@@ -1,10 +1,14 @@
 <?php
 
+use App\Helpers\FilterHelper;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductImageController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ShoppingCartItemController;
+use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use App\ViewModels\Product\IndexViewModel;
 use Illuminate\Foundation\Application;
@@ -31,10 +35,8 @@ Route::get('/', function () {
     ]);
 });
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function (IndexViewModel $indexViewModel) {
-    $products = Product::filter(request()->input('filter', []))->with('images')->paginate();
-    return Inertia::render('Dashboard', $indexViewModel->collection($products));
-})->name('dashboard');
+Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', [DashboardController::class, 'index'])
+->name('dashboard');
 
 Route::resource('customers', CustomerController::class)->except(['create', 'edit', 'show'])
 ->middleware(['auth:sanctum', 'verified', 'role:admin']);
@@ -49,6 +51,9 @@ Route::resource('products', ProductController::class)->except(['create', 'edit',
 Route::put('products/disable/{product}', [ProductController::class, 'disable'])
 ->middleware(['auth:sanctum', 'verified', 'role:admin'])
 ->name('products.disable');
+
+Route::post('products/import', [ProductController::class, 'import'])
+->name('products.import');
 
 Route::group(['prefix' => 'productImages'], function () {
     Route::post('upload/{productId}', [ProductImageController::class, 'upload'])->name('products.images.upload');
@@ -68,3 +73,13 @@ Route::get('orders/retry/{order}', [OrderController::class, 'retryPayment'])
 Route::get('all/orders', [OrderController::class, 'all'])
 ->middleware(['auth:sanctum', 'verified', 'role:admin'])
 ->name('orders.all');
+
+Route::resource('reports', ReportController::class)->except(['create', 'edit'])
+->middleware(['auth:sanctum', 'verified', 'role:admin']);
+
+Route::get('reports/download/{report}', [ReportController::class, 'download'])->name('reports.download');
+
+Route::get('test', function () {
+    //return sprintf('%010d', 1234567890);
+    return uniqid();
+});

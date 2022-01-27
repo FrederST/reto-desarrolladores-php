@@ -31,11 +31,4 @@ class OrderStatusChange extends Notification
                     ->action('Can se the details click Here', route('orders.show', $this->order->id))
                     ->line('Thank you for using our application!');
     }
-
-    public function toArray($notifiable)
-    {
-        return [
-            //
-        ];
-    }
 }

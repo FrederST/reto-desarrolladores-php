@@ -11,13 +11,20 @@ class AddToCartAction extends Action
     public function execute(array $data, Model $shoppingCartItem): Model
     {
         $product = Product::find($data['product_id']);
-        $product->quantity -= $data['quantity'];
+        $cartItemQ = auth()->user()->shoppingCart->shoppingCartItems()->where('product_id', $product->id);
+        if ($cartItemQ->exists()) {
+            $cartItem = $cartItemQ->first();
+            $cartItem->quantity += $data['quantity'];
+            $cartItem->total += $data['quantity'] * $product->sale_price;
+            $cartItem->save();
+            return $shoppingCartItem;
+        }
+
         $shoppingCartItem->shopping_cart_id = auth()->user()->shoppingCart->id;
         $shoppingCartItem->product_id = $product->id;
         $shoppingCartItem->quantity = $data['quantity'];
         $shoppingCartItem->total = $data['quantity'] * $product->sale_price;
         $shoppingCartItem->save();
-        $product->save();
 
         return $shoppingCartItem;
     }

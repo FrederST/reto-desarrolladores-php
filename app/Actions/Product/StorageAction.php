@@ -4,12 +4,14 @@ namespace App\Actions\Product;
 
 use App\Actions\Action;
 use App\Helpers\CurrencyHelper;
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Model;
 
 class StorageAction extends Action
 {
     public function execute(array $data, Model $product): Model
     {
+        $product->code = array_key_exists('code', $data) ? $data['code'] : $this->generateProductCode();
         $product->name = $data['name'];
         $product->description = $data['description'];
         $product->quantity = $data['quantity'];
@@ -22,5 +24,19 @@ class StorageAction extends Action
         $product->save();
 
         return $product;
+    }
+
+    public function generateProductCode() {
+        $number = mt_rand(1000000000, 9999999999);
+
+        if ($this->codeNumberExists($number)) {
+            return $this->generateProductCode();
+        }
+
+        return $number;
+    }
+
+    public function codeNumberExists($number) {
+        return Product::where('code', $number)->exists();
     }
 }

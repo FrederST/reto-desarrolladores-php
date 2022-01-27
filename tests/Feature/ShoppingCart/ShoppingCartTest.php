@@ -60,6 +60,26 @@ class ShoppingCartTest extends TestCase
         $this->assertDatabaseMissing('shopping_cart_items', $itemForDelete);
     }
 
+    public function test_product_is_add_to_current_cart_item_if_exits()
+    {
+        $user = $this->createUser();
+        $product = Product::factory()->create();
+
+        $data = [
+            'product_id' => $product->id,
+            'quantity' => 2,
+            'shopping_cart_id' => $user->shoppingCart->id,
+        ];
+
+        $this->post(self::SHOPPING_CART_PATH, $data);
+        $response = $this->post(self::SHOPPING_CART_PATH, $data);
+        $response->assertRedirect(self::SHOPPING_CART_PATH);
+
+        $data['quantity'] = 4;
+
+        $this->assertDatabaseHas('shopping_cart_items', $data);
+    }
+
     private function createUser(): User
     {
         $this->actingAs($user = User::factory()->create());

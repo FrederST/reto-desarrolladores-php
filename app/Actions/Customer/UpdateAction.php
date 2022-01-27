@@ -10,10 +10,6 @@ class UpdateAction extends Action
 {
     public function execute(array $data, Model $user): Model
     {
-        if (isset($data['photo'])) {
-            $user->updateProfilePhoto($data['photo']);
-        }
-
         $user->update([
             'name' => $data['name'],
             'email' => $data['email'],

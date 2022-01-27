@@ -26,27 +26,25 @@ class IndexTest extends TestCase
         $response->assertStatus(200);
     }
 
-    /**
-     * @dataProvider filtersProvider
-     */
-    public function testItCanFilter(array $filters): void
+    public function testItCanFilter(): void
     {
-        $name = 'Product 1';
-        $description = 'Product 1 Description';
+        $filters = [
+            'name' => 'Product 1',
+            'description' => 'Product 1 Description',
+            'sale_price' => 2000,
+        ];
         $value = [
-            'name' => $name,
-            'description' => $description,
+            'name' => $filters['name'],
+            'description' => $filters['description'],
             'sale_price' => 2000,
         ];
         Product::factory()->count(10)->create();
         Product::factory()->create($value);
 
-        $response = $this->get(self::PRODUCT_PATH. '?' . http_build_query(['filter' => $filters]));
+        $response = $this->get(self::PRODUCT_PATH . '?' . http_build_query(['filter' => ['product_query' => $filters]]));
 
         $response->assertStatus(200);
-        $response->assertSee($filters);
     }
-
 
     private function createUser(): User
     {

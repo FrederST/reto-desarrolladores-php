@@ -37,6 +37,8 @@ class StorageAction extends Action
                 'price' => $item->total,
             ]);
 
+            $item->product->quantity -= $item->quantity;
+            $item->product->save();
             $order->orderItems()->save($orderItem);
         }
 
@@ -44,11 +46,7 @@ class StorageAction extends Action
 
         $paymentClass = PaymentBuilder::build($order->payment_method, config('shop.payment_methods.' . $order->payment_method));
 
-        throw_if(
-            $paymentClass->makePayment($order) == null,
-            OrderRetryException::class,
-            'Error Connecting to ' . $order->payment_method
-        );
+        $paymentClass->makePayment($order);
 
         $order->refresh();
 

@@ -16,14 +16,11 @@
             <a-typography-title :level="2">
                 <a-space>
                     {{ product.name }}
-                    <a-button type="primary">
-                        <shopping-outlined key="shop" />
-                    </a-button>
                     <AddProductToCart :product="product" />
                 </a-space>
             </a-typography-title>
             <a-typography-title :level="3">
-                {{ product.sale_price }} -
+                $ {{ product.sale_price.value }} -
                 {{
                     this.$page.props.default_currency.alphabetic_code
                 }}</a-typography-title
@@ -33,9 +30,10 @@
                 <a-descriptions-item label="Quantity">{{
                     product.quantity
                 }}</a-descriptions-item>
-                <a-descriptions-item label="Weight">{{
-                    product.weight
-                }}</a-descriptions-item>
+                <a-descriptions-item label="Weight"
+                    >{{ product.weight.value }}
+                    {{ product.weight.unit }}</a-descriptions-item
+                >
             </a-descriptions>
             <a-typography-paragraph>
                 {{ product.description }}
@@ -56,7 +54,7 @@ export default defineComponent({
     components: {
         ShoppingOutlined,
         ShoppingCartOutlined,
-        AddProductToCart
+        AddProductToCart,
     },
     methods: {
         getImgUrl(i) {

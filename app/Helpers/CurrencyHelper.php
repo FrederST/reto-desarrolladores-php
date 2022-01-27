@@ -25,20 +25,20 @@ class CurrencyHelper
         return $money->getAmount();
     }
 
-    public static function toCurrencyFormat(string $value, string $currency = null): string
+    public static function toCurrencyFormat(string $value, string $currency = null): int
     {
         $money = new Money($value, new Currency($currency ? $currency : config(self::DEFAULT_CURRENCY_KEY)));
         $currencies = new ISOCurrencies();
 
         $moneyFormatter = new DecimalMoneyFormatter($currencies);
 
-        return $moneyFormatter->format($money);
+        return (int)$moneyFormatter->format($money);
     }
 
     public static function getDefaultCurrency(): ModelsCurrency
     {
         return Cache::rememberForever('default_currency', function () {
-            return ModelsCurrency::where('alphabetic_code', config('shop.default_currency'))->first();
+            return ModelsCurrency::where('alphabetic_code', config(self::DEFAULT_CURRENCY_KEY))->first();
         });
     }
 }

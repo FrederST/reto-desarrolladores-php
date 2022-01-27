@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Filters\Concerns\HasFilters;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,6 +13,7 @@ use Khsing\World\Models\Country;
 class Order extends Model
 {
     use HasFactory;
+    use HasFilters;
 
     protected $fillable = [
         'order_number',

@@ -10,13 +10,13 @@ class CheckOrderAction
 {
     public function execute(Model $order): Model
     {
-        $payment_class = PaymentBuilder::build($order->payment_method, config('shop.payment_methods.' . $order->payment_method));
+        $paymentClass = PaymentBuilder::build($order->payment_method, config('shop.payment_methods.' . $order->payment_method));
 
         if ($order->status == OrderStatus::STATUS_APPROVED) {
             return $order;
         }
 
-        $payment_class->checkStatus($order);
+        $paymentClass->checkStatus($order);
         $order->refresh();
         return $order;
     }

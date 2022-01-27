@@ -8,7 +8,7 @@
 
         <div class="py-6">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <StatusMessage :order="order" />
+                <StatusMessage :order="order.data" />
                 <br />
                 <a-row :gutter="20">
                     <a-col :span="16">
@@ -17,7 +17,7 @@
                         </a-typography-title>
                         <a-collapse>
                             <a-collapse-panel
-                                v-for="orderItem in order.order_items"
+                                v-for="orderItem in order.data.orderItems"
                                 :key="orderItem.id"
                                 :header="`${orderItem.product.name} - ${orderItem.quantity} - ${orderItem.price}`"
                             >
@@ -31,12 +31,12 @@
                                 >Total Cost
                                 <a-statistic
                                     prefix="$"
-                                    :value="order.grand_total"
+                                    :value="order.data.grand_total"
                                 />
                             </a-typography-title>
                             <a-typography-paragraph>
                                 <a-button
-                                    v-if="order.status != 'APPROVED'"
+                                    v-if="order.data.status != 'APPROVED'"
                                     block
                                     type="primary"
                                     ><a
@@ -69,8 +69,11 @@ export default {
     },
     methods: {
         getRetry() {
-            return route("orders.retry", this.order.id);
+            return route("orders.retry", this.order.data.id);
         },
     },
+    setup(props){
+        console.log(props);
+    }
 };
 </script>

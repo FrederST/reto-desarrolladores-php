@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Constants\OrderStatus;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Khsing\World\Models\Country;
@@ -25,6 +26,7 @@ class OrderFactory extends Factory
             'post_code' => $this->faker->numberBetween(1, 10),
             'phone_number' => $this->faker->phoneNumber(),
             'notes' => $this->faker->text(),
+            'status' => OrderStatus::STATUS_PENDING,
         ];
     }
 }

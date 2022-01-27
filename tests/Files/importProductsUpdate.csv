@@ -1,10 +1,10 @@
 ﻿code;name;quantity;weight;weight_unit;price;sale_price;description
 1;Product 1;21;20;kg;10000;30000;Desciption 1
 2;Product 2;21;20;kg;10000;30000;Desciption 2
-3;Product 3;22;20;kg;10000;30000;Desciption 3
+3;Product 3;22;20;kg;10000;20000;Desciption 3
 4;Product 4;40;20;kg;10000;30000;Desciption 4
 5;Product 5;21;20;kg;10000;30000;Desciption 5
-6;Product 6;21;20;kg;10000;5555;Desciption 6
+6;Product 6;21;20;kg;10000;30000;Desciption 6
 7;Product 7;21;20;kg;10000;30000;Desciption 7
 8;Product 8;21;20;kg;10000;30000;Desciption 8
 9;Product 9;21;20;kg;10000;30000;Desciption 9

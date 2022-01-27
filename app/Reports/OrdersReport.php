@@ -3,6 +3,7 @@
 namespace App\Reports;
 
 use App\Constants\ReportStatus;
+use App\Helpers\CurrencyHelper;
 use App\Models\Order;
 use App\Notifications\ReportStatusChange;
 use Illuminate\Support\Facades\Storage;
@@ -19,17 +20,22 @@ class OrdersReport extends ReportBase
         ]);
         $orders = Order::filter(['order_query' => $this->report->filters])->get();
 
-        $csv = Writer::createFromFileObject(new SplTempFileObject());
-
         if ($orders->count() == 0) {
             $this->setReportStatusInfoAndPath(ReportStatus::STATUS_FINISHED, 'Not Found Orders');
             $this->notify();
             return;
         }
-        $csv->insertOne(array_keys($orders[0]->getAttributes()));
-        $csv->insertAll($orders->toArray());
 
-        $filePath = "products/export-{$this->report->id}-{$this->report->created_at->toDateString()}.csv";
+        $ordersMap = $orders->map(function ($item) {
+            $item['grand_total'] = CurrencyHelper::toCurrencyFormat($item['grand_total']);
+            return $item;
+        });
+
+        $csv = Writer::createFromFileObject(new SplTempFileObject());
+        $csv->insertOne(array_keys($ordersMap[0]->getAttributes()));
+        $csv->insertAll($ordersMap->toArray());
+
+        $filePath = "orders/export-{$this->report->id}-{$this->report->created_at->toDateString()}.csv";
 
         Storage::disk('reports')->put($filePath, $csv->__toString());
 

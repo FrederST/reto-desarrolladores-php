@@ -3,6 +3,7 @@
 namespace App\Reports;
 
 use App\Constants\ReportStatus;
+use App\Helpers\CurrencyHelper;
 use App\Models\Product;
 use App\Notifications\ReportStatusChange;
 use Illuminate\Support\Facades\Storage;
@@ -25,9 +26,14 @@ class ProductsReport extends ReportBase
             return;
         }
 
+        $productsMap = $products->map(function ($item) {
+            $item['sale_price'] = CurrencyHelper::toCurrencyFormat($item['sale_price']);
+            return $item;
+        });
+
         $csv = Writer::createFromFileObject(new SplTempFileObject());
-        $csv->insertOne(array_keys($products[0]->getAttributes()));
-        $csv->insertAll($products->toArray());
+        $csv->insertOne(array_keys($productsMap[0]->getAttributes()));
+        $csv->insertAll($productsMap->toArray());
 
         $filePath = "products/export-{$this->report->id}-{$this->report->created_at->toDateString()}.csv";
 

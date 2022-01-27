@@ -32,7 +32,7 @@
                     @change="handleTableChange"
                 >
                     <template #emptyText>
-                        <a-result status="403" title="No Products"> </a-result>
+                        <a-result status="403" title="No Reports"> </a-result>
                     </template>
                     <template #bodyCell="{ column, record }">
                         <template v-if="column.dataIndex === 'actions'">

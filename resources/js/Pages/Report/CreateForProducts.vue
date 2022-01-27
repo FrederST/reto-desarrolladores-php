@@ -20,6 +20,7 @@ import { defineComponent } from "vue";
 import { useForm } from "@inertiajs/inertia-vue3";
 import { PlusOutlined } from "@ant-design/icons-vue";
 import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
+import { message } from "ant-design-vue";
 
 export default defineComponent({
     components: {
@@ -42,7 +43,7 @@ export default defineComponent({
                 preserveScroll: true,
                 onError: (errors) => console.log(errors),
                 onSuccess: (data) => {
-                    console.log(data);
+                    message.success('Report created we notify when is complete');
                     this.closeModal();
                 },
             });

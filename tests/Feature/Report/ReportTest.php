@@ -31,6 +31,16 @@ class ReportTest extends TestCase
         $response->assertStatus(200);
     }
 
+    public function test_show_screen_can_be_rendered()
+    {
+        $report = Report::factory()->create();
+
+        $response = $this->get(self::REPORT_PATH . '/' . $report->id);
+
+        $response->assertStatus(200);
+        $response->assertSee($report->status);
+    }
+
     public function test_new_order_report_not_can_created_not_found(): void
     {
         $report = $this->reportProvider()['report'];
@@ -75,6 +85,15 @@ class ReportTest extends TestCase
         $this->assertDatabaseCount('reports', 1);
         $this->assertDatabaseHas('reports', $report);
         Storage::assertExists(Report::first()->path);
+    }
+
+    public function test_report_can_be_deleted(): void
+    {
+        $report = Report::factory()->create();
+
+        $this->delete(self::REPORT_PATH . '/' . $report->id);
+
+        $this->assertDeleted('reports', $report->toArray());
     }
 
     private function createUser(): User

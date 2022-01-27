@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\Report;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Arr;
 
 class ReportFactory extends Factory
 {
@@ -16,8 +17,8 @@ class ReportFactory extends Factory
     public function definition(): array
     {
         return [
-            'type' => $this->faker->randomElements(ReportTypes::TYPES),
-            'status' => $this->faker->randomElements(ReportStatus::STATUSES),
+            'type' => Arr::random(ReportTypes::TYPES),
+            'status' => Arr::random(ReportStatus::STATUSES),
             'info' => $this->faker->text(),
             'path'=> '',
             'filters' => '',

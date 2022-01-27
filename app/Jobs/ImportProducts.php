@@ -14,6 +14,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use League\Csv\Reader;
@@ -37,7 +38,7 @@ class ImportProducts implements ShouldQueue
         'products.*.weight' => ['required', 'numeric', self::GTE_RULE],
         'products.*.weight_unit' => ['required'],
         'products.*.price' => ['required', 'numeric', self::GTE_RULE],
-        'products.*.sale_price' => ['required', 'numeric'],
+        'products.*.sale_price' => ['required', 'numeric', 'gte:products.*.price'],
     ];
 
     private string $filePath;
@@ -56,6 +57,10 @@ class ImportProducts implements ShouldQueue
     public function handle(): void
     {
         $user = User::find($this->userId);
+        $weight_units = Cache::rememberForever('weight_units', function ()
+        {
+            return WeightUnit::all();
+        });
 
         $csv = Reader::createFromPath(Storage::path($this->filePath))
         ->setHeaderOffset(0)
@@ -68,7 +73,7 @@ class ImportProducts implements ShouldQueue
         } else {
             foreach ($csv as $value) {
                 $product = $value;
-                $product['weight_unit_id'] = WeightUnit::where('weight_unit_alias', $product['weight_unit'])->first()->id;
+                $product['weight_unit_id'] =  $weight_units->where('weight_unit_alias', $product['weight_unit'])->first()->id;
                 unset($product['weight_unit']);
                 $this->saveProduct($product);
             }

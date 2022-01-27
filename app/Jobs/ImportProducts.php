@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Actions\Product\StorageAction;
 use App\Actions\Product\UpdateAction;
 use App\Constants\ImportStatus;
+use App\Constants\WeightUnits;
 use App\Models\Product;
 use App\Models\User;
 use App\Models\WeightUnit;
@@ -17,6 +18,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use League\Csv\Reader;
 use Throwable;
 
@@ -57,8 +59,7 @@ class ImportProducts implements ShouldQueue
     public function handle(): void
     {
         $user = User::find($this->userId);
-        $weight_units = Cache::rememberForever('weight_units', function ()
-        {
+        $weight_units = Cache::rememberForever('weight_units', function () {
             return WeightUnit::all();
         });
 
@@ -66,14 +67,17 @@ class ImportProducts implements ShouldQueue
         ->setHeaderOffset(0)
         ->setDelimiter(';');
 
-        $validator = Validator::make(['products' => iterator_to_array($csv->getRecords())], self::RULES);
+        $rules = self::RULES;
+        $rules['products.*.weight_unit'] = ['required', Rule::in(WeightUnits::UNITS)];
+
+        $validator = Validator::make(['products' => iterator_to_array($csv->getRecords())], $rules);
 
         if ($validator->fails()) {
             $user->notify(new ImportStatusChange(ImportStatus::STATUS_FAIL, $validator->errors()->__toString()));
         } else {
             foreach ($csv as $value) {
                 $product = $value;
-                $product['weight_unit_id'] =  $weight_units->where('weight_unit_alias', $product['weight_unit'])->first()->id;
+                $product['weight_unit_id'] = $weight_units->where('weight_unit_alias', $product['weight_unit'])->first()->id;
                 unset($product['weight_unit']);
                 $this->saveProduct($product);
             }

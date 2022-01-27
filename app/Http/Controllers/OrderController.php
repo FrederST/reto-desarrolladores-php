@@ -29,7 +29,7 @@ class OrderController extends Controller
     public function index(IndexViewModel $indexViewModel): Response
     {
         $orders = Order::filter(request()->input('filter', []))->paginate();
-        return Inertia::render('Order/Index', $indexViewModel->collection($orders));
+        return Inertia::render('Order/Index', $indexViewModel->collection(OrderResource::collection($orders)));
     }
 
     public function create(): Response
@@ -47,7 +47,7 @@ class OrderController extends Controller
     public function show(Order $order, CheckOrderAction $checkOrderAction): Response
     {
         $upOrder = $checkOrderAction->execute($order)->with('orderItems.product')->find($order->id);
-        return Inertia::render('Order/Info', ['order' => $upOrder]);
+        return Inertia::render('Order/Info', ['order' => new OrderResource($upOrder)]);
     }
 
     public function retryPayment(Order $order, RetryPaymentAction $retryPaymentAction): RedirectResponse

@@ -29,6 +29,7 @@ class OrderResource extends JsonResource
             'notes' => $this->notes,
             'payment_process_id' => $this->payment_process_id,
             'payment_process_url' => $this->payment_process_url,
+            'orderItems' => OrderItemResource::collection($this->whenLoaded('orderItems')),
         ];
     }
 }

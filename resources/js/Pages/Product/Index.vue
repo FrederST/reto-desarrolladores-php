@@ -235,9 +235,8 @@ export default {
 
             if (status === "done") {
                 message.success(
-                    `${info.file.name} file uploaded successfully.`
+                    `${info.file.name} file uploaded successfully we notify when import is ready.`
                 );
-                location.reload();
             } else if (status === "error") {
                 message.error(`${info.file.name} file upload failed.`);
             }

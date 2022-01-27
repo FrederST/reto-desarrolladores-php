@@ -29,7 +29,7 @@ class ProductController extends Controller
 
     public function index(): AnonymousResourceCollection
     {
-        $products = Product::filter(request()->input('filter', []))->with('images')->paginate();
+        $products = Product::filter(['filter' => ['product_query' => request()->input('filter', [])]])->with('images')->paginate();
         return ProductAPIResource::collection($products);
     }
 

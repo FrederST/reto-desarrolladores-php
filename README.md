@@ -76,10 +76,131 @@ Nota:Para la ejecución de los jobs debes abrir una nueva terminal y ejecutar el
 $ php artisan queue:work
 ```
 
-## Accesos. 🔑
+## Accesos.
 
-| Email           | Password |
-| --------------- | -------- |
+| Email         | Password |
+| ------------- | -------- |
 | test@test.com | password |
 
 ---
+
+## API
+
+para el uso del API debes habilitar tu token en el apartado de configuraciones
+
+| Header          | Type     | Description                  |
+| :-------------- | :------- | :--------------------------- |
+| `Authorization` | `string` | **Required**. Your API Token |
+
+#### Get all products
+
+```http
+  GET /api/v1/products
+```
+
+| Parameter    | Type     | Description                |
+| :----------- | :------- | :------------------------- |
+| `name`       | `string` | Filtro por nombre          |
+| `sale_price` | `string` | Filtro por precio de venta |
+
+#### Get Product
+
+```http
+  GET /api/v1/products/${id}
+```
+
+| Parameter | Type     | Description                           |
+| :-------- | :------- | :------------------------------------ |
+| `id`      | `string` | **Required**. Id del product a buscar |
+
+#### Crear Producto
+
+```http
+  POST /api/v1/products
+```
+
+| Type   | Description                                    |
+| :----- | :--------------------------------------------- |
+| `json` | **Required**. informacion del producto a crear |
+
+#### Actualiar Producto
+
+```http
+  GET /api/v1/products/${id}
+```
+
+| Type   | Description                                         |
+| :----- | :-------------------------------------------------- |
+| `json` | **Required**. informacion del producto a actualizar |
+
+#### Desactivar Producto
+
+```http
+  PUT /api/v1/products/disable/${id}
+```
+
+| Parameter | Type     | Description                                |
+| :-------- | :------- | :----------------------------------------- |
+| `id`      | `string` | **Required**. Id del producto a desactivar |
+
+#### Eliminar Producto
+
+```http
+  DELETE /api/v1/products/${id}
+```
+
+| Parameter | Type     | Description                              |
+| :-------- | :------- | :--------------------------------------- |
+| `id`      | `string` | **Required**. Id del producto a eliminar |
+
+#### Importar Productos
+
+```http
+  POST /api/v1/products/import
+```
+
+| Parameter  | Type   | Description                                        |
+| :--------- | :----- | :------------------------------------------------- |
+| `products` | `file` | **Required**. archivo csv con productos a importar |
+
+#### Product Request
+
+```json
+{
+    "code": "0000000002" (opcional),
+    "name": "Product 2",
+    "description": "Desciption 2",
+    "quantity": 21,
+    "weight_unit_id": 1,
+    "price": 1000,
+    "sale_price": 2000
+}
+```
+
+#### Product Repose
+
+```json
+{
+    "id": 5,
+    "code": "0000000005",
+    "name": "Product 5",
+    "description": "Desciption 5",
+    "quantity": 21,
+    "weight": {
+        "value": "20.00",
+        "unit": "kg"
+    },
+    "price": {
+        "value": 10000,
+        "currency": "USD"
+    },
+    "sale_price": {
+        "value": 20000,
+        "currency": "USD"
+    },
+    "disabled_at": null,
+    "created_at": "2022-01-24T08:16:10.000000Z",
+    "updated_at": "2022-01-27T05:12:20.000000Z",
+    "images": []
+}
+```
